@@ -1,0 +1,118 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Twitelo API",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "apps": [
+    {
+      "name": "twitelo-api-dev",
+      "script": "./app.js",
+      "watch": true,
+      "restart_delay": 1000,
+      "ignore_watch": [
+        "node_modules",
+        "logs/*",
+        "public/*",
+        "*.log",
+        ".git"
+      ],
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    },
+    {
+      "name": "twitelo-api",
+      "script": "./app.js",
+      "watch": true,
+      "restart_delay": 1000,
+      "ignore_watch": [
+        "node_modules",
+        "logs/*",
+        "public/*",
+        "*.log",
+        ".git"
+      ],
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "env": {
+        "NODE_ENV": "prod"
+      }
+    }
+  ],
+  "deploy": {
+    "production": {
+      "user": "root",
+      "host": "51.254.118.165",
+      "ref": "origin/master",
+      "repo": "git@github.com:iFonny/TwiteloAPI.git",
+      "path": "/home/root/www/production/",
+      "ssh_options": [
+        "StrictHostKeyChecking=no",
+        "PasswordAuthentication=no"
+      ],
+      "post-deploy": "npm install && pm2 startOrRestart package.json --only twitelo-api",
+      "env": {
+        "NODE_ENV": "prod"
+      }
+    },
+    "dev": {
+      "user": "root",
+      "host": "51.254.118.165",
+      "ref": "origin/dev",
+      "repo": "git@github.com:iFonny/TwiteloAPI.git",
+      "path": "/home/root/www/dev/",
+      "ssh_options": [
+        "StrictHostKeyChecking=no",
+        "PasswordAuthentication=no"
+      ],
+      "post-deploy": "npm install && pm2 startOrRestart package.json --only twitelo-api-dev",
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iFonny/TwiteloAPI.git"
+  },
+  "keywords": [
+    "Twitelo",
+    "API"
+  ],
+  "author": "Nicolas Thouchkaieff",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iFonny/TwiteloAPI/issues"
+  },
+  "homepage": "https://github.com/iFonny/TwiteloAPI#readme",
+  "dependencies": {
+    "base64-img": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.2",
+    "deep-freeze": "0.0.1",
+    "express": "^4.16.2",
+    "express-rate-limit": "^2.11.0",
+    "fs": "0.0.1-security",
+    "glob": "^7.1.2",
+    "hat": "0.0.3",
+    "helmet": "^3.9.0",
+    "is-base64": "0.0.4",
+    "jwt-simple": "^0.5.1",
+    "lodash": "^4.17.5",
+    "make-dir": "^1.2.0",
+    "moment": "^2.19.2",
+    "morgan": "^1.9.0",
+    "path": "^0.12.7",
+    "request": "^2.83.0",
+    "rethinkdbdash": "^2.3.31",
+    "serve-favicon": "^2.4.5"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "eslint-plugin-import": "^2.9.0"
+  }
+}

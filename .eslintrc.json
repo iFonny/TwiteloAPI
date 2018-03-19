@@ -1,0 +1,37 @@
+{
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    },
+    "globals": {
+        "_": false,
+        "r": false,
+        "config": false,
+        "Server": false,
+        "__log": false,
+        "__logInfo": false,
+        "__logError": false,
+        "__logWarning": false
+    },
+    "rules": {
+        "no-console": 0,
+        "indent": 0,
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}
