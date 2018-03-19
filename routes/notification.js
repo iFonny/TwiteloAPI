@@ -1,6 +1,6 @@
 module.exports = {
 	// router(express, routeName)
-	router: function (express) {
+	router: function (express, routeName) {
 		const router = express.Router();
 
 		// middleware that is specific to this router
@@ -60,6 +60,7 @@ module.exports = {
 		routerMe.post('/archive', (req, res) => {
 			Server.fn.routes.notification.checkParamsNotificationIDs(req.body)
 				.then((notificationIDs) => Server.fn.routes.notification.archiveNotifications(req.user.id, notificationIDs))
+				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient d'archiver des notifications`, data))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});
@@ -68,6 +69,7 @@ module.exports = {
 		routerMe.post('/unarchive', (req, res) => {
 			Server.fn.routes.notification.checkParamsNotificationIDs(req.body)
 				.then((notificationIDs) => Server.fn.routes.notification.unarchiveNotifications(req.user.id, notificationIDs))
+				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient de désarchiver des notifications`, data))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});

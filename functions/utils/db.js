@@ -58,6 +58,13 @@ module.exports = {
             __logInfo('RethinkDB: "setting" indexes created.');
           });
         }
+        if (!tables.includes('log')) {
+          __logInfo('RethinkDB: "log" table created.');
+          r.tableCreate('log').run().then(() => {
+            //r.table('log').indexCreate('user_id').run();
+            __logInfo('RethinkDB: "log" indexes created.');
+          });
+        }
       });
     } catch (e) {
       __logError('checkOrCreateTable() error', e);
@@ -74,6 +81,20 @@ module.exports = {
         .run()
         .then((users) => users.length > 0 && users[0] ? resolve(users[0]) : reject())
         .catch(reject);
+    });
+  },
+
+  log(action, content) {
+    return new Promise((resolve) => {
+      r.table('log')
+        .insert({
+          action,
+          content,
+          created: Date.now()
+        })
+        .run()
+        .then(resolve)
+        .catch(resolve);
     });
   }
 

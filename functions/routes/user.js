@@ -19,6 +19,27 @@ module.exports = {
         });
     },
 
+    async getStats(user, join) {
+        try {
+            const all = await Server.fn.dbMethods.user.count({});
+            const active = await Server.fn.dbMethods.user.count({
+                switch: true
+            });
+
+            return Promise.resolve({
+                join,
+                username: user.username,
+                pp: user.profile_image_url,
+                count: {
+                    all,
+                    active
+                }
+            });
+        } catch (err) {
+            return Promise.reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] getUser() error', err));
+        }
+    },
+
     getTwitterUserData(user) {
         return new Promise((resolve, reject) => {
 

@@ -43,4 +43,17 @@ module.exports = {
 
   },
 
+  sendWelcomeJoinLeave(stats) {
+    if (stats.join) {
+
+      // TODO: follow @TwiteloFR
+      // TODO: send message de bienvenue twitter (MP)
+      Server.fn.db.log('join', `New user: @${stats.username}`);
+    } else {
+      Server.fn.db.log('leave', `Delete user: @${stats.username}`);
+    }
+
+    return Promise.resolve(Server.fn.api.jsonSuccess(200, __logJoinLeave(stats)));
+  }
+
 };

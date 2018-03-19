@@ -57,6 +57,7 @@ global.Server = {
         dbMethods: {}
     }
 };
+Server.moment.locale('fr');
 
 
 //=======================================================================//
@@ -122,7 +123,7 @@ app.use(morgan('combined', {
 
 
 app.listen(config.server.port, () => {
-    __log(`API runining on port ${config.server.port} [${config.env}]!`);
+    __log(`API runining on port ${config.server.port} [**${config.env}**]`);
 });
 
 /* TODO: RATELIMIT A PENSER 
