@@ -64,7 +64,7 @@ module.exports = {
                     description: profile.description,
                     updated: Date.now()
                 });
-            }).catch(err => reject(Server.fn.api.jsonError(403, 'Invalid or expired token.', `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id})}`, err)));
+            }).catch(err => reject(Server.fn.api.jsonError(403, 'Invalid or expired token.', `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id})`, err)));
 
         });
     },
