@@ -6,6 +6,10 @@ module.exports.getAll = () => {
     return r.table('game').run();
 };
 
+module.exports.getAllMin = () => {
+    return r.table('game').pluck('id', 'small_name', 'name', 'icon', 'image').run();
+};
+
 
 //=======================================================================//
 //     INSERT                                                            //
