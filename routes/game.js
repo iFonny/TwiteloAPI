@@ -16,14 +16,14 @@ module.exports = {
 
 		/* Get games */
 		router.get('/', (req, res) => {
-			Server.fn.routes.game.getAllGames()
+			Server.fn.routes.game.getEnabledGames()
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});
 
 		/* Get games (without settings) */
 		router.get('/min', (req, res) => {
-			Server.fn.routes.game.getAllGamesMin()
+			Server.fn.routes.game.getEnabledGamesMin()
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});

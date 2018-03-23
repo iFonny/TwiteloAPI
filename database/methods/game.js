@@ -2,12 +2,12 @@
 //     GET                                                               //
 //=======================================================================//
 
-module.exports.getAll = () => {
+module.exports.getEnabled = () => {
     return r.table('game').run();
 };
 
-module.exports.getAllMin = () => {
-    return r.table('game').pluck('id', 'small_name', 'name', 'icon', 'image').run();
+module.exports.getEnabledMin = () => {
+    return r.table('game').pluck('id', 'small_name', 'name', 'icon', 'image', 'enabled').run();
 };
 
 
