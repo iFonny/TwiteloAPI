@@ -16,7 +16,9 @@
         "__log": false,
         "__logInfo": false,
         "__logError": false,
-        "__logWarning": false
+        "__logWarning": false,
+        "__logUserAction": false,
+        "__logJoinLeave": false
     },
     "rules": {
         "no-console": 0,

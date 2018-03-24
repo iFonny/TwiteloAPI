@@ -1,18 +1,13 @@
 module.exports = {
 	// router(express, routeName)
-	router: function (express) {
+	router: function (express, routeName) {
 		const router = express.Router();
 
 		// middleware that is specific to this router
 		router.use((req, res, next) => {
 
-			// Check user permissions
-			Server.fn.api.checkUserAuthorization('ALL', req.headers.authorization)
-				.then((user) => {
-					req.user = user;
-					next();
-				}) // Go to the routes
-				.catch((err) => res.status(err.status).json(err));
+			// No auth
+			next();
 		});
 
 		//=======================================================================//
@@ -23,12 +18,27 @@ module.exports = {
 
 		// middleware
 		routerMe.use((req, res, next) => {
-			next();
+
+			// Check user permissions
+			Server.fn.api.checkUserAuthorization('ALL', req.headers.authorization)
+				.then((user) => {
+					req.user = user;
+					next();
+				}) // Go to the routes
+				.catch((err) => res.status(err.status).json(err));
 		});
 
 		/* Get user */
 		routerMe.get('/', (req, res) => {
 			Server.fn.routes.user.getUser(req.user.id)
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
+		/* Say welcome to the user and get stats (+log) */
+		routerMe.get('/welcome', (req, res) => {
+			Server.fn.routes.user.getStats(req.user, true)
+				.then((stats) => Server.fn.api.sendWelcomeJoinLeave(stats, req.user))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});
@@ -43,19 +53,44 @@ module.exports = {
 		});
 
 		/* Delete user */
-		routerMe.delete('/', (req, res) => {
+		routerMe.delete('/delete', (req, res) => {
 			Server.fn.routes.user.getUser(req.user.id)
 				.then((user) => Server.fn.routes.user.deleteUser(user.data))
-				.then((data) => res.status(data.status).json(data))
+				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient de supprimer son compte :wastebasket:`, data))
+				.then(() => Server.fn.routes.user.getStats(req.user, false))
+				.then((stats) => Server.fn.api.sendWelcomeJoinLeave(stats))
+				.then(() => res.status(200).json({
+					status: 200,
+					data: true
+				}))
 				.catch((err) => res.status(err.status).json(err));
 		});
 
 		router.use('/me', routerMe);
 
+		//=======================================================================//
+		//     No auth routes                                                    //
+		//=======================================================================//
+
+		/* Get latest user */
+		router.get('/latest', Server.cache.route({
+			expire: {
+				200: 600, // 10 minutes
+				xxx: 1
+			}
+		}), (req, res) => {
+			Server.fn.routes.user.getLatestActiveUsers(10)
+				.then((twitterUsers) => Server.fn.routes.user.getUpdatedTwitterUser(twitterUsers))
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
 
 		//=======================================================================//
 		//     Other routes                                                      //
 		//=======================================================================//
+
+
 
 
 		return router;

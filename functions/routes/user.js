@@ -19,6 +19,27 @@ module.exports = {
         });
     },
 
+    async getStats(user, join) {
+        try {
+            const all = await Server.fn.dbMethods.user.count({});
+            const active = await Server.fn.dbMethods.user.count({
+                switch: true
+            });
+
+            return Promise.resolve({
+                join,
+                username: user.username,
+                pp: user.profile_image_url,
+                count: {
+                    all,
+                    active
+                }
+            });
+        } catch (err) {
+            return Promise.reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] getUser() error', err));
+        }
+    },
+
     getTwitterUserData(user) {
         return new Promise((resolve, reject) => {
 
@@ -43,7 +64,7 @@ module.exports = {
                     description: profile.description,
                     updated: Date.now()
                 });
-            }).catch(err => reject(Server.fn.api.jsonError(403, 'Invalid or expired token.', `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id})}`, err)));
+            }).catch(err => reject(Server.fn.api.jsonError(403, 'Invalid or expired token.', `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id})`, err)));
 
         });
     },
@@ -63,6 +84,44 @@ module.exports = {
                 .then(() => Server.fn.dbMethods.user.delete(user.id))
                 .then(() => resolve(Server.fn.api.jsonSuccess(200, true)))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] deleteUser() error', err)));
+
+        });
+    },
+
+    getLatestActiveUsers(limit) {
+        return new Promise((resolve, reject) => {
+
+            Server.fn.dbMethods.user.getLatestActive(limit)
+                .then(resolve)
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] getLatestActiveUsers() error', err)));
+
+        });
+    },
+
+    getUpdatedTwitterUser(twitterUsers) {
+        return new Promise((resolve, reject) => {
+
+            let users = [];
+            const usersIDs = twitterUsers.map(user => user.twitter_id);
+
+            Server.twitterAPI.get('/users/lookup', {
+                user_id: usersIDs.join(','),
+                include_entities: false,
+                tweet_mode: false
+            }, (err, twUsers) => {
+                if (err) reject(Server.fn.api.jsonError(500, 'Internal server error', '[TWITTER] getUpdatedTwitterUser() error', err));
+                else {
+                    for (const twUser of twUsers) {
+                        users.push({
+                            twitter_id: twUser.id_str,
+                            username: twUser.screen_name,
+                            name: twUser.name,
+                            profile_image_url: twUser.profile_image_url
+                        });
+                    }
+                    resolve(Server.fn.api.jsonSuccess(200, users));
+                }
+            });
 
         });
     },

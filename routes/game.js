@@ -6,13 +6,8 @@ module.exports = {
 		// middleware that is specific to this router
 		router.use((req, res, next) => {
 
-			// Check user permissions
-			Server.fn.api.checkUserAuthorization('ALL', req.headers.authorization)
-				.then((user) => {
-					req.user = user;
-					next();
-				}) // Go to the routes
-				.catch((err) => res.status(err.status).json(err));
+			// No auth
+			next();
 		});
 
 		//=======================================================================//
@@ -21,7 +16,14 @@ module.exports = {
 
 		/* Get games */
 		router.get('/', (req, res) => {
-			Server.fn.routes.game.getAllGames()
+			Server.fn.routes.game.getEnabledGames()
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
+		/* Get games (without settings) */
+		router.get('/min', (req, res) => {
+			Server.fn.routes.game.getEnabledGamesMin()
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});

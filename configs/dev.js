@@ -13,7 +13,7 @@ const config = {
 		}
 	},
 	logs: {
-		discord: false
+		discord: true
 	},
 	db: {
 		name: 'twitelo_dev'

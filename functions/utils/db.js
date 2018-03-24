@@ -14,6 +14,8 @@ module.exports = {
             r.table('user').indexCreate('username').run();
             r.table('user').indexCreate('twitelo_token').run();
             r.table('user').indexCreate('api_key').run();
+            r.table('user').indexCreate('created').run();
+            r.table('user').indexCreate('updated').run();
             __logInfo('RethinkDB: "user" indexes created.');
           });
         }
@@ -24,6 +26,8 @@ module.exports = {
             r.table('deleted_user').indexCreate('username').run();
             r.table('deleted_user').indexCreate('twitelo_token').run();
             r.table('deleted_user').indexCreate('api_key').run();
+            r.table('deleted_user').indexCreate('created').run();
+            r.table('deleted_user').indexCreate('updated').run();
             __logInfo('RethinkDB: "deleted_user" indexes created.');
           });
         }
@@ -58,6 +62,13 @@ module.exports = {
             __logInfo('RethinkDB: "setting" indexes created.');
           });
         }
+        if (!tables.includes('log')) {
+          __logInfo('RethinkDB: "log" table created.');
+          r.tableCreate('log').run().then(() => {
+            //r.table('log').indexCreate('user_id').run();
+            __logInfo('RethinkDB: "log" indexes created.');
+          });
+        }
       });
     } catch (e) {
       __logError('checkOrCreateTable() error', e);
@@ -74,6 +85,20 @@ module.exports = {
         .run()
         .then((users) => users.length > 0 && users[0] ? resolve(users[0]) : reject())
         .catch(reject);
+    });
+  },
+
+  log(action, content) {
+    return new Promise((resolve) => {
+      r.table('log')
+        .insert({
+          action,
+          content,
+          created: Date.now()
+        })
+        .run()
+        .then(resolve)
+        .catch(resolve);
     });
   }
 

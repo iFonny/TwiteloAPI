@@ -21,6 +21,11 @@ const base64Img = require('base64-img');
 const MTwitter = require('mtwitter');
 const Twitter = require('twitter');
 const makeDir = require('make-dir');
+// Set default lifetime to 60 seconds for all entries
+const cache = require('express-redis-cache')({
+    expire: 60,
+    prefix: 'twitelo'
+});
 global._ = require('lodash');
 
 //=======================================================================//
@@ -37,6 +42,7 @@ global.Server = {
     fs,
     hat,
     jwt,
+    cache,
     makeDir,
     moment,
     Twitter,
@@ -44,10 +50,16 @@ global.Server = {
         isBase64,
         utils: base64Img
     },
-    twitterApi: new MTwitter({ // Twitter API no-account
+    twitterAPI: new MTwitter({ // Twitter API no-account
         consumer_key: config.secret.twitter.consumerKey,
         consumer_secret: config.secret.twitter.consumerSecret,
         application_only: true
+    }),
+    twitterBot: new Twitter({
+        consumer_key: config.secret.twitter.consumerKey,
+        consumer_secret: config.secret.twitter.consumerSecret,
+        access_token_key: config.secret.twitter.twiteloAccessToken,
+        access_token_secret: config.secret.twitter.twiteloAccessTokenSecret
     }),
     fn: {
         error: require('./functions/utils/error'),
@@ -57,6 +69,7 @@ global.Server = {
         dbMethods: {}
     }
 };
+Server.moment.locale('fr');
 
 
 //=======================================================================//
@@ -104,7 +117,9 @@ app.use('/public/media', express.static(`${__dirname}/public/media/${config.env}
 
 app.disable('x-powered-by');
 app.use(helmet());
-app.use(bodyParser.json({limit: '2mb'}));
+app.use(bodyParser.json({
+    limit: '2mb'
+}));
 app.use(bodyParser.urlencoded({
     extended: true,
     limit: '2mb'
@@ -122,7 +137,7 @@ app.use(morgan('combined', {
 
 
 app.listen(config.server.port, () => {
-    __log(`API runining on port ${config.server.port} [${config.env}]!`);
+    __log(`API runining on port ${config.server.port} [**${config.env}**]`);
 });
 
 /* TODO: RATELIMIT A PENSER 
