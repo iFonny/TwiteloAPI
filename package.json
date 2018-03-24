@@ -96,6 +96,7 @@
     "deep-freeze": "0.0.1",
     "express": "^4.16.2",
     "express-rate-limit": "^2.11.0",
+    "express-redis-cache": "^1.1.1",
     "fs": "0.0.1-security",
     "glob": "^7.1.2",
     "hat": "0.0.3",

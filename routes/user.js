@@ -6,13 +6,8 @@ module.exports = {
 		// middleware that is specific to this router
 		router.use((req, res, next) => {
 
-			// Check user permissions
-			Server.fn.api.checkUserAuthorization('ALL', req.headers.authorization)
-				.then((user) => {
-					req.user = user;
-					next();
-				}) // Go to the routes
-				.catch((err) => res.status(err.status).json(err));
+			// No auth
+			next();
 		});
 
 		//=======================================================================//
@@ -23,7 +18,14 @@ module.exports = {
 
 		// middleware
 		routerMe.use((req, res, next) => {
-			next();
+
+			// Check user permissions
+			Server.fn.api.checkUserAuthorization('ALL', req.headers.authorization)
+				.then((user) => {
+					req.user = user;
+					next();
+				}) // Go to the routes
+				.catch((err) => res.status(err.status).json(err));
 		});
 
 		/* Get user */
@@ -66,10 +68,29 @@ module.exports = {
 
 		router.use('/me', routerMe);
 
+		//=======================================================================//
+		//     No auth routes                                                    //
+		//=======================================================================//
+
+		/* Get latest user */
+		router.get('/latest', Server.cache.route({
+			expire: {
+				200: 600,
+				xxx: 1
+			}
+		}), (req, res) => {
+			Server.fn.routes.user.getLatestActiveUsers(10)
+				.then((twitterUsers) => Server.fn.routes.user.getUpdatedTwitterUser(twitterUsers))
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
 
 		//=======================================================================//
 		//     Other routes                                                      //
 		//=======================================================================//
+
+
 
 
 		return router;

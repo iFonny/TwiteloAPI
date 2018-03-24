@@ -1,5 +1,6 @@
 Required: 
 - RethinkDB
+- Redis
 
 Config file needed: secret.json (in /configs/)
 

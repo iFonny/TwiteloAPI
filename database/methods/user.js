@@ -6,6 +6,20 @@ module.exports.get = (id) => {
     return r.table('user').get(id).run();
 };
 
+module.exports.getLatestActive = (limit = 10) => {
+    return r.table('user').orderBy({
+            index: r.desc('created')
+        })
+        .filter(
+            r.row('switch').eq(true)
+            .and(r.row('twitelo')('description')('status').eq(true))
+            .and(r.row('twitelo')('description')('content').match('<{[^<>{} ]*}>'))
+        )
+        .limit(limit)
+        .pluck('id', 'name', 'username', 'twitter_id')
+        .run();
+};
+
 
 //=======================================================================//
 //     INSERT                                                            //
