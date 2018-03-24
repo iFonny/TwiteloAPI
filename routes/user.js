@@ -38,7 +38,7 @@ module.exports = {
 		/* Say welcome to the user and get stats (+log) */
 		routerMe.get('/welcome', (req, res) => {
 			Server.fn.routes.user.getStats(req.user, true)
-				.then((stats) => Server.fn.api.sendWelcomeJoinLeave(stats))
+				.then((stats) => Server.fn.api.sendWelcomeJoinLeave(stats, req.user))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});
@@ -75,7 +75,7 @@ module.exports = {
 		/* Get latest user */
 		router.get('/latest', Server.cache.route({
 			expire: {
-				200: 600,
+				200: 600, // 10 minutes
 				xxx: 1
 			}
 		}), (req, res) => {

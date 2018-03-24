@@ -125,17 +125,17 @@ module.exports.initLogs = () => {
 		return Promise.resolve(data);
 	};
 
-	global.__logError = (message, str) => {
+	global.__logError = (message, full) => {
 		sendDiscordLog('error', message);
-		sendDiscordLog('full-error', str);
-		console.error(str);
-		return str;
+		sendDiscordLog('full-error', full);
+		console.error(full);
+		return full;
 	};
 
-	global.__logWarning = (str) => {
-		sendDiscordLog('warn', str);
-		console.warn(str);
-		return str;
+	global.__logWarning = (message, full) => {
+		sendDiscordLog('warn', message);
+		console.warn(full);
+		return full;
 	};
 
 };

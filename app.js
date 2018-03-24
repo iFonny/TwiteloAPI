@@ -55,6 +55,12 @@ global.Server = {
         consumer_secret: config.secret.twitter.consumerSecret,
         application_only: true
     }),
+    twitterBot: new Twitter({
+        consumer_key: config.secret.twitter.consumerKey,
+        consumer_secret: config.secret.twitter.consumerSecret,
+        access_token_key: config.secret.twitter.twiteloAccessToken,
+        access_token_secret: config.secret.twitter.twiteloAccessTokenSecret
+    }),
     fn: {
         error: require('./functions/utils/error'),
         api: require('./functions/utils/api'),
