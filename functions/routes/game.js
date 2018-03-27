@@ -7,7 +7,15 @@ module.exports = {
 
     /* Check parameters */
 
+    checkParamsTagByGame(URLparams) {
+        return new Promise((resolve, reject) => {
 
+            // Check mandatory params
+            if (URLparams.gameID && URLparams.gameID.length > 0 && Server.tags[URLparams.gameID]) return resolve(URLparams.gameID);
+            else return reject((Server.fn.api.jsonError(400, 'Game not found')));
+
+        });
+    },
 
     /* Functions */
 
@@ -27,4 +35,13 @@ module.exports = {
         });
     },
 
+    /* Tags */
+
+    getAllTags() {
+        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.tags));
+    },
+
+    getTagsByGame(gameID) {
+        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.tags[gameID]));
+    },
 };

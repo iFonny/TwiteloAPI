@@ -4,6 +4,9 @@ Required:
 
 Config file needed: secret.json (in /configs/)
 
+Clear redis cache : 
+> redis-cli flushdb
+
 Launch local : 
 > npm start
 
