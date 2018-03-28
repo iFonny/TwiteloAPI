@@ -29,16 +29,16 @@ const setting = {
         },
         input: {
             uppercase: {
-                en: 'UPPERCASE',
-                fr: 'MAJUSCULE'
+                en: 'EXAMPLE',
+                fr: 'EXEMPLE'
             },
             lowercase: {
-                en: 'lowercase',
-                fr: 'minuscule'
+                en: 'example',
+                fr: 'exemple'
             },
             capitalize: {
-                en: 'Capitalized',
-                fr: 'Capitalisé'
+                en: 'Example',
+                fr: 'Exemple'
             }
         }
     }
