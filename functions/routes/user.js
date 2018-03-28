@@ -104,24 +104,26 @@ module.exports = {
             let users = [];
             const usersIDs = twitterUsers.map(user => user.twitter_id);
 
-            Server.twitterAPI.get('/users/lookup', {
-                user_id: usersIDs.join(','),
-                include_entities: false,
-                tweet_mode: false
-            }, (err, twUsers) => {
-                if (err) reject(Server.fn.api.jsonError(500, 'Internal server error', '[TWITTER] getUpdatedTwitterUser() error', err));
-                else {
-                    for (const twUser of twUsers) {
-                        users.push({
-                            twitter_id: twUser.id_str,
-                            username: twUser.screen_name,
-                            name: twUser.name,
-                            profile_image_url: twUser.profile_image_url
-                        });
+            if (usersIDs.length > 0) {
+                Server.twitterAPI.get('/users/lookup', {
+                    user_id: usersIDs.join(','),
+                    include_entities: false,
+                    tweet_mode: false
+                }, (err, twUsers) => {
+                    if (err) reject(Server.fn.api.jsonError(500, 'Internal server error', '[TWITTER] getUpdatedTwitterUser() error', err));
+                    else {
+                        for (const twUser of twUsers) {
+                            users.push({
+                                twitter_id: twUser.id_str,
+                                username: twUser.screen_name,
+                                name: twUser.name,
+                                profile_image_url: twUser.profile_image_url
+                            });
+                        }
+                        resolve(Server.fn.api.jsonSuccess(200, users));
                     }
-                    resolve(Server.fn.api.jsonSuccess(200, users));
-                }
-            });
+                });
+            } else resolve(Server.fn.api.jsonSuccess(200, []));
 
         });
     },
