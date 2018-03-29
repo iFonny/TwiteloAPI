@@ -29,7 +29,13 @@ module.exports = {
 
 		// middleware
 		routerTags.use((req, res, next) => {
-			next();
+			// Check user permissions
+			Server.fn.api.checkUserAuthorization('ALL', req.headers.authorization)
+				.then((user) => {
+					req.user = user;
+					next();
+				}) // Go to the routes
+				.catch((err) => res.status(err.status).json(err));
 		});
 
 		/* Get all tags */
