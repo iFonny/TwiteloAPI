@@ -21,12 +21,49 @@ module.exports = {
 				.catch((err) => res.status(err.status).json(err));
 		});
 
-		/* Get games (without settings) */
-		router.get('/min', (req, res) => {
-			Server.fn.routes.game.getEnabledGamesMin()
+		//=======================================================================//
+		//     Tag routes                                                        //
+		//=======================================================================//
+
+		const routerTags = express.Router();
+
+		// middleware
+		routerTags.use((req, res, next) => {
+			// Check user permissions
+			Server.fn.api.checkUserAuthorization('ALL', req.headers.authorization)
+				.then((user) => {
+					req.user = user;
+					next();
+				}) // Go to the routes
+				.catch((err) => res.status(err.status).json(err));
+		});
+
+		/* Get all tags */
+		routerTags.get('/', Server.cache.route({
+			expire: {
+				200: 6000, // 100 minutes
+				xxx: 1
+			}
+		}), (req, res) => {
+			Server.fn.routes.game.getAllTags()
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});
+
+		/* Get tags by game */
+		routerTags.get('/:gameID', Server.cache.route({
+			expire: {
+				200: 6000, // 100 minutes
+				xxx: 1
+			}
+		}), (req, res) => {
+			Server.fn.routes.game.checkParamsTagByGame(req.params)
+				.then((gameID) => Server.fn.routes.game.getTagsByGame(gameID))
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
+		router.use('/tags', routerTags);
 
 		//=======================================================================//
 		//     Other routes                                                      //

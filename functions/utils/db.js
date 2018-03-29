@@ -69,6 +69,16 @@ module.exports = {
             __logInfo('RethinkDB: "log" indexes created.');
           });
         }
+        if (!tables.includes('tag')) {
+          __logInfo('RethinkDB: "tag" table created.');
+          r.tableCreate('tag').run().then(() => {
+            r.table('tag').indexCreate('user_id').run();
+            r.table('tag').indexCreate('game_id').run();
+            r.table('tag').indexCreate('tag_id').run();
+            r.table('tag').indexCreate('created').run();
+            __logInfo('RethinkDB: "tag" indexes created.');
+          });
+        }
       });
     } catch (e) {
       __logError('checkOrCreateTable() error', e);

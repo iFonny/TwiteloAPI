@@ -42,7 +42,10 @@ module.exports.initLogs = () => {
 				break;
 		}
 
-		if (typeof message != 'string') message = JSON.stringify(message);
+		if (typeof message != 'string') {
+			console.log(typeof message);
+			message = message.toString(); // TODO: A TESTER, JSON.stringify(message);
+		}
 
 		if (discordWebHook === null) return;
 

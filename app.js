@@ -67,7 +67,8 @@ global.Server = {
         db: require('./functions/utils/db'),
         routes: {}, // Look Routes (end of app.js)
         dbMethods: {}
-    }
+    },
+    tags: {} // by game
 };
 Server.moment.locale('fr');
 
@@ -91,6 +92,17 @@ glob.sync(`${__dirname}/database/methods/*.js`).forEach((file) => {
     Server.fn.dbMethods[methodName] = require(file);
 });
 
+//=======================================================================//
+//     Tags                                                           //
+//=======================================================================//
+
+/* Getting tags in the /tags folder */
+glob.sync(`${__dirname}/tags/*.js`).forEach((file) => {
+    const gameName = path.basename(file, '.js');
+
+    // Require routes functions
+    Server.tags[gameName] = require(`${__dirname}/tags/${gameName}`);
+});
 
 //=======================================================================//
 //     Express                                                           //

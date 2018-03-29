@@ -2,15 +2,22 @@
 //     GET                                                               //
 //=======================================================================//
 
-module.exports.getEnabled = () => {
-    return r.table('game').run();
+module.exports.getAll = (userID) => {
+    return r.table('tag')
+        .getAll(userID, {
+            index: 'user_id'
+        }).orderBy('created').run();
 };
-
 
 //=======================================================================//
 //     INSERT                                                            //
 //=======================================================================//
 
+module.exports.insert = (document) => {
+    return r.table('tag').insert(document, {
+        returnChanges: true
+    }).run();
+};
 
 //=======================================================================//
 //     EDIT                                                              //

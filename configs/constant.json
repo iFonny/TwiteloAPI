@@ -1,7 +1,14 @@
-{   
+{
     "roles": ["USER", "ADMIN"],
     "locales": ["en", "fr"],
+    "twitterLimits": {
+        "description": 160,
+        "url": 100,
+        "location": 30,
+        "name": 50
+    },
     "limits": {
-        "ppTrigger": 15
+        "ppTrigger": 15,
+        "accountbyGame": 2
     }
 }
