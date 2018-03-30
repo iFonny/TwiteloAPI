@@ -6,6 +6,10 @@ module.exports.getEnabled = () => {
     return r.table('game').run();
 };
 
+module.exports.get = (gameID) => {
+    return r.table('game').get(gameID).run();
+};
+
 
 //=======================================================================//
 //     INSERT                                                            //

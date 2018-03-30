@@ -21,6 +21,14 @@ module.exports = {
 				.catch((err) => res.status(err.status).json(err));
 		});
 
+		/* Get a game */
+		router.get('/:gameID', (req, res) => {
+			Server.fn.routes.game.checkParamsGameID(req.params)
+				.then((game) => Server.fn.routes.game.getGame(game))
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
 		//=======================================================================//
 		//     Tag routes                                                        //
 		//=======================================================================//
