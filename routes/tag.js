@@ -60,7 +60,11 @@ module.exports = {
 
 		/* Edit a tag */
 		routerMe.post('/:id/edit', (req, res) => {
-			// TODO
+			Server.fn.routes.tag.checkParamsTagUpdateSettings(req.body, req.params)
+				.then((tag) => Server.fn.routes.tag.updateTagSettings(req.user.id, tag))
+				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient d'editer :pencil: un tag : \`${req.body.tag_id}\``, data))
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
 		});
 
 
