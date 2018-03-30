@@ -61,39 +61,5 @@ module.exports = {
             size: setting.size, // existing setting
             format: setting.format // existing setting
         }
-    },
-    LOL__RANKED_SOLO_SR__TIER2: {
-        id: 'LOL__RANKED_SOLO_SR__TIER2', // Tag ID
-        gameID: 'lol', // game ID
-        category: 'Ranked Solo Summoner\'s Rift22', // Category name
-        categorySmall: 'Ranked Solo SR', // Category small name
-        name: 'Tier', // Tag name
-        nameSmall: 'Tier', // Tag small name
-        size: { // Tag sizes
-            default: 10, // default is required !!
-            short: 6
-        },
-        fieldSettings: {
-            account: setting.account, // existing setting
-            size: setting.size, // existing setting
-            format: setting.format // existing setting
-        }
-    },
-    LOL__RANKED_SOLO_SR__TIER3: {
-        id: 'LOL__RANKED_SOLO_SR__TIER3', // Tag ID
-        gameID: 'lol', // game ID
-        category: 'Ranked Solo Summoner\'s Rift22', // Category name
-        categorySmall: 'Ranked Solo SR', // Category small name
-        name: 'Tier', // Tag name
-        nameSmall: 'Tier', // Tag small name
-        size: { // Tag sizes
-            default: 10, // default is required !!
-            short: 6
-        },
-        fieldSettings: {
-            account: setting.account, // existing setting
-            size: setting.size, // existing setting
-            format: setting.format // existing setting
-        }
     }
 };
