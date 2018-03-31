@@ -99,7 +99,8 @@ module.exports = {
                     newTag.game = {
                         id: game.id,
                         name: game.name,
-                        small_name: game.small_name
+                        small_name: game.small_name,
+                        color: game.color
                     };
                     resolve(newTag);
                 })

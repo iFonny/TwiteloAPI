@@ -21,7 +21,8 @@ module.exports.getAll = (userID) => {
             game: {
                 id: r.row('right')('id'),
                 name: r.row('right')('name'),
-                small_name: r.row('right')('small_name')
+                small_name: r.row('right')('small_name'),
+                color: r.row('right')('color')
             }
         }).orderBy('created').run();
 };
