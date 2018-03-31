@@ -57,6 +57,16 @@ module.exports.update = (userID, document) => {
 //     DELETE                                                            //
 //=======================================================================//
 
+module.exports.delete = (userID, id) => {
+    return r.table('tag')
+        .getAll(id, {
+            index: 'id'
+        })
+        .filter({
+            user_id: userID
+        })
+        .delete().run();
+};
 
 //=======================================================================//
 //     OTHER                                                             //

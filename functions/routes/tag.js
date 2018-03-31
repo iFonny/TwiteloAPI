@@ -73,6 +73,15 @@ module.exports = {
         });
     },
 
+    checkParamsTagID(params) {
+        return new Promise((resolve, reject) => {
+
+            // Check mandatory params
+            if (params.id && typeof params.id == 'string' && params.id.length > 0) resolve(params.id);
+            else return reject((Server.fn.api.jsonError(400, 'Bad or Missing id')));
+        });
+    },
+
     /* Functions */
 
     getAll(userID) {
@@ -118,6 +127,43 @@ module.exports = {
                     else resolve(Server.fn.api.jsonSuccess(200, false));
                 })
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update tag', '[DB] updateTagSettings() error', err)));
+
+        });
+    },
+
+    deleteTagFromProfile(user, id) {
+        return new Promise((resolve, reject) => {
+
+            const twitelo = {
+                description: {
+                    content: user.twitelo.description.content.replace(`<{${id}}>`, '').trim()
+                },
+                name: {
+                    content: user.twitelo.name.content.replace(`<{${id}}>`, '').trim()
+                },
+                location: {
+                    content: user.twitelo.location.content.replace(`<{${id}}>`, '').trim()
+                },
+                url: {
+                    content: user.twitelo.url.content.replace(`<{${id}}>`, '').trim()
+                }
+            };
+
+            Server.fn.dbMethods.user.update(user.id, {
+                    twitelo
+                })
+                .then(() => resolve(id))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t delete tag from profile', '[DB] deleteTagFromProfile() error', err)));
+
+        });
+    },
+
+    deleteTag(userID, id) {
+        return new Promise((resolve, reject) => {
+
+            Server.fn.dbMethods.tag.delete(userID, id)
+                .then((result) => resolve(Server.fn.api.jsonSuccess(200, result.deleted ? true : false)))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t delete tag', '[DB] deleteTag() error', err)));
 
         });
     },

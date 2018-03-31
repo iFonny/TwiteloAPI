@@ -69,9 +69,15 @@ module.exports = {
 
 
 
-		/* Delete tags */
-		routerMe.delete('/delete', (req, res) => {
+		/* Delete a tag */
+		routerMe.delete('/:id/delete', (req, res) => {
 			// TODO
+			Server.fn.routes.tag.checkParamsTagID(req.params)
+				.then((id) => Server.fn.routes.tag.deleteTagFromProfile(req.user, id))
+				.then((id) => Server.fn.routes.tag.deleteTag(req.user.id, id))
+				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** a supprimé un tag`, data))
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
 		});
 
 		router.use('/me', routerMe);
