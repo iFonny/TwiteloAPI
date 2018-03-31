@@ -12,8 +12,8 @@ const setting = {
         type: 'size', // select
         input: false, // already handled by the component
         tooltip: {
-            en: 'Text length',
-            fr: 'Longueur du texte'
+            en: 'Text length in profile',
+            fr: 'Longueur du texte dans le profil'
         },
         label: {
             en: 'Size',
@@ -60,6 +60,24 @@ module.exports = {
             account: setting.account, // existing setting
             size: setting.size, // existing setting
             format: setting.format // existing setting
+        },
+        example: {
+            size: { // setting property
+                default: { // setting value
+                    format: { // setting property
+                        uppercase: 'DIAMOND', // setting value
+                        lowercase: 'diamond', // setting value
+                        capitalize: 'Diamond' // setting value
+                    }
+                },
+                short: { // setting value
+                    format: { // setting property
+                        uppercase: 'DIAM', // setting value
+                        lowercase: 'diam', // setting value
+                        capitalize: 'Diam' // setting value
+                    }
+                }
+            }
         }
     }
 };

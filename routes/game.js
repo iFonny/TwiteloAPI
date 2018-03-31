@@ -47,7 +47,7 @@ module.exports = {
 		});
 
 		/* Get all tags */
-		routerTags.get('/', Server.cache.route({
+		routerTags.get('/all', Server.cache.route({
 			expire: {
 				200: 6000, // 100 minutes
 				xxx: 1
@@ -59,7 +59,7 @@ module.exports = {
 		});
 
 		/* Get tags by game */
-		routerTags.get('/:gameID', Server.cache.route({
+		routerTags.get('/game/:gameID', Server.cache.route({
 			expire: {
 				200: 6000, // 100 minutes
 				xxx: 1
