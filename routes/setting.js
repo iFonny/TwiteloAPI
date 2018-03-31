@@ -96,7 +96,7 @@ module.exports = {
 		});
 
 		/* Delete ppTriggers */
-		routerMe.delete('/pp_trigger', (req, res) => {
+		routerMe.delete('/pp_trigger/delete', (req, res) => {
 			Server.fn.routes.setting.checkParamsPPTriggerIDs(req.body)
 				.then((ppTriggerIDs) => Server.fn.routes.setting.deletePPTriggers(req.user.id, ppTriggerIDs))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** a supprimé des images de profil`, data))

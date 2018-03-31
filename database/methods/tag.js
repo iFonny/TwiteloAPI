@@ -6,6 +6,24 @@ module.exports.getAll = (userID) => {
     return r.table('tag')
         .getAll(userID, {
             index: 'user_id'
+        })
+        .eqJoin(
+            'game_id',
+            r.table('game'), {
+                index: 'id'
+            }
+        ).map({
+            id: r.row('left')('id'),
+            created: r.row('left')('created'),
+            settings: r.row('left')('settings'),
+            tag_id: r.row('left')('tag_id'),
+            user_id: r.row('left')('user_id'),
+            game: {
+                id: r.row('right')('id'),
+                name: r.row('right')('name'),
+                small_name: r.row('right')('small_name'),
+                color: r.row('right')('color')
+            }
         }).orderBy('created').run();
 };
 
@@ -23,11 +41,32 @@ module.exports.insert = (document) => {
 //     EDIT                                                              //
 //=======================================================================//
 
+module.exports.update = (userID, document) => {
+    return r.table('tag')
+        .getAll(document.id, {
+            index: 'id'
+        })
+        .filter({
+            user_id: userID
+        }).update(document, {
+            returnChanges: true
+        }).run();
+};
 
 //=======================================================================//
 //     DELETE                                                            //
 //=======================================================================//
 
+module.exports.delete = (userID, id) => {
+    return r.table('tag')
+        .getAll(id, {
+            index: 'id'
+        })
+        .filter({
+            user_id: userID
+        })
+        .delete().run();
+};
 
 //=======================================================================//
 //     OTHER                                                             //
