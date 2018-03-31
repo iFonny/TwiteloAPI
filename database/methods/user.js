@@ -13,7 +13,7 @@ module.exports.getLatestActive = (limit = 10) => {
         .filter(
             r.row('switch').eq(true)
             .and(r.row('twitelo')('description')('status').eq(true))
-            .and(r.row('twitelo')('description')('content').match('<{[^<>{} ]*}>'))
+            .and(r.row('twitelo')('description')('content').match('<{[^<>{} ]+}>'))
         )
         .limit(limit)
         .pluck('id', 'name', 'username', 'twitter_id')
