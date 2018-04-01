@@ -10,7 +10,6 @@ const fs = require('fs');
 const morgan = require('morgan');
 const path = require('path');
 const favicon = require('serve-favicon');
-const RateLimit = require('express-rate-limit');
 const hat = require('hat');
 const deepFreeze = require('deep-freeze');
 const moment = require('moment');
@@ -26,6 +25,7 @@ const cache = require('express-redis-cache')({
     expire: 60,
     prefix: 'twitelo'
 });
+const redisClient = require('redis').createClient();
 global._ = require('lodash');
 
 //=======================================================================//
@@ -65,10 +65,14 @@ global.Server = {
         error: require('./functions/utils/error'),
         api: require('./functions/utils/api'),
         db: require('./functions/utils/db'),
+        game: {}, // game functions
         routes: {}, // Look Routes (end of app.js)
         dbMethods: {}
     },
-    tags: {} // by game
+    limiter: null, // rate limiter
+    gameAPI: {}, // by game
+    gameTags: {}, // by game
+    gameSettings: {} // by game
 };
 Server.moment.locale('fr');
 
@@ -93,16 +97,39 @@ glob.sync(`${__dirname}/database/methods/*.js`).forEach((file) => {
 });
 
 //=======================================================================//
-//     Tags                                                           //
+//     Tags & settings                                                   //
 //=======================================================================//
 
-/* Getting tags in the /tags folder */
-glob.sync(`${__dirname}/tags/*.js`).forEach((file) => {
+/* Getting Tags & account in the /games/settings && /games/tags folder */
+glob.sync(`${__dirname}/games/settings/*.js`).forEach((file) => {
     const gameName = path.basename(file, '.js');
 
-    // Require routes functions
-    Server.tags[gameName] = require(`${__dirname}/tags/${gameName}`);
+    // Require tags
+    Server.gameTags[gameName] = require(`${__dirname}/games/tags/${gameName}`);
+    // Require account settings
+    Server.gameSettings[gameName] = require(`${__dirname}/games/settings/${gameName}`);
 });
+
+//=======================================================================//
+//     Games api methods & functions                                     //
+//=======================================================================//
+
+/* Getting games api methods in the /games folder */
+glob.sync(`${__dirname}/games/*.js`).forEach((file) => {
+    const gameName = path.basename(file, '.js');
+
+    // Require games api functions
+    Server.gameAPI[gameName] = require(`${__dirname}/games/${gameName}`);
+});
+
+/* Getting games functions in the /games/functions folder */
+glob.sync(`${__dirname}/games/functions/*.js`).forEach((file) => {
+    const name = path.basename(file, '.js');
+
+    // Require games api functions
+    Server.fn.game[name] = require(`${__dirname}/games/functions/${name}`);
+});
+
 
 //=======================================================================//
 //     Express                                                           //
@@ -152,23 +179,8 @@ app.listen(config.server.port, () => {
     __log(`API runining on port ${config.server.port} [**${config.env}**]`);
 });
 
-/* TODO: RATELIMIT A PENSER 
-const apiLimiter = new RateLimit({
-    windowMs: 60 * 1000,
-    max: 5,
-    delayAfter: 1,
-    delayMs: 3 * 1000
-});
-
-
-var limiter = new RateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 200, // limit each IP to 100 requests per windowMs
-    delayMs: 0 // disable delaying - full speed until the max limit is reached
-});
-
-app.use(limiter); //  apply to all requests
-*/
+/* Rate limiter */
+Server.limiter = require('express-limiter')(app, redisClient);
 
 //=======================================================================//
 //     Routes          		                                             //

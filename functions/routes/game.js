@@ -21,7 +21,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
 
             // Check mandatory params
-            if (URLparams.gameID && typeof URLparams.gameID == 'string' && URLparams.gameID.length > 0 && Server.tags[URLparams.gameID]) return resolve(URLparams.gameID);
+            if (URLparams.gameID && typeof URLparams.gameID == 'string' && URLparams.gameID.length > 0 && Server.gameTags[URLparams.gameID]) return resolve(URLparams.gameID);
             else return reject((Server.fn.api.jsonError(400, 'Game not found')));
 
         });
@@ -48,10 +48,20 @@ module.exports = {
     /* Tags */
 
     getAllTags() {
-        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.tags));
+        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.gameTags));
     },
 
     getTagsByGame(gameID) {
-        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.tags[gameID]));
+        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.gameTags[gameID]));
+    },
+
+    /* Settings */
+
+    getAllSettings() {
+        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.gameSettings));
+    },
+
+    getSettingsByGame(gameID) {
+        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.gameSettings[gameID]));
     },
 };

@@ -1,4 +1,4 @@
-const setting = {
+const fieldSettings = {
     account: {
         type: 'account', // select
         tooltip: false,

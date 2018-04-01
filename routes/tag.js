@@ -71,7 +71,6 @@ module.exports = {
 
 		/* Delete a tag */
 		routerMe.delete('/:id/delete', (req, res) => {
-			// TODO
 			Server.fn.routes.tag.checkParamsTagID(req.params)
 				.then((id) => Server.fn.routes.tag.deleteTagFromProfile(req.user, id))
 				.then((id) => Server.fn.routes.tag.deleteTag(req.user.id, id))

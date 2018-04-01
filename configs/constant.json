@@ -9,6 +9,6 @@
     },
     "limits": {
         "ppTrigger": 15,
-        "accountbyGame": 2
+        "accountbyGame": 3
     }
 }

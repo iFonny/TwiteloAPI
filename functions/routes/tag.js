@@ -23,8 +23,8 @@ module.exports = {
             if (params.game_id && typeof params.game_id == 'string') tag.game_id = params.game_id;
             else return reject((Server.fn.api.jsonError(400, 'Bad or Missing game_id')));
 
-            if (params.settings && Server.tags[tag.game_id] && Server.tags[tag.game_id][tag.tag_id]) {
-                for (const key in Server.tags[tag.game_id][tag.tag_id].fieldSettings) {
+            if (params.settings && Server.gameTags[tag.game_id] && Server.gameTags[tag.game_id][tag.tag_id]) {
+                for (const key in Server.gameTags[tag.game_id][tag.tag_id].fieldSettings) {
                     if (params.settings[key] != null && ['boolean', 'string', 'number'].includes(typeof params.settings[key])) {
                         tag.settings[key] = params.settings[key];
                     } else return reject((Server.fn.api.jsonError(400, `Bad or Missing '${key}' setting`)));
@@ -57,8 +57,8 @@ module.exports = {
             if (bodyParams.game_id && typeof bodyParams.game_id == 'string') tag.game_id = bodyParams.game_id;
             else return reject((Server.fn.api.jsonError(400, 'Bad or Missing game_id')));
 
-            if (bodyParams.settings && Server.tags[tag.game_id] && Server.tags[tag.game_id][tag.tag_id]) {
-                for (const key in Server.tags[tag.game_id][tag.tag_id].fieldSettings) {
+            if (bodyParams.settings && Server.gameTags[tag.game_id] && Server.gameTags[tag.game_id][tag.tag_id]) {
+                for (const key in Server.gameTags[tag.game_id][tag.tag_id].fieldSettings) {
                     if (bodyParams.settings[key] != null && ['boolean', 'string', 'number'].includes(typeof bodyParams.settings[key])) {
                         tag.settings[key] = bodyParams.settings[key];
                     } else return reject((Server.fn.api.jsonError(400, `Bad or Missing '${key}' setting`)));
@@ -173,12 +173,12 @@ module.exports = {
             let tagsInfo = [];
 
             for (const key in tag) {
-                if (Server.tags[tag[key].game.id][tag[key].tag_id]) {
-                    tag[key].info = Server.tags[tag[key].game.id][tag[key].tag_id];
+                if (Server.gameTags[tag[key].game.id][tag[key].tag_id]) {
+                    tag[key].info = Server.gameTags[tag[key].game.id][tag[key].tag_id];
                     tagsInfo.push(tag[key]);
                 }
             }
             return Promise.resolve(Server.fn.api.jsonSuccess(200, tagsInfo));
-        } else return Promise.resolve(Server.fn.api.jsonSuccess(200, (tag.info = Server.tags[tag.game.id][tag.tag_id], tag)));
+        } else return Promise.resolve(Server.fn.api.jsonSuccess(200, (tag.info = Server.gameTags[tag.game.id][tag.tag_id], tag)));
     },
 };

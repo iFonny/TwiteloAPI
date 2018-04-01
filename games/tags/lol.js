@@ -1,4 +1,4 @@
-const setting = {
+const fieldSettings = {
     account: {
         type: 'account', // select
         tooltip: false,
@@ -57,9 +57,9 @@ module.exports = {
             short: 6
         },
         fieldSettings: {
-            account: setting.account, // existing setting
-            size: setting.size, // existing setting
-            format: setting.format // existing setting
+            account: fieldSettings.account, // existing setting
+            size: fieldSettings.size, // existing setting
+            format: fieldSettings.format // existing setting
         },
         example: {
             size: { // setting property
