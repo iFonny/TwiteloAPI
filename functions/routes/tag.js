@@ -98,6 +98,7 @@ module.exports = {
 
             tag.user_id = userID;
             tag.created = Date.now();
+            tag.included = false;
 
             Server.fn.dbMethods.tag.insert(tag)
                 .then(async (result) => {

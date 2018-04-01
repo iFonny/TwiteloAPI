@@ -95,7 +95,7 @@ module.exports = {
     getAccountID(userID, account) {
         return new Promise((resolve, reject) => {
 
-            Server.gameAPI[account.game_id].getAccountID()
+            Server.gameAPI[account.game_id].getAccountID(account.settings)
                 .then((id) => {
                     if (id) resolve((account.user_id = userID, account.account_id = id, account.verified = false, account));
                     else reject(Server.fn.api.jsonError(404, 'Account not found'));
@@ -113,6 +113,7 @@ module.exports = {
             }).then((total) => {
                 if (total < config.constant.limits.accountbyGame) {
                     account.created = Date.now();
+                    account.included = false;
                     Server.fn.dbMethods.account.insert(account)
                         .then((result) => resolve(result.changes[0].new_val))
                         .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t create account', '[DB] createAccount() error', err)));
@@ -126,7 +127,7 @@ module.exports = {
     updateAccountGameData(account) {
         return new Promise((resolve, reject) => {
 
-            Server.gameAPI[account.game_id].updateAccountGameData(account)
+            Server.gameAPI[account.game_id].updateAccountGameData([account])
                 .then(() => resolve(Server.fn.api.jsonSuccess(200, account)))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update game data', '[DB] updateAccountGameData() error', err)));
 
