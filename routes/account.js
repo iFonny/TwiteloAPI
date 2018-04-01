@@ -74,7 +74,27 @@ module.exports = {
 
 
 		/* Edit account settings */
-		routerMe.post('/:id/edit', (req, res) => {
+		routerMe.post('/:id/edit', Server.limiter({
+			expire: 1000 * 60, // 1 minute
+			lookup: function (req, res, opts, next) {
+				opts.lookup = ['user.id', 'body.game_id'];
+
+				switch (req.body.game_id) {
+					case 'lol':
+						opts.total = 5;
+						break;
+
+					case 'speedrun':
+						opts.total = 2;
+						break;
+
+					default:
+						opts.total = 5;
+						break;
+				}
+				return next();
+			}
+		}), (req, res) => {
 			Server.fn.routes.account.checkParamsAccountUpdateSettings(req.body, req.params)
 				.then((account) => Server.fn.routes.account.getAccountID(req.user.id, account))
 				.then((account) => Server.fn.routes.account.updateAccountSettings(req.user.id, account)) // TODO
