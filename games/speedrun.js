@@ -4,6 +4,5 @@ module.exports = {
     name: 'Speedrun.com',
     icon: '/public/images/game/speedrun/icon.png',
     image: '/public/images/game/speedrun/image.png',
-    color: '#d68548',
-    enabled: true
+    color: '#d68548'
 };
