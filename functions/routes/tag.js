@@ -101,19 +101,7 @@ module.exports = {
             tag.included = false;
 
             Server.fn.dbMethods.tag.insert(tag)
-                .then(async (result) => {
-                    let newTag = result.changes[0].new_val;
-
-                    const game = await Server.fn.dbMethods.game.get(newTag.game_id);
-                    delete newTag.game_id;
-                    newTag.game = {
-                        id: game.id,
-                        name: game.name,
-                        small_name: game.small_name,
-                        color: game.color
-                    };
-                    resolve(newTag);
-                })
+                .then((result) => resolve(result.changes[0].new_val))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t create tag', '[DB] createTag() error', err)));
 
         });
@@ -174,12 +162,12 @@ module.exports = {
             let tagsInfo = [];
 
             for (const key in tag) {
-                if (Server.gameTags[tag[key].game.id][tag[key].tag_id]) {
-                    tag[key].info = Server.gameTags[tag[key].game.id][tag[key].tag_id];
+                if (Server.gameTags[tag[key].game_id][tag[key].tag_id]) {
+                    tag[key].info = Server.gameTags[tag[key].game_id][tag[key].tag_id];
                     tagsInfo.push(tag[key]);
                 }
             }
             return Promise.resolve(Server.fn.api.jsonSuccess(200, tagsInfo));
-        } else return Promise.resolve(Server.fn.api.jsonSuccess(200, (tag.info = Server.gameTags[tag.game.id][tag.tag_id], tag)));
+        } else return Promise.resolve(Server.fn.api.jsonSuccess(200, (tag.info = Server.gameTags[tag.game_id][tag.tag_id], tag)));
     },
 };

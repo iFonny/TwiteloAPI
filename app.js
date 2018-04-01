@@ -70,6 +70,7 @@ global.Server = {
         dbMethods: {}
     },
     limiter: null, // rate limiter
+    game: {}, // by game
     gameAPI: {}, // by game
     gameTags: {}, // by game
     gameSettings: {} // by game
@@ -97,30 +98,25 @@ glob.sync(`${__dirname}/database/methods/*.js`).forEach((file) => {
 });
 
 //=======================================================================//
-//     Tags & settings                                                   //
+//     Game, tag, settings, api                                          //
 //=======================================================================//
 
-/* Getting Tags & account in the /games/settings && /games/tags folder */
-glob.sync(`${__dirname}/games/settings/*.js`).forEach((file) => {
-    const gameName = path.basename(file, '.js');
-
-    // Require tags
-    Server.gameTags[gameName] = require(`${__dirname}/games/tags/${gameName}`);
-    // Require account settings
-    Server.gameSettings[gameName] = require(`${__dirname}/games/settings/${gameName}`);
-});
-
-//=======================================================================//
-//     Games api methods & functions                                     //
-//=======================================================================//
-
-/* Getting games api methods in the /games folder */
 glob.sync(`${__dirname}/games/*.js`).forEach((file) => {
     const gameName = path.basename(file, '.js');
 
-    // Require games api functions
-    Server.gameAPI[gameName] = require(`${__dirname}/games/${gameName}`);
+    // Require game in /games folder
+    Server.gameTags[gameName] = require(`${__dirname}/games/${gameName}`);
+    // Require game tags in /games/tags folder
+    Server.gameTags[gameName] = require(`${__dirname}/games/tags/${gameName}`);
+    // Require game account settings in /games/settings folder
+    Server.gameSettings[gameName] = require(`${__dirname}/games/settings/${gameName}`);
+    // Require game methods in /games/api folder
+    Server.gameAPI[gameName] = require(`${__dirname}/games/api/${gameName}`);
 });
+
+//=======================================================================//
+//     Games api functions                                               //
+//=======================================================================//
 
 /* Getting games functions in the /games/functions folder */
 glob.sync(`${__dirname}/games/functions/*.js`).forEach((file) => {
