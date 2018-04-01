@@ -7,15 +7,15 @@ module.exports = {
   jsonError(status, publicMessage, message, err) {
     if (err) __logError(message, err);
     return ({
-      status,
-      data: publicMessage
+      status: status,
+      data: publicMessage || null
     });
   },
 
   jsonSuccess(status, data) {
     return ({
-      status,
-      data,
+      status: status,
+      data: data || null,
     });
   },
 

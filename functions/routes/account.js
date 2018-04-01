@@ -31,17 +31,15 @@ module.exports = {
 
         });
     },
-    /*
 
-        checkParamsTagID(params) {
-            return new Promise((resolve, reject) => {
+    checkParamsAccountID(params) {
+        return new Promise((resolve, reject) => {
 
-                // Check mandatory params
-                if (params.id && typeof params.id == 'string' && params.id.length > 0) resolve(params.id);
-                else return reject((Server.fn.api.jsonError(400, 'Bad or Missing id')));
-            });
-        },
-        */
+            // Check mandatory params
+            if (params.id && typeof params.id == 'string' && params.id.length > 0) resolve(params.id);
+            else return reject((Server.fn.api.jsonError(400, 'Bad or Missing id')));
+        });
+    },
 
     /* Functions */
 
@@ -51,6 +49,16 @@ module.exports = {
             Server.fn.dbMethods.account.getAll(userID)
                 .then(accounts => resolve(Server.fn.api.jsonSuccess(200, accounts)))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get accounts', '[DB] getAll() error', err)));
+
+        });
+    },
+
+    getAccount(userID, id) {
+        return new Promise((resolve, reject) => {
+
+            Server.fn.dbMethods.account.get(userID, id)
+                .then(accounts => resolve(Server.fn.api.jsonSuccess(200, accounts[0])))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\' get account', '[DB] getAccount() error', err)));
 
         });
     },

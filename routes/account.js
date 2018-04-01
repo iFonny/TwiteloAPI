@@ -35,7 +35,10 @@ module.exports = {
 
 		/* Get account by id */
 		routerMe.get('/:id', (req, res) => {
-			// TODO
+			Server.fn.routes.account.checkParamsAccountID(req.params)
+				.then((id) => Server.fn.routes.account.getAccount(req.user.id, id)) // TODO
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
 		});
 
 
@@ -88,7 +91,7 @@ module.exports = {
 		/* Delete a tag */
 		routerMe.delete('/:id/delete', (req, res) => {
 			// TODO
-			Server.fn.routes.account.checkParamsAccountID(req.params) // TODO
+			Server.fn.routes.account.checkParamsAccountID(req.params)
 				.then((id) => Server.fn.routes.account.deleteTagsWithThisAccountFromProfile(req.user, id)) // TODO
 				.then((id) => Server.fn.routes.account.deleteAccount(req.user.id, id)) // TODO
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** a supprimé un compte`, data))

@@ -2,6 +2,16 @@
 //     GET                                                               //
 //=======================================================================//
 
+module.exports.get = (userID, id) => {
+    return r.table('account')
+        .getAll(id, {
+            index: 'id'
+        })
+        .filter({
+            user_id: userID
+        }).run();
+};
+
 module.exports.getAll = (userID) => {
     return r.table('account')
         .getAll(userID, {
