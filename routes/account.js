@@ -41,7 +41,6 @@ module.exports = {
 				.catch((err) => res.status(err.status).json(err));
 		});
 
-
 		/* Create an account */
 		routerMe.put('/create', Server.limiter({
 			expire: 1000 * 60, // 1 minute
@@ -68,27 +67,25 @@ module.exports = {
 				.then((account) => Server.fn.routes.account.getAccountID(req.user.id, account))
 				.then((account) => Server.fn.routes.account.createAccount(account))
 				.then((account) => Server.fn.routes.account.updateAccountGameData(account))
-				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient d'ajouter :heavy_plus_sign: un compte ${data.data.game_id} : \`${data.data.settings.username}\``, data))
+				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient d'ajouter :heavy_plus_sign: un compte **${data.data.game_id}** : \`${data.data.settings.username}\``, data))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});
 
 
-
-		/* Edit a tag */
+		/* Edit account settings */
 		routerMe.post('/:id/edit', (req, res) => {
-			// TODO
 			Server.fn.routes.account.checkParamsAccountUpdateSettings(req.body, req.params)
-				.then((data) => Server.fn.routes.account.getAccountData(req.user.id, data)) // TODO
-				.then((data) => Server.fn.routes.account.updateAccountSettings(req.user.id, data)) // TODO
-				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient d'editer :pencil: un compte : \`${req.body.settings.username}\``, data))
+				.then((account) => Server.fn.routes.account.getAccountID(req.user.id, account))
+				.then((account) => Server.fn.routes.account.updateAccountSettings(req.user.id, account)) // TODO
+				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient d'editer :pencil: un compte **${req.body.game_id}** : \`${req.body.settings.username}\``, data))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});
 
 
 
-		/* Delete a tag */
+		/* Delete an account */
 		routerMe.delete('/:id/delete', (req, res) => {
 			// TODO
 			Server.fn.routes.account.checkParamsAccountID(req.params)

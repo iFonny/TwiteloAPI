@@ -32,6 +32,35 @@ module.exports = {
         });
     },
 
+    checkParamsAccountUpdateSettings(bodyParams, urlParams) {
+        return new Promise((resolve, reject) => {
+
+            let account = {
+                id: '',
+                game_id: '',
+                settings: {}
+            };
+
+            // Check mandatory params
+            if (urlParams.id && typeof urlParams.id == 'string' && urlParams.id.length > 0) account.id = urlParams.id;
+            else return reject((Server.fn.api.jsonError(400, 'Bad or Missing id')));
+
+            if (bodyParams.game_id && typeof bodyParams.game_id == 'string' && Server.gameAPI[bodyParams.game_id]) account.game_id = bodyParams.game_id;
+            else return reject((Server.fn.api.jsonError(400, 'Bad or Missing game_id')));
+
+            if (bodyParams.settings && Server.gameSettings[account.game_id]) {
+                for (const key in Server.gameSettings[account.game_id]) {
+                    if (key == 'verified' || bodyParams.settings[key] != null && ['boolean', 'string', 'number'].includes(typeof bodyParams.settings[key])) {
+                        if (key != 'verified') account.settings[key] = bodyParams.settings[key];
+                    } else return reject((Server.fn.api.jsonError(400, `Bad or Missing '${key}' setting`)));
+                }
+            } else return reject((Server.fn.api.jsonError(400, 'Bad or Missing settings')));
+
+            resolve(account);
+
+        });
+    },
+
     checkParamsAccountID(params) {
         return new Promise((resolve, reject) => {
 
@@ -100,6 +129,19 @@ module.exports = {
             Server.gameAPI[account.game_id].updateAccountGameData(account)
                 .then(() => resolve(Server.fn.api.jsonSuccess(200, account)))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update game data', '[DB] updateAccountGameData() error', err)));
+
+        });
+    },
+
+    updateAccountSettings(userID, account) {
+        return new Promise((resolve, reject) => {
+
+            Server.fn.dbMethods.account.update(userID, account)
+                .then(async (result) => {
+                    if (result.replaced) resolve(Server.fn.api.jsonSuccess(200, result.changes[0].new_val));
+                    else resolve(Server.fn.api.jsonSuccess(200, false));
+                })
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t create account', '[DB] createAccount() error', err)));
 
         });
     }

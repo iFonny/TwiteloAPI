@@ -33,6 +33,18 @@ module.exports.insert = (document) => {
 //     EDIT                                                              //
 //=======================================================================//
 
+module.exports.update = (userID, document) => {
+    return r.table('account')
+        .getAll(document.id, {
+            index: 'id'
+        })
+        .filter({
+            user_id: userID
+        }).update(document, {
+            returnChanges: true
+        }).run();
+};
+
 //=======================================================================//
 //     DELETE                                                            //
 //=======================================================================//

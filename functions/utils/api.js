@@ -8,14 +8,14 @@ module.exports = {
     if (err) __logError(message, err);
     return ({
       status: status,
-      data: publicMessage || null
+      data: publicMessage
     });
   },
 
   jsonSuccess(status, data) {
     return ({
       status: status,
-      data: data || null,
+      data: data,
     });
   },
 
