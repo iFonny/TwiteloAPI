@@ -214,6 +214,10 @@ module.exports = {
                 let formatedSettings = _.groupBy(settings, 'type');
                 const triggers = _.keyBy(await Server.fn.dbMethods.trigger.getAll(), 'id');
 
+                for (const key in triggers) {
+                    triggers[key].game = Server.game[triggers[key].game_id].small_name;
+                }
+
                 for (const key in formatedSettings) {
                     for (const settingKey in formatedSettings[key]) {
                         formatedSettings[key][settingKey].game = triggers[formatedSettings[key][settingKey].trigger_id] ?

@@ -105,7 +105,7 @@ glob.sync(`${__dirname}/games/*.js`).forEach((file) => {
     const gameName = path.basename(file, '.js');
 
     // Require game in /games folder
-    Server.gameTags[gameName] = require(`${__dirname}/games/${gameName}`);
+    Server.game[gameName] = require(`${__dirname}/games/${gameName}`);
     // Require game tags in /games/tags folder
     Server.gameTags[gameName] = require(`${__dirname}/games/tags/${gameName}`);
     // Require game account settings in /games/settings folder
