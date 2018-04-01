@@ -28,7 +28,6 @@ module.exports = {
 
 		/* Get all accounts */
 		routerMe.get('/all', (req, res) => {
-			// TODO
 			Server.fn.routes.account.getAll(req.user.id) // TODO
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));

@@ -2,6 +2,12 @@
 //     GET                                                               //
 //=======================================================================//
 
+module.exports.getAll = (userID) => {
+    return r.table('account')
+        .getAll(userID, {
+            index: 'user_id'
+        }).orderBy('created').run();
+};
 
 //=======================================================================//
 //     INSERT                                                            //

@@ -45,6 +45,15 @@ module.exports = {
 
     /* Functions */
 
+    getAll(userID) {
+        return new Promise((resolve, reject) => {
+
+            Server.fn.dbMethods.account.getAll(userID)
+                .then(accounts => resolve(Server.fn.api.jsonSuccess(200, accounts)))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get accounts', '[DB] getAll() error', err)));
+
+        });
+    },
 
     getAccountID(userID, account) {
         return new Promise((resolve, reject) => {
