@@ -16,7 +16,7 @@ module.exports = {
 
 		/* Get games */
 		router.get('/', (req, res) => {
-			Server.fn.routes.game.getEnabledGames()
+			Server.fn.routes.game.getGames()
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});

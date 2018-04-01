@@ -45,14 +45,6 @@ module.exports = {
             __logInfo('RethinkDB: "trigger" indexes created.');
           });
         }
-        if (!tables.includes('game')) {
-          __logInfo('RethinkDB: "game" table created.');
-          r.tableCreate('game').run().then(() => {
-            r.table('game').indexCreate('small_name').run();
-            r.table('game').indexCreate('name').run();
-            __logInfo('RethinkDB: "game" indexes created.');
-          });
-        }
         if (!tables.includes('setting')) {
           __logInfo('RethinkDB: "setting" table created.');
           r.tableCreate('setting').run().then(() => {

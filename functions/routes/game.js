@@ -29,20 +29,13 @@ module.exports = {
 
     /* Functions */
 
-    getEnabledGames() {
-        return new Promise((resolve, reject) => {
-            Server.fn.dbMethods.game.getEnabled()
-                .then(games => resolve(Server.fn.api.jsonSuccess(200, games)))
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] getEnabledGames() error', err)));
-        });
+    getGames() {
+        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.game));
     },
 
     getGame(gameID) {
-        return new Promise((resolve, reject) => {
-            Server.fn.dbMethods.game.get(gameID)
-                .then(game => game ? resolve(Server.fn.api.jsonSuccess(200, game)) : reject(Server.fn.api.jsonError(400, 'Game not found')))
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] getEnabledGames() error', err)));
-        });
+        if (Server.game[gameID]) return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.game[gameID]));
+        else return Promise.reject(Server.fn.api.jsonError(400, 'Game not found'));
     },
 
     /* Tags */
@@ -52,7 +45,8 @@ module.exports = {
     },
 
     getTagsByGame(gameID) {
-        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.gameTags[gameID]));
+        if (Server.gameTags[gameID]) return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.gameTags[gameID]));
+        else return Promise.reject(Server.fn.api.jsonError(400, 'Game not found'));
     },
 
     /* Settings */
@@ -62,6 +56,7 @@ module.exports = {
     },
 
     getSettingsByGame(gameID) {
-        return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.gameSettings[gameID]));
+        if (Server.gameSettings[gameID]) return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.gameSettings[gameID]));
+        else return Promise.reject(Server.fn.api.jsonError(400, 'Game not found'));
     },
 };
