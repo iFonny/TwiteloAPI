@@ -4,16 +4,27 @@
 
 const fieldSettings = {
     size: {
-        type: 'size', // select
-        input: false, // already handled by the component
+        type: 'select', // select
         tooltip: {
-            en: 'Text length in profile',
-            fr: 'Longueur du texte dans le profil'
+            en: 'Text size in the profile',
+            fr: 'Taille du texte dans le profil'
         },
         label: {
             en: 'Size',
             fr: 'Taille'
-        }
+        },
+        input: {
+            default: {
+                value: 0,
+                en: 'Default size',
+                fr: 'Taille par défaut'
+            },
+            short: {
+                value: -4,
+                en: 'Short',
+                fr: 'Court'
+            }
+        },
     },
     format: {
         type: 'select', // select
@@ -24,14 +35,17 @@ const fieldSettings = {
         },
         input: {
             uppercase: {
+                value: 0,
                 en: 'EXAMPLE',
                 fr: 'EXEMPLE'
             },
             lowercase: {
+                value: 0,
                 en: 'example',
                 fr: 'exemple'
             },
             capitalize: {
+                value: 0,
                 en: 'Example',
                 fr: 'Exemple'
             }
@@ -51,10 +65,7 @@ module.exports = {
         categorySmall: 'Ranked Solo SR', // Category small name
         name: 'Tier', // Tag name
         nameSmall: 'Tier', // Tag small name
-        size: { // Tag sizes
-            default: 10, // default is required !!
-            short: 6
-        },
+        size: 10,
         account: true, // need account or not
         //settingsOrder: ['size', 'format'],
         fieldSettings: {
