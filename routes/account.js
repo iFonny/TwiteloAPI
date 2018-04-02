@@ -97,7 +97,7 @@ module.exports = {
 		}), (req, res) => {
 			Server.fn.routes.account.checkParamsAccountUpdateSettings(req.body, req.params)
 				.then((account) => Server.fn.routes.account.getAccountID(req.user.id, account))
-				.then((account) => Server.fn.routes.account.updateAccountSettings(req.user.id, account)) // TODO
+				.then((account) => Server.fn.routes.account.updateAccountSettings(req.user.id, account))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient d'editer :pencil: un compte **${req.body.game_id}** : \`${req.body.settings.username}\``, data))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
@@ -107,11 +107,11 @@ module.exports = {
 
 		/* Delete an account */
 		routerMe.delete('/:id/delete', (req, res) => {
-			// TODO
 			Server.fn.routes.account.checkParamsAccountID(req.params)
-				.then((id) => Server.fn.routes.account.deleteTagsWithThisAccountFromProfile(req.user, id)) // TODO
-				.then((id) => Server.fn.routes.account.deleteAccount(req.user.id, id)) // TODO
-				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** a supprimé un compte`, data))
+				.then((id) => Server.fn.routes.account.getTagsToDelete(req.user.id, id))
+				.then((data) => Server.fn.routes.account.deleteTagsFromProfile(req.user, data))
+				.then((data) => Server.fn.routes.account.deleteTagsAndAccount(req.user.id, data.account, data.tags))
+				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** a supprimé un compte et tous les tags liés`, data))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});

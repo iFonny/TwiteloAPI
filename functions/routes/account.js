@@ -145,5 +145,65 @@ module.exports = {
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t create account', '[DB] createAccount() error', err)));
 
         });
+    },
+
+    getTagsToDelete(userID, accountID) {
+        return new Promise((resolve, reject) => {
+
+            Server.fn.dbMethods.tag.getWithFilter(userID, {
+                    settings: {
+                        account: accountID
+                    }
+                })
+                .then((tags) => resolve({
+                    account: accountID,
+                    tags: tags.map(tag => tag.id)
+                }))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get tags to delete', '[DB] getTagsToDelete() error', err)));
+
+        });
+    },
+
+    deleteTagsFromProfile(user, data) {
+        return new Promise((resolve, reject) => {
+            function removeFromProfile(text, ids) {
+                const re = new RegExp(ids.join('|'), 'g');
+                return text.replace(re, '');
+            }
+
+            const ids = data.tags.map(tag => `<{${tag}}>`);
+
+            const twitelo = {
+                description: {
+                    content: removeFromProfile(user.twitelo.description.content.trim(), ids)
+                },
+                name: {
+                    content: removeFromProfile(user.twitelo.name.content.trim(), ids)
+                },
+                location: {
+                    content: removeFromProfile(user.twitelo.location.content.trim(), ids)
+                },
+                url: {
+                    content: removeFromProfile(user.twitelo.url.content.trim(), ids)
+                }
+            };
+
+            Server.fn.dbMethods.user.update(user.id, {
+                    twitelo
+                })
+                .then(() => resolve(data))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t delete tags from profile', '[DB] deleteTagsFromProfile() error', err)));
+        });
+    },
+
+    deleteTagsAndAccount(userID, account, tags) {
+        return new Promise((resolve, reject) => {
+
+            Server.fn.dbMethods.tag.deleteByIDs(userID, tags)
+                .then(() => Server.fn.dbMethods.account.delete(userID, account))
+                .then((result) => resolve(Server.fn.api.jsonSuccess(200, result.deleted ? true : false)))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t delete tags or account', '[DB] deleteTagsAndAccount() error', err)));
+
+        });
     }
 };

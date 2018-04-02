@@ -9,6 +9,16 @@ module.exports.getAll = (userID) => {
         }).orderBy('created').run();
 };
 
+
+module.exports.getWithFilter = (userID, condition) => {
+    return r.table('tag')
+        .getAll(userID, {
+            index: 'user_id'
+        })
+        .filter(condition).run();
+};
+
+
 //=======================================================================//
 //     INSERT                                                            //
 //=======================================================================//
@@ -47,6 +57,20 @@ module.exports.delete = (userID, id) => {
         .filter({
             user_id: userID
         })
+        .delete().run();
+};
+
+module.exports.deleteByIDs = (userID, ids) => {
+    return r.table('tag')
+        .getAll(userID, {
+            index: 'user_id'
+        })
+        .filter(
+            function (doc) {
+                return r.expr(ids)
+                    .contains(doc('id'));
+            }
+        )
         .delete().run();
 };
 
