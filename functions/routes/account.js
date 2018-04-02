@@ -152,9 +152,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
 
             Server.fn.dbMethods.tag.getWithFilter(userID, {
-                    settings: {
-                        account: accountID
-                    }
+                    account_id: accountID
                 })
                 .then((tags) => resolve({
                     account: accountID,

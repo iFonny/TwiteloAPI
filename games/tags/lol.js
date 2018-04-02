@@ -3,15 +3,6 @@
 //=======================================================================//
 
 const fieldSettings = {
-    account: {
-        type: 'account', // select
-        tooltip: false,
-        input: false, // already handled by the component
-        label: { // required
-            en: 'Account',
-            fr: 'Compte'
-        }
-    },
     size: {
         type: 'size', // select
         input: false, // already handled by the component
@@ -49,13 +40,6 @@ const fieldSettings = {
 };
 
 //=======================================================================//
-//     DATA SETTINGS                                                     //
-//=======================================================================//
-
-// TODO
-
-
-//=======================================================================//
 //     TAGS                                                              //
 //=======================================================================//
 
@@ -71,8 +55,9 @@ module.exports = {
             default: 10, // default is required !!
             short: 6
         },
+        account: true, // need account or not
+        //settingsOrder: ['size', 'format'],
         fieldSettings: {
-            account: fieldSettings.account, // existing setting
             size: fieldSettings.size, // existing setting
             format: fieldSettings.format // existing setting
         },

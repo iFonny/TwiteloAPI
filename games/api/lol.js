@@ -52,7 +52,7 @@ module.exports.getAccountsGameData = (accounts, tags) => {
 };
 
 /*
-** (TODO?? faire des fonctions qui genere des settings OU les ajouter directement dans les tags)
+ ** (TODO?? faire des fonctions qui genere des settings OU les ajouter directement dans les tags)
  ** Add game data settings and update database
  **
  ** Params : 
@@ -64,4 +64,23 @@ module.exports.updateAccountsGameData = (accountsData) => {
     return new Promise((resolve, reject) => {
         resolve();
     });
+};
+
+
+
+//=======================================================================//
+//     GENERATOR                                                         //
+//=======================================================================//
+
+module.exports.generator = (gameTagID, data) => {
+
+    switch (gameTagID) {
+        case 'LOL__RANKED_SOLO_SR__TIER':
+
+            break;
+
+        default:
+            return null;
+    }
+
 };

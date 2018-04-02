@@ -13,6 +13,7 @@ module.exports = {
             let tag = {
                 tag_id: '',
                 game_id: '',
+                account_id: false,
                 settings: {}
             };
 
@@ -31,6 +32,11 @@ module.exports = {
                 }
             } else return reject((Server.fn.api.jsonError(400, 'Bad or Missing settings')));
 
+            if (Server.gameTags[tag.game_id][tag.tag_id] && Server.gameTags[tag.game_id][tag.tag_id].account) {
+                if (params.account_id && typeof params.account_id == 'string') tag.account_id = params.account_id;
+                else return reject((Server.fn.api.jsonError(400, 'Bad or Missing account_id')));
+            } else tag.account_id = false;
+
             resolve(tag);
 
         });
@@ -43,6 +49,7 @@ module.exports = {
                 id: '',
                 tag_id: '',
                 game_id: '',
+                account_id: false,
                 settings: {}
             };
 
@@ -64,6 +71,11 @@ module.exports = {
                     } else return reject((Server.fn.api.jsonError(400, `Bad or Missing '${key}' setting`)));
                 }
             } else return reject((Server.fn.api.jsonError(400, 'Bad or Missing settings')));
+
+            if (Server.gameTags[tag.game_id][tag.tag_id] && Server.gameTags[tag.game_id][tag.tag_id].account) {
+                if (bodyParams.account_id && typeof bodyParams.account_id == 'string') tag.account_id = bodyParams.account_id;
+                else return reject((Server.fn.api.jsonError(400, 'Bad or Missing account_id')));
+            } else tag.account_id = false;
 
             delete tag.tag_id;
             delete tag.game_id;
@@ -112,7 +124,7 @@ module.exports = {
 
             Server.fn.dbMethods.tag.update(userID, tag)
                 .then(async (result) => {
-                    if (result.replaced) resolve(Server.fn.api.jsonSuccess(200, result.changes[0].new_val.settings));
+                    if (result.replaced) resolve(Server.fn.api.jsonSuccess(200, result.changes[0].new_val));
                     else resolve(Server.fn.api.jsonSuccess(200, false));
                 })
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update tag', '[DB] updateTagSettings() error', err)));
