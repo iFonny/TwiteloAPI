@@ -127,7 +127,8 @@ module.exports = {
     updateAccountGameData(account) {
         return new Promise((resolve, reject) => {
 
-            Server.gameAPI[account.game_id].updateAccountGameData([account])
+            Server.gameAPI[account.game_id].getAccountsGameData([account])
+                .then((accountsData) => Server.gameAPI[account.game_id].updateAccountsGameData(accountsData))
                 .then(() => resolve(Server.fn.api.jsonSuccess(200, account)))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update game data', '[DB] updateAccountGameData() error', err)));
 
