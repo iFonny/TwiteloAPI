@@ -1,4 +1,5 @@
 const request = require('request');
+const util = require('util');
 
 //=======================================================================//
 //     	LOGS functions                                                   //
@@ -44,7 +45,10 @@ module.exports.initLogs = () => {
 
 		if (typeof message != 'string') {
 			console.log(typeof message);
-			message = message.toString(); // TODO: A TESTER, JSON.stringify(message);
+			message = util.inspect(message, {
+				showHidden: true,
+				depth: null
+			}); // TODO: A TESTER, JSON.stringify(message);
 		}
 
 		if (discordWebHook === null) return;
