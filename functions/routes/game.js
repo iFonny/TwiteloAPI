@@ -45,7 +45,7 @@ module.exports = {
     },
 
     getTagsByGame(gameID) {
-        if (Server.gameTags[gameID]) return Promise.resolve(Server.fn.api.jsonSuccess(200, Server.gameTags[gameID]));
+        if (Server.gameTags[gameID]) return Promise.resolve(Server.fn.api.jsonSuccess(200, _.mapValues(Server.gameTags[gameID], o => _.omit(o, 'data'))));
         else return Promise.reject(Server.fn.api.jsonError(400, 'Game not found'));
     },
 
