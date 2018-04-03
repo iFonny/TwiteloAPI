@@ -30,23 +30,58 @@ module.exports.getAccountID = (settings) => {
 module.exports.getAccountsGameData = (accounts, tags) => {
     return new Promise((resolve, reject) => {
 
+
+        let size = Server.fn.game.getDataSize(Server.gameTags['lol']['LOL__RANKED_SOLO_SR__TIER'], {
+            format: 'capitalize',
+            size: 'default'
+        });
+        console.log(size);
+
+        /*
+
+
+
         let exGameData = {
             LOL__RANKED_SOLO_SR__TIER: 'diamond',
+            LOL__RANKED_SOLO_SR__DIVISION: '4',
             LOL__RANKED_SOLO_SR__LP: '13',
+            LOL__RANKED_FLEX_SR__TIER: 'silver',
+            LOL__RANKED_FLEX_SR__DIVISION: '2',
+            LOL__RANKED_FLEX_SR__LP: '100'
+        };
+
+        let account = {
+            id: 'f4e81a0e-f5e8-4eb3-bf95-c5203e1d87b9',
+            included: true,
+            user_id: '8a766142-be00-4661-abeb-a9e3e912dc05',
+            game_account_id: '46741395', // id du compte dans le jeu
+            game_id: 'lol',
+            verified: true,
+            created: 1519639337231,
+            settings: {
+                username: 'iFonny',
+                region: 'euw'
+            }
         };
 
         // TODO: Get stats en fonction des tags demandés (mettre a null les champs qui ne doivent pas changer ou contienne une error)
 
         resolve({
-            'accountID': {
-                account: 'account',
-                gameData: exGameData
-            },
-            'accountID2': {
-                account: 'account2',
-                gameData: exGameData
-            },
+            user_id: '8a766142-be00-4661-abeb-a9e3e912dc05',
+            account_id: '7a666132-be00-4761-abeb-a9e3e912dc14',
+            game_id: 'lol',
+            tag_id: 'LOL__RANKED_SOLO_SR__TIER',
+            updated: Date.now(),
+            data: 'diamond'
         });
+
+        resolve({
+            [account.id]: {
+                account: account,
+                gameData: exGameData
+            }
+        });*/
+        resolve();
 
     });
 };
@@ -62,6 +97,28 @@ module.exports.getAccountsGameData = (accounts, tags) => {
  */
 module.exports.updateAccountsGameData = (accountsData) => {
     return new Promise((resolve, reject) => {
+
+        for (const accountID in accountsData) {
+            const accountData = accountsData[accountID];
+
+            for (const tagID in accountData.gameData) {
+                let tagData = accountData.gameData[tagID];
+
+                switch (tagID) {
+                    case 'LOL__RANKED_SOLO_SR__TIER':
+                        tagData = this.generator.tier(Server.gameTags['lol']['LOL__RANKED_SOLO_SR__TIER'], tagData, {
+                            format: 'capitalize',
+                            size: 'short'
+                        });
+                        break;
+                    default:
+                        break;
+                }
+
+                console.log(tagData);
+            }
+        }
+
         resolve();
     });
 };
@@ -72,15 +129,26 @@ module.exports.updateAccountsGameData = (accountsData) => {
 //     GENERATOR                                                         //
 //=======================================================================//
 
-module.exports.generator = (gameTagID, data) => {
+module.exports.generator = {
+    tier(tag, data, settings) {
+        let result = data;
 
-    switch (gameTagID) {
-        case 'LOL__RANKED_SOLO_SR__TIER':
+        for (const key of tag.settingsOrder) {
+            const setting = settings[key];
 
-            break;
+            switch (key) {
+                case 'size':
+                    result = tag.data[key][setting][result];
+                    break;
+                case 'format':
+                    result = tag.data[key][setting](result);
+                    break;
 
-        default:
-            return null;
+                default:
+                    break;
+            }
+        }
+
+        return result;
     }
-
 };

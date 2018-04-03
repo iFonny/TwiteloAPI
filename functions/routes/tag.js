@@ -77,9 +77,6 @@ module.exports = {
                 else return reject((Server.fn.api.jsonError(400, 'Bad or Missing account_id')));
             } else tag.account_id = false;
 
-            delete tag.tag_id;
-            delete tag.game_id;
-
             resolve(tag);
 
         });
@@ -111,6 +108,9 @@ module.exports = {
             tag.user_id = userID;
             tag.created = Date.now();
             tag.included = false;
+            tag.size = Server.fn.game.getDataSize(Server.gameTags[tag.game_id][tag.tag_id], tag.settings);
+
+            if (!tag.size) return reject(Server.fn.api.jsonError(400, 'Bad settings', 'Bad settings? getDataSize() error', tag.settings));
 
             Server.fn.dbMethods.tag.insert(tag)
                 .then((result) => resolve(result.changes[0].new_val))
@@ -121,6 +121,13 @@ module.exports = {
 
     updateTagSettings(userID, tag) {
         return new Promise((resolve, reject) => {
+
+            tag.size = Server.fn.game.getDataSize(Server.gameTags[tag.game_id][tag.tag_id], tag.settings);
+
+            if (!tag.size) return reject(Server.fn.api.jsonError(400, 'Bad settings', 'Bad settings? getDataSize() error', tag.settings));
+
+            delete tag.tag_id;
+            delete tag.game_id;
 
             Server.fn.dbMethods.tag.update(userID, tag)
                 .then(async (result) => {

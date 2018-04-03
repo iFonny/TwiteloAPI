@@ -97,7 +97,7 @@ module.exports = {
 
             Server.gameAPI[account.game_id].getAccountID(account.settings)
                 .then((id) => {
-                    if (id) resolve((account.user_id = userID, account.account_id = id, account.verified = false, account));
+                    if (id) resolve((account.user_id = userID, account.game_account_id = id, account.verified = false, account));
                     else reject(Server.fn.api.jsonError(404, 'Account not found'));
                 })
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get game account', '[DB] getAccountID() error', err)));
@@ -127,7 +127,7 @@ module.exports = {
     updateAccountGameData(account) {
         return new Promise((resolve, reject) => {
 
-            Server.gameAPI[account.game_id].getAccountsGameData([account])
+            Server.gameAPI[account.game_id].getAccountsGameData([account]) // TODO: create an error if ratelimit
                 .then((accountsData) => Server.gameAPI[account.game_id].updateAccountsGameData(accountsData))
                 .then(() => resolve(Server.fn.api.jsonSuccess(200, account)))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update game data', '[DB] updateAccountGameData() error', err)));

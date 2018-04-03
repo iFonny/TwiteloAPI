@@ -73,7 +73,7 @@ module.exports = {
           __logInfo('RethinkDB: "account" table created.');
           r.tableCreate('account').run().then(() => {
             r.table('account').indexCreate('user_id').run();
-            r.table('account').indexCreate('account_id').run();
+            r.table('account').indexCreate('game_account_id').run();
             r.table('account').indexCreate('game_id').run();
             r.table('account').indexCreate('created').run();
             __logInfo('RethinkDB: "account" indexes created.');

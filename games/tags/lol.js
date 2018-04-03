@@ -65,12 +65,42 @@ module.exports = {
         categorySmall: 'Ranked Solo SR', // Category small name
         name: 'Tier', // Tag name
         nameSmall: 'Tier', // Tag small name
-        size: 10,
+        size: 10, // default size
         account: true, // need account or not
-        //settingsOrder: ['size', 'format'],
         fieldSettings: {
             size: fieldSettings.size, // existing setting
             format: fieldSettings.format // existing setting
+        },
+        settingsOrder: ['size', 'format'], // settings order
+        generator: 'tier', // function called to generate data 
+        data: {
+            size: { // setting property
+                default: { // setting value
+                    'unranked': 'unranked',
+                    'bronze': 'bronze',
+                    'silver': 'silver',
+                    'gold': 'gold',
+                    'platinum': 'platinum',
+                    'diamond': 'diamond',
+                    'master': 'master',
+                    'challenger': 'challenger',
+                },
+                short: { // setting value
+                    'unranked': 'unrank',
+                    'bronze': 'bronze',
+                    'silver': 'silver',
+                    'gold': 'gold',
+                    'platinum': 'plat',
+                    'diamond': 'diam',
+                    'master': 'master',
+                    'challenger': 'chall',
+                }
+            },
+            format: { // setting property
+                lowercase: _.toLower, // setting value
+                uppercase: _.toUpper, // setting value
+                capitalize: _.capitalize // setting value
+            }
         },
         example: {
             size: { // setting property
