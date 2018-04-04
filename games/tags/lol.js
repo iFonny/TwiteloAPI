@@ -96,24 +96,24 @@ module.exports = {
         data: {
             size: { // setting property
                 default: { // setting value
-                    'unranked': 'unranked',
-                    'bronze': 'bronze',
-                    'silver': 'silver',
-                    'gold': 'gold',
-                    'platinum': 'platinum',
-                    'diamond': 'diamond',
-                    'master': 'master',
-                    'challenger': 'challenger',
+                    'UNRANKED': 'UNRANKED',
+                    'BRONZE': 'BRONZE',
+                    'SILVER': 'SILVER',
+                    'GOLD': 'GOLD',
+                    'PLATINUM': 'PLATINUM',
+                    'DIAMOND': 'DIAMOND',
+                    'MASTER': 'MASTER',
+                    'CHALLENGER': 'CHALLENGER',
                 },
                 short: { // setting value
-                    'unranked': 'unrank',
-                    'bronze': 'bronze',
-                    'silver': 'silver',
-                    'gold': 'gold',
-                    'platinum': 'plat',
-                    'diamond': 'diam',
-                    'master': 'master',
-                    'challenger': 'chall',
+                    'UNRANKED': 'UNRANK',
+                    'BRONZE': 'BRONZE',
+                    'SILVER': 'SILVER',
+                    'GOLD': 'GOLD',
+                    'PLATINUM': 'PLAT',
+                    'DIAMOND': 'DIAM',
+                    'MASTER': 'MASTER',
+                    'CHALLENGER': 'CHALL',
                 }
             },
             format: { // setting property
@@ -127,7 +127,7 @@ module.exports = {
             size: { // setting property
                 default: { // setting value
                     format: { // setting property
-                        original: 'diamond',
+                        original: 'DIAMOND',
                         uppercase: 'DIAMOND', // setting value
                         lowercase: 'diamond', // setting value
                         capitalize: 'Diamond' // setting value
@@ -135,7 +135,7 @@ module.exports = {
                 },
                 short: { // setting value
                     format: { // setting property
-                        original: 'diam',
+                        original: 'DIAM',
                         uppercase: 'DIAM', // setting value
                         lowercase: 'diam', // setting value
                         capitalize: 'Diam' // setting value

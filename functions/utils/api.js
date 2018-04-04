@@ -78,6 +78,35 @@ module.exports = {
     }
 
     return Promise.resolve(Server.fn.api.jsonSuccess(200, __logJoinLeave(stats)));
+  },
+
+  getAndUpdateGameData(game) {
+    return new Promise((resolve, reject) => {
+      Server.fn.dbMethods.tag.getTagsToUpdate(game.id, game.ratelimit.total)
+        .then((results) => {
+          let tagsToUpdate = [];
+
+          for (const result of results) {
+            let tagToUpdate = {
+              game_id: result.group[0],
+              data_settings: result.group[1],
+              game_account_info: result.group[2],
+              tag_ids: {}
+            };
+
+            for (const tag of result.reduction) {
+              tagToUpdate.tag_ids[tag.tag_id] = true;
+            }
+
+            tagsToUpdate.push(tagToUpdate);
+          }
+
+          return tagsToUpdate;
+        })
+        .then((tags) => Server.gameAPI[game.id].updateGameData(game, tags))
+        // TODO: resolve le retour de updateGameData?
+        .catch(reject);
+    });
   }
 
 };

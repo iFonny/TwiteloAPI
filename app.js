@@ -203,3 +203,15 @@ glob.sync(`${__dirname}/routes/*.js`).forEach((file) => {
 app.all('*', Server.fn.error.page404);
 
 module.exports = app; // for testing
+
+
+
+
+
+
+
+//=======================================================================//
+//     Test game data updater                                            //
+//=======================================================================//
+
+Server.fn.api.getAndUpdateGameData(Server.game['lol']);

@@ -1,15 +1,18 @@
 module.exports = {
 
-    fonctionCoolQuiRecupereDesChoses: (accountInfo, region) => {
+    fonctionCoolQuiRecupereDesChoses: (summonerID, region) => {
         return new Promise((resolve) => {
 
             setTimeout(() => {
                 resolve({
-                    username: 'iFonny',
-                    soloSR: {
-                        tier: 'diamond',
-                        division: '3',
-                        lp: '26'
+                    requests: 1,
+                    data: {
+                        username: 'iFonny',
+                        soloSR: {
+                            tier: 'diamond',
+                            division: '3',
+                            lp: '26'
+                        }
                     }
                 });
             }, 3000);

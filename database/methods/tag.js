@@ -91,10 +91,10 @@ module.exports.deleteByIDs = (userID, ids) => {
 //=======================================================================//
 
 module.exports.getTagsToUpdate = (game, time) => {
-    return r.db('twitelo_dev').table('tag')
+    return r.table('tag')
         .filter({
-            included: false,
-            game_id: 'lol'
+            included: false, // TODO: changer to true
+            game_id: game
         })
         .filter(r.row('updated').lt(Date.now() - (time * 1000)))
         .map({
@@ -103,5 +103,7 @@ module.exports.getTagsToUpdate = (game, time) => {
             data_settings: r.row('data_settings'),
             game_account_info: r.row('game_account_info')
         })
-        .distinct().run();
+        .distinct()
+        .group('game_id', 'data_settings', 'game_account_info')
+        .run();
 };
