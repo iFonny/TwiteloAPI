@@ -45,6 +45,18 @@ module.exports.update = (userID, document) => {
         }).run();
 };
 
+module.exports.updateByAccountID = (userID, accountID, document) => {
+    return r.table('tag')
+        .getAll(accountID, {
+            index: 'account_id'
+        })
+        .filter({
+            user_id: userID
+        }).update(document, {
+            returnChanges: true
+        }).run();
+};
+
 //=======================================================================//
 //     DELETE                                                            //
 //=======================================================================//
@@ -77,3 +89,19 @@ module.exports.deleteByIDs = (userID, ids) => {
 //=======================================================================//
 //     OTHER                                                             //
 //=======================================================================//
+
+module.exports.getTagsToUpdate = (game, time) => {
+    return r.db('twitelo_dev').table('tag')
+        .filter({
+            included: false,
+            game_id: 'lol'
+        })
+        .filter(r.row('updated').lt(Date.now() - (time * 1000)))
+        .map({
+            game_id: r.row('game_id'),
+            tag_id: r.row('tag_id'),
+            data_settings: r.row('data_settings'),
+            game_account_info: r.row('game_account_info')
+        })
+        .distinct().run();
+};
