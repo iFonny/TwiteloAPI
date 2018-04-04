@@ -123,7 +123,7 @@ glob.sync(`${__dirname}/games/functions/*.js`).forEach((file) => {
     const name = path.basename(file, '.js');
 
     // Require games api functions
-    Server.fn.game = require(`${__dirname}/games/functions/${name}`);
+    Server.fn.game[name] = require(`${__dirname}/games/functions/${name}`);
 });
 
 

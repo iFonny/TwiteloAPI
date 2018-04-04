@@ -34,6 +34,11 @@ const fieldSettings = {
             fr: 'Mise en forme'
         },
         input: {
+            original: {
+                value: 0,
+                en: 'No change',
+                fr: 'Aucune modification'
+            },
             uppercase: {
                 value: 0,
                 en: 'EXAMPLE',
@@ -50,6 +55,18 @@ const fieldSettings = {
                 fr: 'Exemple'
             }
         }
+    }
+};
+
+const dataSettings = {
+    game: {
+        type: 'string', // text input
+        tooltip: false,
+        input: false, // because string type
+        label: {
+            en: 'Game',
+            fr: 'Jeu'
+        },
     }
 };
 
@@ -70,6 +87,9 @@ module.exports = {
         fieldSettings: {
             size: fieldSettings.size, // existing setting
             format: fieldSettings.format // existing setting
+        },
+        dataSettings: {
+            game: dataSettings.game, // existing setting
         },
         settingsOrder: ['size', 'format'], // settings order
         generator: 'tier', // function called to generate data 
@@ -97,6 +117,7 @@ module.exports = {
                 }
             },
             format: { // setting property
+                original: _.trim,
                 lowercase: _.toLower, // setting value
                 uppercase: _.toUpper, // setting value
                 capitalize: _.capitalize // setting value
@@ -106,6 +127,7 @@ module.exports = {
             size: { // setting property
                 default: { // setting value
                     format: { // setting property
+                        original: 'diamond',
                         uppercase: 'DIAMOND', // setting value
                         lowercase: 'diamond', // setting value
                         capitalize: 'Diamond' // setting value
@@ -113,6 +135,7 @@ module.exports = {
                 },
                 short: { // setting value
                     format: { // setting property
+                        original: 'diam',
                         uppercase: 'DIAM', // setting value
                         lowercase: 'diam', // setting value
                         capitalize: 'Diam' // setting value
