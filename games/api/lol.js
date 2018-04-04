@@ -21,27 +21,56 @@ module.exports.getAccountInfo = (settings) => {
 };
 
 /*
- ** Resolve game data for accounts
+ ** Update database with new game data
  **
  ** Params : 
- ** - accounts (required): Array of accounts
- ** - object (optional): Object with tags to update (all if undefined) like : 
- **            {LOL__RANKED_SOLO_SR__TIER: true, LOL__RANKED_SOLO_SR__LP: true}
+ ** - game (required)
+ ** - tags (required): Array of tags (reduced and modified with only useful informations)
+ ** example: 
+ ** [{ 
+ **     game_id: 'lol',
+ **     data_settings: null,
+ **     game_account_info: { 
+ **         account_id: '204805322',
+ **         region: 'br',
+ **         summoner_id: '46741395'
+ **     },
+ **     tag_ids: [ 'LOL__RANKED_SOLO_SR__DIVISION', 'LOL__RANKED_SOLO_SR__TIER' ] 
+ ** }]
  **
  ** Return (Promise): 
- ** - object: object of accounts key by id (db id) with account && game data
+ ** - ??
  */
 
-/* AVANT D'ARRIVER ICI (pour chaque jeu): 
- ** - recuperer tous les tags qui sont 'included' et dans le jeu desiré (ici 'lol')
- **     conditions:
- **         - 'included' = true
- **         - 'game_id' = 'lol' (ici)
- **         - 'updated' si la derniere update a été faite il y a plus de lol.ratelimit.total (penser au ms) (ici 10 minutes / 600s)
- **         - join avec la table 'account' (grace au 'account_id') et remplacer 'account_id' par 'game_account_info'
- */
-module.exports.updateGameData = (tags) => {
+module.exports.updateGameData = (game, tags) => {
     return new Promise(async (resolve, reject) => {
+
+        let reqCounter = 0;
+        let totalRequests = 0;
+
+        for (const {
+                data_settings,
+                game_account_info,
+                tag_ids
+            } of tags) {
+
+            // If one of this tag -> update datas
+            if (tag_ids.LOL__RANKED_SOLO_SR__TIER || tag_ids.LOL__RANKED_SOLO_SR__DIVISION || tag_ids.LOL__RANKED_SOLO_SR__LP) {
+                const res = await Server.fn.game[game.id].fonctionCoolQuiRecupereDesChoses(game_account_info.summoner_id, game_account_info.region);
+                reqCounter += res.requests;
+                //console.log('nice');
+            }
+            if (tag_ids.LOL__TOP1__TIER) {
+                const res = await Server.fn.game[game.id].fonctionCoolQuiRecupereDesChoses();
+                reqCounter += res.requests;
+            }
+
+            console.log(reqCounter);
+
+
+
+            //console.log(iterator);
+        }
 
         /*
         let gameDatas = [];
@@ -104,7 +133,7 @@ module.exports.updateGameData = (tags) => {
             }
             */
 
-            /* if (!tags ||
+        /* if (!tags ||
                 tags.LOL__RANKED_FLEX_SR__TIER || tags.LOL__RANKED_FLEX_SR__DIVISION || tags.LOL__RANKED_FLEX_SR__LP) {
                 console.log(await Server.fn.game.lol.fonctionCoolQuiRecupereDesChoses(account.game_account_info, account.settings.region));
                 console.log('RANKED_FLEX_SR' + account.id);
@@ -222,7 +251,7 @@ module.exports.generator = {
 
             switch (key) {
                 case 'size':
-                    result = tag.data[key][setting][result.toLowerCase()];
+                    result = tag.data[key][setting][result.toUpperCase()];
                     break;
                 case 'format':
                     result = tag.data[key][setting](result);
