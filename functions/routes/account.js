@@ -127,11 +127,13 @@ module.exports = {
     updateAccountGameData(account) {
         return new Promise((resolve, reject) => {
 
-            Server.gameAPI[account.game_id].getAccountsGameData([account]) // TODO: create an error if ratelimit
-                .then((accountsData) => Server.gameAPI[account.game_id].updateAccountsGameData(accountsData))
+            resolve(Server.fn.api.jsonSuccess(200, account));
+
+            /*Server.gameAPI[account.game_id].getAccountsGameData([account]) // TODO: create an error if ratelimit
+                //.then((accountsData) => Server.gameAPI[account.game_id].updateAccountsGameData(accountsData))
                 .then(() => resolve(Server.fn.api.jsonSuccess(200, account)))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update game data', '[DB] updateAccountGameData() error', err)));
-
+*/
         });
     },
 
@@ -140,8 +142,12 @@ module.exports = {
 
             Server.fn.dbMethods.account.update(userID, account)
                 .then(async (result) => {
-                    if (result.replaced) resolve(Server.fn.api.jsonSuccess(200, result.changes[0].new_val));
-                    else resolve(Server.fn.api.jsonSuccess(200, false));
+                    if (result.replaced) {
+                        Server.fn.dbMethods.tag.updateByAccountID(userID, account.id, { // update tag : game_account_info
+                                game_account_info: account.game_account_info
+                            }).then(() => resolve(Server.fn.api.jsonSuccess(200, result.changes[0].new_val)))
+                            .catch(() => reject(Server.fn.api.jsonError(500, 'Can\'t update account : tags not found')));
+                    } else resolve(Server.fn.api.jsonSuccess(200, false));
                 })
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t create account', '[DB] createAccount() error', err)));
 

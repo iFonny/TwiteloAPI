@@ -13,7 +13,8 @@ module.exports.getAccountInfo = (settings) => {
         // TODO
         resolve({
             summoner_id: '46741395',
-            account_id: '204805322'
+            account_id: '204805322',
+            region: settings.region
         });
 
     });
@@ -30,60 +31,60 @@ module.exports.getAccountInfo = (settings) => {
  ** Return (Promise): 
  ** - object: object of accounts key by id (db id) with account && game data
  */
-module.exports.getAccountsGameData = (accounts, tags) => {
+
+/* AVANT D'ARRIVER ICI (pour chaque jeu): 
+ ** - recuperer tous les tags qui sont 'included' et dans le jeu desiré (ici 'lol')
+ **     conditions:
+ **         - 'included' = true
+ **         - 'game_id' = 'lol' (ici)
+ **         - 'updated' si la derniere update a été faite il y a plus de lol.ratelimit.total (penser au ms) (ici 10 minutes / 600s)
+ **         - join avec la table 'account' (grace au 'account_id') et remplacer 'account_id' par 'game_account_info'
+ */
+module.exports.updateGameData = (tags) => {
     return new Promise(async (resolve, reject) => {
 
+        /*
         let gameDatas = [];
 
-        accounts = [{
-                "created": 1522743686411,
-                "game_account_info": {
-                    "account_id": "204805322",
-                    "summoner_id": "46741395"
-                },
-                "game_id": "lol",
-                "id": "d18402ef-f413-4a97-9f34-b29bdbcf47f1",
-                "included": false,
-                "settings": {
-                    "region": "euw",
-                    "username": "iFonny"
-                },
-                "user_id": "05e9ac42-b2db-4858-af6b-b5dda3710e7f",
-                "verified": false
+        "game_id": "lol",
+        "tag_id": "LOL__RANKED_SOLO_SR__TIER"
+        "dataSettings": {
+            "game": "ori",
+            "category": "any%"
+        }
+        "game_account_info": {
+            "account_id": "204805322",
+            "region": "euw",
+            "summoner_id": "46741395"
+        },
+
+        tags = [{
+            "game_account_info": {
+                "account_id": "204805322",
+                "region": "euw",
+                "summoner_id": "46741395"
+            }, // de la table account (obtenu (et remplace) avec account_id)
+            "created": 1522819163251,
+            "dataSettings": {
+                "game": "ori"
             },
-            {
-                "created": 1522743696795,
-                "game_account_info": {
-                    "account_id": "204805322",
-                    "summoner_id": "46741395"
-                },
-                "game_id": "lol",
-                "id": "eae38537-041f-4668-b470-7f9bdd79bb74",
-                "included": false,
-                "settings": {
-                    "region": "euw",
-                    "username": "iFonny"
-                },
-                "user_id": "05e9ac42-b2db-4858-af6b-b5dda3710e7f",
-                "verified": false
+            "game_id": "lol",
+            "id": "104fa55a-434f-47ae-a887-2ae154f9e045",
+            "included": true,
+            "settings": {
+                "format": "uppercase",
+                "size": "default"
             },
-            {
-                "created": 1522743724122,
-                "game_account_info": {
-                    "account_id": "204805322",
-                    "summoner_id": "46741395"
-                },
-                "game_id": "lol",
-                "id": "5823aefd-a0cd-4d8a-a6f5-8e969bf00a40",
-                "included": false,
-                "settings": {
-                    "region": "euw",
-                    "username": "iFonny"
-                },
-                "user_id": "05e9ac42-b2db-4858-af6b-b5dda3710e7f",
-                "verified": false
-            }
-        ];
+            "size": 10,
+            "tag_id": "LOL__RANKED_SOLO_SR__TIER",
+            "user_id": "05e9ac42-b2db-4858-af6b-b5dda3710e7f"
+        }];
+
+
+
+
+
+
 
         tags = {
             LOL__RANKED_SOLO_SR__TIER: true,
@@ -101,15 +102,16 @@ module.exports.getAccountsGameData = (accounts, tags) => {
                 //console.log(Server.fn.game.utils.formatGameDataForDB(account, data.username));
                 //console.log('RANKED_SOLO_SR' + account.id);
             }
+            */
 
             /* if (!tags ||
                 tags.LOL__RANKED_FLEX_SR__TIER || tags.LOL__RANKED_FLEX_SR__DIVISION || tags.LOL__RANKED_FLEX_SR__LP) {
                 console.log(await Server.fn.game.lol.fonctionCoolQuiRecupereDesChoses(account.game_account_info, account.settings.region));
                 console.log('RANKED_FLEX_SR' + account.id);
-            } */
+            } 
         }
 
-
+*/
 
         /*
 

@@ -15,7 +15,7 @@ module.exports = {
                 game_id: '',
                 account_id: false,
                 settings: {},
-                dataSettings: {}
+                data_settings: {}
             };
 
             // Check mandatory params
@@ -25,15 +25,15 @@ module.exports = {
             if (params.game_id && typeof params.game_id == 'string') tag.game_id = params.game_id;
             else return reject((Server.fn.api.jsonError(400, 'Bad or Missing game_id')));
 
-            if (params.settings && Server.gameTags[tag.game_id] && Server.gameTags[tag.game_id][tag.tag_id]) {
+            if (params.settings && params.data_settings && Server.gameTags[tag.game_id] && Server.gameTags[tag.game_id][tag.tag_id]) {
                 for (const key in Server.gameTags[tag.game_id][tag.tag_id].fieldSettings) {
                     if (params.settings[key] != null && ['boolean', 'string', 'number'].includes(typeof params.settings[key])) {
                         tag.settings[key] = params.settings[key];
                     } else return reject((Server.fn.api.jsonError(400, `Bad or Missing '${key}' setting`)));
                 }
                 for (const key in Server.gameTags[tag.game_id][tag.tag_id].dataSettings) {
-                    if (params.dataSettings[key] != null && ['boolean', 'string', 'number'].includes(typeof params.dataSettings[key])) {
-                        tag.dataSettings[key] = params.dataSettings[key];
+                    if (params.data_settings[key] != null && ['boolean', 'string', 'number'].includes(typeof params.data_settings[key])) {
+                        tag.data_settings[key] = params.data_settings[key];
                     } else return reject((Server.fn.api.jsonError(400, `Bad or Missing '${key}' setting`)));
                 }
             } else return reject((Server.fn.api.jsonError(400, 'Bad or Missing settings')));
@@ -57,7 +57,7 @@ module.exports = {
                 game_id: '',
                 account_id: false,
                 settings: {},
-                dataSettings: {}
+                data_settings: {}
             };
 
             // Check mandatory params
@@ -71,15 +71,15 @@ module.exports = {
             if (bodyParams.game_id && typeof bodyParams.game_id == 'string') tag.game_id = bodyParams.game_id;
             else return reject((Server.fn.api.jsonError(400, 'Bad or Missing game_id')));
 
-            if (bodyParams.settings && bodyParams.dataSettings && Server.gameTags[tag.game_id] && Server.gameTags[tag.game_id][tag.tag_id]) {
+            if (bodyParams.settings && bodyParams.data_settings && Server.gameTags[tag.game_id] && Server.gameTags[tag.game_id][tag.tag_id]) {
                 for (const key in Server.gameTags[tag.game_id][tag.tag_id].fieldSettings) {
                     if (bodyParams.settings[key] != null && ['boolean', 'string', 'number'].includes(typeof bodyParams.settings[key])) {
                         tag.settings[key] = bodyParams.settings[key];
                     } else return reject((Server.fn.api.jsonError(400, `Bad or Missing '${key}' setting`)));
                 }
                 for (const key in Server.gameTags[tag.game_id][tag.tag_id].dataSettings) {
-                    if (bodyParams.dataSettings[key] != null && ['boolean', 'string', 'number'].includes(typeof bodyParams.dataSettings[key])) {
-                        tag.dataSettings[key] = bodyParams.dataSettings[key];
+                    if (bodyParams.data_settings[key] != null && ['boolean', 'string', 'number'].includes(typeof bodyParams.data_settings[key])) {
+                        tag.data_settings[key] = bodyParams.data_settings[key];
                     } else return reject((Server.fn.api.jsonError(400, `Bad or Missing '${key}' setting`)));
                 }
             } else return reject((Server.fn.api.jsonError(400, 'Bad or Missing settings')));
@@ -115,10 +115,17 @@ module.exports = {
     },
 
     createTag(userID, tag) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
+
+            if (tag.account_id)
+                await Server.fn.dbMethods.account.get(userID, tag.account_id)
+                .then((accounts) => tag.game_account_info = accounts[0].game_account_info)
+                .catch(() => reject(Server.fn.api.jsonError(500, 'Can\'t create tag : account not found')));
+            else tag.game_account_info = null;
 
             tag.user_id = userID;
             tag.created = Date.now();
+            tag.updated = Date.now();
             tag.included = false;
             tag.size = Server.fn.game.utils.getDataSize(Server.gameTags[tag.game_id][tag.tag_id], tag.settings);
 
@@ -132,8 +139,15 @@ module.exports = {
     },
 
     updateTagSettings(userID, tag) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
 
+            if (tag.account_id)
+                await Server.fn.dbMethods.account.get(userID, tag.account_id)
+                .then((accounts) => tag.game_account_info = accounts[0].game_account_info)
+                .catch(() => reject(Server.fn.api.jsonError(500, 'Can\'t update tag : account not found')));
+            else tag.game_account_info = null;
+
+            // tag.updated = Date.now(); si j'update les tags au moment de l'edition (a reflechir si possible par rapport au ratelimits)
             tag.size = Server.fn.game.utils.getDataSize(Server.gameTags[tag.game_id][tag.tag_id], tag.settings);
 
             if (!tag.size) return reject(Server.fn.api.jsonError(400, 'Bad settings', 'Bad settings? getDataSize() error', tag.settings));
