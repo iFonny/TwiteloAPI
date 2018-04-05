@@ -18,6 +18,10 @@ module.exports.initLogs = () => {
 				discordWebHook = config.logs.logDiscordWebhook;
 				color = 5687273;
 				break;
+			case 'recap':
+				discordWebHook = config.logs.recapDiscordWebhook;
+				color = 5687273;
+				break;
 			case 'info':
 				discordWebHook = config.logs.infoDiscordWebhook;
 				color = 5687273;
@@ -117,6 +121,12 @@ module.exports.initLogs = () => {
 
 	global.__log = (str) => {
 		sendDiscordLog('log', str);
+		console.log(str);
+		return str;
+	};
+
+	global.__logRecap = (str) => {
+		sendDiscordLog('recap', str);
 		console.log(str);
 		return str;
 	};

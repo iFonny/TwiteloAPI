@@ -14,6 +14,7 @@
         "config": false,
         "Server": false,
         "__log": false,
+        "__logRecap": false,
         "__logInfo": false,
         "__logError": false,
         "__logWarning": false,
