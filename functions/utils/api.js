@@ -84,6 +84,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       Server.fn.dbMethods.tag.getTagsToUpdate(game.id, game.ratelimit.total)
         .then((results) => {
+
           let tagsToUpdate = [];
 
           for (const result of results) {
@@ -104,7 +105,7 @@ module.exports = {
           return tagsToUpdate;
         })
         .then((tags) => Server.gameAPI[game.id].updateGameData(game, tags))
-        // TODO: resolve le retour de updateGameData?
+        .then(resolve)
         .catch(reject);
     });
   }

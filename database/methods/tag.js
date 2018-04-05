@@ -57,6 +57,14 @@ module.exports.updateByAccountID = (userID, accountID, document) => {
         }).run();
 };
 
+module.exports.updateByTagIDAndFilter = (tagID, condition, document) => {
+    return r.table('tag').getAll(tagID, {
+            index: 'tag_id'
+        })
+        .filter(condition)
+        .update(document).run();
+};
+
 //=======================================================================//
 //     DELETE                                                            //
 //=======================================================================//

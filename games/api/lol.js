@@ -20,6 +20,36 @@ module.exports.getAccountInfo = (settings) => {
     });
 };
 
+
+/*
+ ** Update database with new game data (no bulk account)
+ **
+ ** Params : 
+ ** - counters (required): counter for ratelimit & stats
+ ** - game (required)
+ ** - data_settings (required)
+ ** - game_account_info (required)
+ ** - tag_ids (required)
+ **
+ */
+module.exports.getDataOneByOne = async (counters, game, data_settings, game_account_info, tag_ids) => {
+
+    // If one of this tag -> update data
+    if (tag_ids.LOL__RANKED_SOLO_SR__TIER || tag_ids.LOL__RANKED_SOLO_SR__RANK || tag_ids.LOL__RANKED_SOLO_SR__LP) {
+        await Server.fn.game.utils.useMeBeforeEachRequest(game.ratelimit, counters);
+
+        const res = await Server.fn.game[game.id].fonctionCoolQuiRecupereDesChoses(game_account_info.summoner_id, game_account_info.region);
+
+        if (res.data) {
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.tier, 'LOL__RANKED_SOLO_SR__TIER', game.id, data_settings, game_account_info, counters);
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.rank, 'LOL__RANKED_SOLO_SR__RANK', game.id, data_settings, game_account_info, counters);
+        }
+
+        Server.fn.game.utils.useMeAfterEachRequest(counters, res.requests);
+    }
+
+};
+
 /*
  ** Update database with new game data
  **
@@ -35,18 +65,26 @@ module.exports.getAccountInfo = (settings) => {
  **         region: 'br',
  **         summoner_id: '46741395'
  **     },
- **     tag_ids: [ 'LOL__RANKED_SOLO_SR__DIVISION', 'LOL__RANKED_SOLO_SR__TIER' ] 
+ **     tag_ids: {
+ **         LOL__RANKED_SOLO_SR__RANK: true,
+ **         LOL__RANKED_SOLO_SR__TIER: true
+ **     } 
  ** }]
  **
- ** Return (Promise): 
- ** - ??
+ ** Return (Promise): recap
+ **
  */
 
 module.exports.updateGameData = (game, tags) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
 
-        let reqCounter = 0;
-        let totalRequests = 0;
+        let counters = {
+            reqCounter: 0,
+            totalRequests: 0,
+            totalTags: 0
+        };
+        const time = process.hrtime();
+        __log(`__**${game.name}**__ - starting update...`);
 
         for (const {
                 data_settings,
@@ -54,42 +92,38 @@ module.exports.updateGameData = (game, tags) => {
                 tag_ids
             } of tags) {
 
-            // If one of this tag -> update data
-            if (tag_ids.LOL__RANKED_SOLO_SR__TIER || tag_ids.LOL__RANKED_SOLO_SR__DIVISION || tag_ids.LOL__RANKED_SOLO_SR__LP) {
-                const res = await Server.fn.game[game.id].fonctionCoolQuiRecupereDesChoses(game_account_info.summoner_id, game_account_info.region);
-
-                // TODO: update db avec les données (data dans res.data)
-
-                reqCounter += res.requests;
-                totalRequests += res.requests;
-                reqCounter = await Server.fn.game.utils.useMeAfterEachRequest_SometimesIFeelTired(game.ratelimit, reqCounter);
-            }
+            await Server.gameAPI[game.id].getDataOneByOne(counters, game, data_settings, game_account_info, tag_ids);
 
         }
-        console.log('total: ', totalRequests);
+        const elapsedTimeS = process.hrtime(time)[0];
+        const elapsedTimeMS = process.hrtime(time)[1] / 1000000;
 
-        resolve();
-
+        __log(`__**${game.name}**__ - update finished in **${elapsedTimeS}s ${elapsedTimeMS}ms**`);
+        __logRecap(`__**${game.name}**__ - **${counters.totalTags}** tags updated for a total of **${counters.totalRequests}** requests in **${elapsedTimeS}s**.\n\nMax: **${game.ratelimit.total/game.ratelimit.every*game.ratelimit.request} / ${game.ratelimit.total}s**`);
+        return resolve(`${game.name} - ${counters.totalTags} tags updated for a total of ${counters.totalRequests} requests in ${elapsedTimeS}s.\n\nMax: ${game.ratelimit.total/game.ratelimit.every*game.ratelimit.request} / ${game.ratelimit.total}s`);
     });
 };
+
+
+
 
 //=======================================================================//
 //     GENERATOR                                                         //
 //=======================================================================//
 
 module.exports.generator = {
-    tier(tag, data, settings) {
+    tier(gameTag, data, settings) {
         let result = data;
 
-        for (const key of tag.settingsOrder) {
+        for (const key of gameTag.settingsOrder) {
             const setting = settings[key];
 
             switch (key) {
                 case 'size':
-                    result = tag.data[key][setting][result.toUpperCase()];
+                    result = gameTag.data[key][setting][result.toUpperCase()];
                     break;
                 case 'format':
-                    result = tag.data[key][setting](result);
+                    result = gameTag.data[key][setting](result);
                     break;
 
                 default:
