@@ -106,7 +106,7 @@ module.exports = {
           else {
             Server.gameAPI[game.id].updateGameData(game, tagsToUpdate)
               .then((recap) => {
-                _rtCount[game.id] = {
+                Server.ratelimitCounters[game.id] = {
                   reqCounter: 0,
                   totalRequests: 0,
                   totalTags: 0

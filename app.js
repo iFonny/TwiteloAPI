@@ -73,7 +73,8 @@ global.Server = {
     game: {}, // by game
     gameAPI: {}, // by game
     gameTags: {}, // by game
-    gameSettings: {} // by game
+    gameSettings: {}, // by game
+    ratelimitCounters: {} // by game
 };
 Server.moment.locale('fr');
 
@@ -101,13 +102,11 @@ glob.sync(`${__dirname}/database/methods/*.js`).forEach((file) => {
 //     Game, tag, settings, api                                          //
 //=======================================================================//
 
-// global ratelimit counter
-global._rtCount = {};
-
 glob.sync(`${__dirname}/games/*.js`).forEach((file) => {
     const gameName = path.basename(file, '.js');
 
-    _rtCount[gameName] = {
+    // global ratelimit counter
+    Server.ratelimitCounters[gameName] = {
         reqCounter: 0,
         totalRequests: 0,
         totalTags: 0
