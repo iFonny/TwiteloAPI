@@ -2,33 +2,29 @@
 //     GET                                                               //
 //=======================================================================//
 
-module.exports.get = (id) => {
-    return r.table('tag').get(id).run();
+module.exports.get = (userID, id) => {
+    return r.table('account')
+        .getAll(id, {
+            index: 'id'
+        })
+        .filter({
+            user_id: userID
+        }).run();
 };
 
 module.exports.getAll = (userID) => {
-    return r.table('tag')
+    return r.table('account')
         .getAll(userID, {
             index: 'user_id'
         }).orderBy('created').run();
 };
-
-
-module.exports.getWithFilter = (userID, condition) => {
-    return r.table('tag')
-        .getAll(userID, {
-            index: 'user_id'
-        })
-        .filter(condition).run();
-};
-
 
 //=======================================================================//
 //     INSERT                                                            //
 //=======================================================================//
 
 module.exports.insert = (document) => {
-    return r.table('tag').insert(document, {
+    return r.table('account').insert(document, {
         returnChanges: true
     }).run();
 };
@@ -38,7 +34,7 @@ module.exports.insert = (document) => {
 //=======================================================================//
 
 module.exports.update = (userID, document) => {
-    return r.table('tag')
+    return r.table('account')
         .getAll(document.id, {
             index: 'id'
         })
@@ -49,32 +45,12 @@ module.exports.update = (userID, document) => {
         }).run();
 };
 
-module.exports.updateByAccountID = (userID, accountID, document) => {
-    return r.table('tag')
-        .getAll(accountID, {
-            index: 'account_id'
-        })
-        .filter({
-            user_id: userID
-        }).update(document, {
-            returnChanges: true
-        }).run();
-};
-
-module.exports.updateByTagIDAndFilter = (tagID, condition, document) => {
-    return r.table('tag').getAll(tagID, {
-            index: 'tag_id'
-        })
-        .filter(condition)
-        .update(document).run();
-};
-
 //=======================================================================//
 //     DELETE                                                            //
 //=======================================================================//
 
 module.exports.delete = (userID, id) => {
-    return r.table('tag')
+    return r.table('account')
         .getAll(id, {
             index: 'id'
         })
@@ -84,38 +60,14 @@ module.exports.delete = (userID, id) => {
         .delete().run();
 };
 
-module.exports.deleteByIDs = (userID, ids) => {
-    return r.table('tag')
-        .getAll(userID, {
-            index: 'user_id'
-        })
-        .filter(
-            function (doc) {
-                return r.expr(ids)
-                    .contains(doc('id'));
-            }
-        )
-        .delete().run();
-};
-
 //=======================================================================//
 //     OTHER                                                             //
 //=======================================================================//
 
-module.exports.getTagsToUpdate = (game, time) => {
-    return r.table('tag')
-        .filter({
-            included: false, // TODO: changer to true
-            game_id: game
+module.exports.count = (userID, filter) => {
+    return r.table('account')
+        .getAll(userID, {
+            index: 'user_id'
         })
-        .filter(r.row('updated').lt(Date.now() - (time * 1000)))
-        .map({
-            game_id: r.row('game_id'),
-            tag_id: r.row('tag_id'),
-            data_settings: r.row('data_settings'),
-            game_account_info: r.row('game_account_info')
-        })
-        .distinct()
-        .group('game_id', 'data_settings', 'game_account_info')
-        .run();
+        .filter(filter).count().run();
 };

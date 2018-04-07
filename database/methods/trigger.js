@@ -3,32 +3,12 @@
 //=======================================================================//
 
 module.exports.getAll = () => {
-    return r.table('trigger').eqJoin(
-        'game_id',
-        r.table('game'), {
-            index: 'id'
-        }
-    ).map({
-        id: r.row('left')('id'),
-        game: r.row('right')('small_name'),
-        game_id: r.row('right')('id'),
-        name: r.row('left')('name')
-    }).run();
+    return r.table('trigger').run();
 };
 
 module.exports.getAllByGame = (game_id) => {
-    return r.table('trigger').filter({
-        game_id: game_id
-    }).eqJoin(
-        'game_id',
-        r.table('game'), {
-            index: 'id'
-        }
-    ).map({
-        id: r.row('left')('id'),
-        game: r.row('right')('small_name'),
-        game_id: r.row('right')('id'),
-        name: r.row('left')('name')
+    return r.table('trigger').getAll(game_id, {
+        index: 'game_id'
     }).run();
 };
 

@@ -45,14 +45,6 @@ module.exports = {
             __logInfo('RethinkDB: "trigger" indexes created.');
           });
         }
-        if (!tables.includes('game')) {
-          __logInfo('RethinkDB: "game" table created.');
-          r.tableCreate('game').run().then(() => {
-            r.table('game').indexCreate('small_name').run();
-            r.table('game').indexCreate('name').run();
-            __logInfo('RethinkDB: "game" indexes created.');
-          });
-        }
         if (!tables.includes('setting')) {
           __logInfo('RethinkDB: "setting" table created.');
           r.tableCreate('setting').run().then(() => {
@@ -64,10 +56,7 @@ module.exports = {
         }
         if (!tables.includes('log')) {
           __logInfo('RethinkDB: "log" table created.');
-          r.tableCreate('log').run().then(() => {
-            //r.table('log').indexCreate('user_id').run();
-            __logInfo('RethinkDB: "log" indexes created.');
-          });
+          r.tableCreate('log').run();
         }
         if (!tables.includes('tag')) {
           __logInfo('RethinkDB: "tag" table created.');
@@ -75,8 +64,28 @@ module.exports = {
             r.table('tag').indexCreate('user_id').run();
             r.table('tag').indexCreate('game_id').run();
             r.table('tag').indexCreate('tag_id').run();
+            r.table('tag').indexCreate('account_id').run();
             r.table('tag').indexCreate('created').run();
+            r.table('tag').indexCreate('updated').run();
             __logInfo('RethinkDB: "tag" indexes created.');
+          });
+        }
+        if (!tables.includes('account')) {
+          __logInfo('RethinkDB: "account" table created.');
+          r.tableCreate('account').run().then(() => {
+            r.table('account').indexCreate('user_id').run();
+            r.table('account').indexCreate('game_id').run();
+            r.table('account').indexCreate('created').run();
+            __logInfo('RethinkDB: "account" indexes created.');
+          });
+        }
+        if (!tables.includes('game_data')) {
+          __logInfo('RethinkDB: "game_data" table created.');
+          r.tableCreate('game_data').run().then(() => {
+            r.table('game_data').indexCreate('game_id').run();
+            r.table('game_data').indexCreate('tag_id').run();
+            r.table('game_data').indexCreate('updated').run();
+            __logInfo('RethinkDB: "game_data" indexes created.');
           });
         }
       });

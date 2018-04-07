@@ -47,7 +47,14 @@ module.exports = {
 
 
 		/* Create a tag */
-		routerMe.put('/create', (req, res) => {
+		routerMe.put('/create', Server.limiter({
+			expire: 1000 * 10, // 10 seconds
+			lookup: function (req, res, opts, next) {
+				opts.lookup = ['user.id', 'body.game_id'];
+				opts.total = 8;
+				return next();
+			}
+		}), (req, res) => {
 			Server.fn.routes.tag.checkParamsTagCreate(req.body)
 				.then((data) => Server.fn.routes.tag.createTag(req.user.id, data))
 				.then((tag) => Server.fn.routes.tag.addInfo(tag, false))
@@ -59,7 +66,14 @@ module.exports = {
 
 
 		/* Edit a tag */
-		routerMe.post('/:id/edit', (req, res) => {
+		routerMe.post('/:id/edit', Server.limiter({
+			expire: 1000 * 10, // 10 seconds
+			lookup: function (req, res, opts, next) {
+				opts.lookup = ['user.id', 'body.game_id'];
+				opts.total = 8;
+				return next();
+			}
+		}), (req, res) => {
 			Server.fn.routes.tag.checkParamsTagUpdateSettings(req.body, req.params)
 				.then((tag) => Server.fn.routes.tag.updateTagSettings(req.user.id, tag))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient d'editer :pencil: un tag : \`${req.body.tag_id}\``, data))
@@ -71,7 +85,6 @@ module.exports = {
 
 		/* Delete a tag */
 		routerMe.delete('/:id/delete', (req, res) => {
-			// TODO
 			Server.fn.routes.tag.checkParamsTagID(req.params)
 				.then((id) => Server.fn.routes.tag.deleteTagFromProfile(req.user, id))
 				.then((id) => Server.fn.routes.tag.deleteTag(req.user.id, id))

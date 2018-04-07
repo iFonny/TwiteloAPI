@@ -23,7 +23,12 @@ module.exports = {
     getAllTriggers() {
         return new Promise((resolve, reject) => {
             Server.fn.dbMethods.trigger.getAll()
-                .then(triggers => resolve(Server.fn.api.jsonSuccess(200, triggers)))
+                .then(triggers => {
+                    for (const key in triggers) {
+                        triggers[key].game = Server.game[triggers[key].game_id].small_name;
+                    }
+                    resolve(Server.fn.api.jsonSuccess(200, triggers));
+                })
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] getAllTriggers() error', err)));
         });
     },
@@ -31,7 +36,12 @@ module.exports = {
     getAllTriggersByGame(gameID) {
         return new Promise((resolve, reject) => {
             Server.fn.dbMethods.trigger.getAllByGame(gameID)
-                .then(triggers => resolve(Server.fn.api.jsonSuccess(200, triggers)))
+                .then(triggers => {
+                    for (const key in triggers) {
+                        triggers[key].game = Server.game[triggers[key].game_id].small_name;
+                    }
+                    resolve(Server.fn.api.jsonSuccess(200, triggers));
+                })
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] getAllTriggersByGame() error', err)));
         });
     },

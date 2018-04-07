@@ -1,4 +1,5 @@
 const request = require('request');
+const util = require('util');
 
 //=======================================================================//
 //     	LOGS functions                                                   //
@@ -15,6 +16,10 @@ module.exports.initLogs = () => {
 		switch (type) {
 			case 'log':
 				discordWebHook = config.logs.logDiscordWebhook;
+				color = 5687273;
+				break;
+			case 'recap':
+				discordWebHook = config.logs.recapDiscordWebhook;
 				color = 5687273;
 				break;
 			case 'info':
@@ -44,7 +49,10 @@ module.exports.initLogs = () => {
 
 		if (typeof message != 'string') {
 			console.log(typeof message);
-			message = message.toString(); // TODO: A TESTER, JSON.stringify(message);
+			message = util.inspect(message, {
+				showHidden: true,
+				depth: null
+			}); // TODO: A TESTER, JSON.stringify(message);
 		}
 
 		if (discordWebHook === null) return;
@@ -113,6 +121,12 @@ module.exports.initLogs = () => {
 
 	global.__log = (str) => {
 		sendDiscordLog('log', str);
+		console.log(str);
+		return str;
+	};
+
+	global.__logRecap = (str) => {
+		sendDiscordLog('recap', str);
 		console.log(str);
 		return str;
 	};

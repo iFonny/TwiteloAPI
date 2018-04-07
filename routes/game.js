@@ -16,7 +16,7 @@ module.exports = {
 
 		/* Get games */
 		router.get('/', (req, res) => {
-			Server.fn.routes.game.getEnabledGames()
+			Server.fn.routes.game.getGames()
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});
@@ -46,8 +46,8 @@ module.exports = {
 				.catch((err) => res.status(err.status).json(err));
 		});
 
-		/* Get all tags */
-		routerTags.get('/', Server.cache.route({
+		/* Get all game tags */
+		routerTags.get('/all', Server.cache.route({
 			expire: {
 				200: 6000, // 100 minutes
 				xxx: 1
@@ -58,8 +58,8 @@ module.exports = {
 				.catch((err) => res.status(err.status).json(err));
 		});
 
-		/* Get tags by game */
-		routerTags.get('/:gameID', Server.cache.route({
+		/* Get game tags by game */
+		routerTags.get('/game/:gameID', Server.cache.route({
 			expire: {
 				200: 6000, // 100 minutes
 				xxx: 1
@@ -71,7 +71,53 @@ module.exports = {
 				.catch((err) => res.status(err.status).json(err));
 		});
 
+
 		router.use('/tags', routerTags);
+
+		//=======================================================================//
+		//     Settings routes                                                   //
+		//=======================================================================//
+
+		const routerSettings = express.Router();
+
+		// middleware
+		routerSettings.use((req, res, next) => {
+
+			// Check user permissions
+			Server.fn.api.checkUserAuthorization('ALL', req.headers.authorization)
+				.then((user) => {
+					req.user = user;
+					next();
+				}) // Go to the routes
+				.catch((err) => res.status(err.status).json(err));
+		});
+
+		/* Get all game settings */
+		routerSettings.get('/all', Server.cache.route({
+			expire: {
+				200: 6000, // 100 minutes
+				xxx: 1
+			}
+		}), (req, res) => {
+			Server.fn.routes.game.getAllSettings()
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
+		/* Get game settings by game */
+		routerSettings.get('/game/:gameID', Server.cache.route({
+			expire: {
+				200: 6000, // 100 minutes
+				xxx: 1
+			}
+		}), (req, res) => {
+			Server.fn.routes.game.checkParamsTagByGame(req.params)
+				.then((gameID) => Server.fn.routes.game.getSettingsByGame(gameID))
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
+		router.use('/settings', routerSettings);
 
 		//=======================================================================//
 		//     Other routes                                                      //

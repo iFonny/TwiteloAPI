@@ -10,7 +10,6 @@ const fs = require('fs');
 const morgan = require('morgan');
 const path = require('path');
 const favicon = require('serve-favicon');
-const RateLimit = require('express-rate-limit');
 const hat = require('hat');
 const deepFreeze = require('deep-freeze');
 const moment = require('moment');
@@ -26,6 +25,7 @@ const cache = require('express-redis-cache')({
     expire: 60,
     prefix: 'twitelo'
 });
+const redisClient = require('redis').createClient();
 global._ = require('lodash');
 
 //=======================================================================//
@@ -65,10 +65,15 @@ global.Server = {
         error: require('./functions/utils/error'),
         api: require('./functions/utils/api'),
         db: require('./functions/utils/db'),
+        game: {}, // game functions
         routes: {}, // Look Routes (end of app.js)
         dbMethods: {}
     },
-    tags: {} // by game
+    limiter: null, // rate limiter
+    game: {}, // by game
+    gameAPI: {}, // by game
+    gameTags: {}, // by game
+    gameSettings: {} // by game
 };
 Server.moment.locale('fr');
 
@@ -93,16 +98,42 @@ glob.sync(`${__dirname}/database/methods/*.js`).forEach((file) => {
 });
 
 //=======================================================================//
-//     Tags                                                           //
+//     Game, tag, settings, api                                          //
 //=======================================================================//
 
-/* Getting tags in the /tags folder */
-glob.sync(`${__dirname}/tags/*.js`).forEach((file) => {
+// global ratelimit counter
+global._rtCount = {};
+
+glob.sync(`${__dirname}/games/*.js`).forEach((file) => {
     const gameName = path.basename(file, '.js');
 
-    // Require routes functions
-    Server.tags[gameName] = require(`${__dirname}/tags/${gameName}`);
+    _rtCount[gameName] = {
+        reqCounter: 0,
+        totalRequests: 0,
+        totalTags: 0
+    };
+    // Require game in /games folder
+    Server.game[gameName] = require(`${__dirname}/games/${gameName}`);
+    // Require game tags in /games/tags folder
+    Server.gameTags[gameName] = require(`${__dirname}/games/tags/${gameName}`);
+    // Require game account settings in /games/settings folder
+    Server.gameSettings[gameName] = require(`${__dirname}/games/settings/${gameName}`);
+    // Require game methods in /games/api folder
+    Server.gameAPI[gameName] = require(`${__dirname}/games/api/${gameName}`);
 });
+
+//=======================================================================//
+//     Games api functions                                               //
+//=======================================================================//
+
+/* Getting games functions in the /games/functions folder */
+glob.sync(`${__dirname}/games/functions/*.js`).forEach((file) => {
+    const name = path.basename(file, '.js');
+
+    // Require games api functions
+    Server.fn.game[name] = require(`${__dirname}/games/functions/${name}`);
+});
+
 
 //=======================================================================//
 //     Express                                                           //
@@ -152,23 +183,8 @@ app.listen(config.server.port, () => {
     __log(`API runining on port ${config.server.port} [**${config.env}**]`);
 });
 
-/* TODO: RATELIMIT A PENSER 
-const apiLimiter = new RateLimit({
-    windowMs: 60 * 1000,
-    max: 5,
-    delayAfter: 1,
-    delayMs: 3 * 1000
-});
-
-
-var limiter = new RateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 200, // limit each IP to 100 requests per windowMs
-    delayMs: 0 // disable delaying - full speed until the max limit is reached
-});
-
-app.use(limiter); //  apply to all requests
-*/
+/* Rate limiter */
+Server.limiter = require('express-limiter')(app, redisClient);
 
 //=======================================================================//
 //     Routes          		                                             //
@@ -195,3 +211,15 @@ glob.sync(`${__dirname}/routes/*.js`).forEach((file) => {
 app.all('*', Server.fn.error.page404);
 
 module.exports = app; // for testing
+
+
+
+
+
+
+
+//=======================================================================//
+//     Test game data updater                                            //
+//=======================================================================//
+
+Server.fn.api.getAndUpdateGameData(Server.game['lol']);
