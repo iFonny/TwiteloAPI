@@ -131,9 +131,46 @@ module.exports = {
 
             if (!tag.size) return reject(Server.fn.api.jsonError(400, 'Bad settings', 'Bad settings? getDataSize() error', tag.settings));
 
-            Server.fn.dbMethods.tag.insert(tag)
-                .then((result) => resolve(result.changes[0].new_val))
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t create tag', '[DB] createTag() error', err)));
+            // Check if game data already exist
+            Server.fn.dbMethods.game_data.getByTagIDAndFilter(tag.tag_id, {
+                    game_id: tag.game_id,
+                    data_settings: tag.data_settings,
+                    game_account_info: tag.game_account_info
+                })
+                .then((game_data) => {
+
+                    // Set an example data value in tag
+                    tag.data = Server.gameTags[tag.game_id][tag.tag_id].exampleOriginal;
+
+                    // Add existing game data to tag
+                    if (game_data && game_data.length > 0) {
+                        tag.data = game_data[0].data;
+
+                        Server.fn.dbMethods.tag.insert(tag)
+                            .then((result) => resolve(result.changes[0].new_val))
+                            .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t create tag', '[DB] createTag() error', err)));
+                    } else {
+
+                        // insert tag
+                        Server.fn.dbMethods.tag.insert(tag)
+                            .then(async (result) => {
+                                tag = result.changes[0].new_val;
+
+                                if (Server.gameTags[tag.game_id][tag.tag_id].useExample) return resolve(tag);
+                                else {
+
+                                    // get tag game data (and update tag)
+                                    Server.gameAPI[tag.game_id].getDataOneByOne(Server.game[tag.game_id], tag.data_settings, tag.game_account_info, {
+                                        [tag.tag_id]: true
+                                    });
+
+                                    resolve(tag);
+                                }
+                            })
+                            .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t create tag', '[DB] createTag() error', err)));
+                    }
+
+                }).catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get game_data', '[game_data] createTag() error', err)));
 
         });
     },
@@ -147,20 +184,60 @@ module.exports = {
                 .catch(() => reject(Server.fn.api.jsonError(500, 'Can\'t update tag : account not found')));
             else tag.game_account_info = null;
 
-            // tag.updated = Date.now(); si j'update les tags au moment de l'edition (a reflechir si possible par rapport au ratelimits)
             tag.size = Server.fn.game.utils.getDataSize(Server.gameTags[tag.game_id][tag.tag_id], tag.settings);
 
             if (!tag.size) return reject(Server.fn.api.jsonError(400, 'Bad settings', 'Bad settings? getDataSize() error', tag.settings));
 
-            delete tag.tag_id;
-            delete tag.game_id;
-
-            Server.fn.dbMethods.tag.update(userID, tag)
-                .then(async (result) => {
-                    if (result.replaced) resolve(Server.fn.api.jsonSuccess(200, result.changes[0].new_val));
-                    else resolve(Server.fn.api.jsonSuccess(200, false));
+            // Check if game data already exist
+            Server.fn.dbMethods.game_data.getByTagIDAndFilter(tag.tag_id, {
+                    game_id: tag.game_id,
+                    data_settings: tag.data_settings,
+                    game_account_info: tag.game_account_info
                 })
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update tag', '[DB] updateTagSettings() error', err)));
+                .then((game_data) => {
+
+                    // Set an example data value in tag
+                    tag.data = Server.gameTags[tag.game_id][tag.tag_id].exampleOriginal;
+
+                    delete tag.tag_id;
+                    delete tag.game_id;
+
+                    // Add existing game data to tag
+                    if (game_data && game_data.length > 0) {
+                        tag.data = game_data[0].data;
+
+                        Server.fn.dbMethods.tag.update(userID, tag)
+                            .then((result) => {
+                                if (result.replaced) resolve(Server.fn.api.jsonSuccess(200, result.changes[0].new_val));
+                                else resolve(Server.fn.api.jsonSuccess(200, false));
+                            })
+                            .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update tag', '[DB] updateTagSettings() error', err)));
+                    } else {
+
+                        // update tag
+                        Server.fn.dbMethods.tag.update(userID, tag)
+                            .then(async (result) => {
+
+                                if (result.replaced) {
+                                    tag = result.changes[0].new_val;
+
+                                    if (Server.gameTags[tag.game_id][tag.tag_id].useExample) return resolve(Server.fn.api.jsonSuccess(200, tag));
+                                    else {
+
+                                        // get tag game data (and update tag)
+                                        Server.gameAPI[tag.game_id].getDataOneByOne(Server.game[tag.game_id], tag.data_settings, tag.game_account_info, {
+                                            [tag.tag_id]: true
+                                        });
+
+                                        resolve(Server.fn.api.jsonSuccess(200, tag));
+                                    }
+                                } else return resolve(Server.fn.api.jsonSuccess(200, false));
+
+                            })
+                            .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update tag', '[DB] updateTagSettings() error', err)));
+                    }
+
+                }).catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get game_data', '[game_data] updateTagSettings() error', err)));
 
         });
     },

@@ -2,6 +2,10 @@
 //     GET                                                               //
 //=======================================================================//
 
+module.exports.get = (id) => {
+    return r.table('tag').get(id).run();
+};
+
 module.exports.getAll = (userID) => {
     return r.table('tag')
         .getAll(userID, {

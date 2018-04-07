@@ -5,7 +5,7 @@
 module.exports.getByTagIDAndFilter = (tagID, condition) => {
     return r.table('game_data').getAll(tagID, {
         index: 'tag_id'
-    }).filter(condition).run();
+    }).filter(condition).orderBy(r.desc('updated')).run();
 };
 
 //=======================================================================//

@@ -101,9 +101,17 @@ glob.sync(`${__dirname}/database/methods/*.js`).forEach((file) => {
 //     Game, tag, settings, api                                          //
 //=======================================================================//
 
+// global ratelimit counter
+global._rtCount = {};
+
 glob.sync(`${__dirname}/games/*.js`).forEach((file) => {
     const gameName = path.basename(file, '.js');
 
+    _rtCount[gameName] = {
+        reqCounter: 0,
+        totalRequests: 0,
+        totalTags: 0
+    };
     // Require game in /games folder
     Server.game[gameName] = require(`${__dirname}/games/${gameName}`);
     // Require game tags in /games/tags folder

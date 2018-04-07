@@ -6,8 +6,8 @@ module.exports = {
     image: '/public/images/game/speedrun/image.png',
     color: '#d68548',
     ratelimit: {
-        request: 30,
-        every: 60, // 30 requests / 1 minute
-        total: 1800 // 900 requests / 30 minutes
+        request: 12, // ~72 requests / 1 minute (Max: 100/60s)
+        every: 10, // 13 requests / 10 seconds
+        total: 300 // 5 minutes - Game data cache 
     }
 };

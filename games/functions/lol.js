@@ -112,7 +112,7 @@ module.exports = {
                         },
                         rankedSoloSR: {
                             leagueName: 'Zyra\'s Warlocks',
-                            tier: null,
+                            tier: 'null',
                             rank: 'II',
                             leaguePoints: 100,
                             wins: 20,
@@ -133,7 +133,7 @@ module.exports = {
             }, 1000);
 
 
-            // TODO: Resolve null if error
+            // TODO: Resolve data null if error
             // TODO:  else Resolve data
 
         });

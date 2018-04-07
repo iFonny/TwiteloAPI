@@ -14,12 +14,13 @@
         "config": false,
         "Server": false,
         "__log": false,
-        "__logRecap": false,
+        "_rtCount": false,
         "__logInfo": false,
+        "__logRecap": false,
         "__logError": false,
         "__logWarning": false,
-        "__logUserAction": false,
-        "__logJoinLeave": false
+        "__logJoinLeave": false,
+        "__logUserAction": false
     },
     "rules": {
         "no-console": 0,

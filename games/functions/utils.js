@@ -10,15 +10,28 @@ module.exports = {
         return size;
     },
 
-    useMeBeforeEachRequest(ratelimit, counters) {
-        if (counters.reqCounter >= ratelimit.request) {
-            counters.reqCounter = 0;
-            return new Promise(resolve => setTimeout(() => resolve(counters.reqCounter), ratelimit.every * 1000));
-        } else return Promise.resolve(counters.reqCounter);
+    getExampleData(gameTag, settings) {
+        if (gameTag && gameTag.example && settings) {
+            let result = _.cloneDeep(gameTag.example);
+
+            while (typeof result == 'object') {
+                for (const key in result) {
+                    result = result[key][settings[key]];
+                }
+            }
+            return result;
+        } else return null;
     },
-    useMeAfterEachRequest(counters, requests) {
-        counters.reqCounter += requests;
-        counters.totalRequests += requests;
+
+    useMeBeforeEachRequest(game) {
+        if (_rtCount[game.id].reqCounter >= game.ratelimit.request) {
+            _rtCount[game.id].reqCounter = 0;
+            return new Promise(resolve => setTimeout(() => resolve(_rtCount[game.id].reqCounter), game.ratelimit.every * 1000));
+        } else return Promise.resolve(_rtCount[game.id].reqCounter);
+    },
+    useMeAfterEachRequest(game, requests) {
+        _rtCount[game.id].reqCounter += requests;
+        _rtCount[game.id].totalRequests += requests;
     },
 
     getGameDataDoc(data, tag_id, game_id, data_settings, game_account_info) {
@@ -34,18 +47,18 @@ module.exports = {
         };
     },
 
-    async updateGameData(data, tag_id, game_id, data_settings, game_account_info, counters) {
-        counters.totalTags += 1;
+    async updateGameData(data, tag_id, game_id, data_settings, game_account_info) {
+        _rtCount[game_id].totalTags += 1;
         const document = this.getGameDataDoc(data, tag_id, game_id, data_settings, game_account_info);
 
         // Update original tags
-
         await Server.fn.dbMethods.tag.updateByTagIDAndFilter(tag_id, {
             game_id,
             data_settings,
             game_account_info
         }, {
-            updated: Date.now()
+            updated: Date.now(),
+            data: document ? document.data : null
         }).catch(err => __logError(`Can't update game_data : ${tag_id}`, err));
 
         if (document == null) {

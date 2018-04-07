@@ -46,20 +46,7 @@ module.exports = {
 			expire: 1000 * 60, // 1 minute
 			lookup: function (req, res, opts, next) {
 				opts.lookup = ['user.id', 'body.game_id'];
-
-				switch (req.body.game_id) {
-					case 'lol':
-						opts.total = 5;
-						break;
-
-					case 'speedrun':
-						opts.total = 2;
-						break;
-
-					default:
-						opts.total = 5;
-						break;
-				}
+				opts.total = 5;
 				return next();
 			}
 		}), (req, res) => {
@@ -78,20 +65,7 @@ module.exports = {
 			expire: 1000 * 60, // 1 minute
 			lookup: function (req, res, opts, next) {
 				opts.lookup = ['user.id', 'body.game_id'];
-
-				switch (req.body.game_id) {
-					case 'lol':
-						opts.total = 5;
-						break;
-
-					case 'speedrun':
-						opts.total = 2;
-						break;
-
-					default:
-						opts.total = 5;
-						break;
-				}
+				opts.total = 5;
 				return next();
 			}
 		}), (req, res) => {

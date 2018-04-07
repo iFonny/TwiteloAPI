@@ -102,10 +102,20 @@ module.exports = {
             tagsToUpdate.push(tagToUpdate);
           }
 
-          return tagsToUpdate;
+          if (tagsToUpdate.length <= 0) return resolve(null);
+          else {
+            Server.gameAPI[game.id].updateGameData(game, tagsToUpdate)
+              .then((recap) => {
+                _rtCount[game.id] = {
+                  reqCounter: 0,
+                  totalRequests: 0,
+                  totalTags: 0
+                };
+                return resolve(recap);
+              });
+          }
+
         })
-        .then((tags) => Server.gameAPI[game.id].updateGameData(game, tags))
-        .then(resolve)
         .catch(reject);
     });
   }

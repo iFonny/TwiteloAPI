@@ -84,6 +84,7 @@ module.exports = {
         nameSmall: 'Tier', // Tag small name
         size: 10, // default size
         account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
         fieldSettings: {
             size: fieldSettings.size, // existing setting
             format: fieldSettings.format // existing setting
@@ -123,6 +124,7 @@ module.exports = {
                 capitalize: _.capitalize // setting value
             }
         },
+        exampleOriginal: 'PLAT',
         example: {
             size: { // setting property
                 default: { // setting value

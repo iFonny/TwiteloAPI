@@ -7,8 +7,11 @@
  ** Return (Promise): 
  ** - string: account infos in game
  */
-module.exports.getAccountInfo = (settings) => {
+module.exports.getAccountInfo = (gameID, settings) => {
     return new Promise((resolve, reject) => {
+
+
+        // IMPORTANT : Server.fn.game.utils.useMeAfterEachRequest(Server.game[gameID], res.requests);
 
         // TODO
         resolve({
@@ -25,27 +28,26 @@ module.exports.getAccountInfo = (settings) => {
  ** Update database with new game data (no bulk account)
  **
  ** Params : 
- ** - counters (required): counter for ratelimit & stats
  ** - game (required)
  ** - data_settings (required)
  ** - game_account_info (required)
  ** - tag_ids (required)
  **
  */
-module.exports.getDataOneByOne = async (counters, game, data_settings, game_account_info, tag_ids) => {
+module.exports.getDataOneByOne = async (game, data_settings, game_account_info, tag_ids) => {
 
     // If one of this tag -> update data
     if (tag_ids.LOL__RANKED_SOLO_SR__TIER || tag_ids.LOL__RANKED_SOLO_SR__RANK || tag_ids.LOL__RANKED_SOLO_SR__LP) {
-        await Server.fn.game.utils.useMeBeforeEachRequest(game.ratelimit, counters);
+        await Server.fn.game.utils.useMeBeforeEachRequest(game);
 
         const res = await Server.fn.game[game.id].fonctionCoolQuiRecupereDesChoses(game_account_info.summoner_id, game_account_info.region);
 
         if (res.data) {
-            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.tier, 'LOL__RANKED_SOLO_SR__TIER', game.id, data_settings, game_account_info, counters);
-            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.rank, 'LOL__RANKED_SOLO_SR__RANK', game.id, data_settings, game_account_info, counters);
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.tier, 'LOL__RANKED_SOLO_SR__TIER', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.rank, 'LOL__RANKED_SOLO_SR__RANK', game.id, data_settings, game_account_info);
         }
 
-        Server.fn.game.utils.useMeAfterEachRequest(counters, res.requests);
+        Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
     }
 
 };
@@ -78,11 +80,6 @@ module.exports.getDataOneByOne = async (counters, game, data_settings, game_acco
 module.exports.updateGameData = (game, tags) => {
     return new Promise(async (resolve) => {
 
-        let counters = {
-            reqCounter: 0,
-            totalRequests: 0,
-            totalTags: 0
-        };
         const time = process.hrtime();
         __log(`__**${game.name}**__ - starting update...`);
 
@@ -92,15 +89,15 @@ module.exports.updateGameData = (game, tags) => {
                 tag_ids
             } of tags) {
 
-            await Server.gameAPI[game.id].getDataOneByOne(counters, game, data_settings, game_account_info, tag_ids);
+            await Server.gameAPI[game.id].getDataOneByOne(game, data_settings, game_account_info, tag_ids);
 
         }
         const elapsedTimeS = process.hrtime(time)[0];
         const elapsedTimeMS = process.hrtime(time)[1] / 1000000;
 
         __log(`__**${game.name}**__ - update finished in **${elapsedTimeS}s ${elapsedTimeMS}ms**`);
-        __logRecap(`__**${game.name}**__ - **${counters.totalTags}** tags updated for a total of **${counters.totalRequests}** requests in **${elapsedTimeS}s**.\n\nMax: **${game.ratelimit.total/game.ratelimit.every*game.ratelimit.request} / ${game.ratelimit.total}s**`);
-        return resolve(`${game.name} - ${counters.totalTags} tags updated for a total of ${counters.totalRequests} requests in ${elapsedTimeS}s.\n\nMax: ${game.ratelimit.total/game.ratelimit.every*game.ratelimit.request} / ${game.ratelimit.total}s`);
+        __logRecap(`__**${game.name}**__ - **${_rtCount[game.id].totalTags}** tags updated for a total of **${_rtCount[game.id].totalRequests}** requests in **${elapsedTimeS}s**.\n\nMax: **${game.ratelimit.total/game.ratelimit.every*game.ratelimit.request} / ${game.ratelimit.total}s**`);
+        return resolve(`${game.name} - ${_rtCount[game.id].totalTags} tags updated for a total of ${_rtCount[game.id].totalRequests} requests in ${elapsedTimeS}s.\n\nMax: ${game.ratelimit.total/game.ratelimit.every*game.ratelimit.request} / ${game.ratelimit.total}s`);
     });
 };
 
