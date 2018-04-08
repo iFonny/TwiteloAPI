@@ -161,8 +161,13 @@ module.exports = {
         return text.length + counter;
     },
 
-    updateIncludedTags(user) {
+    // If data -> just update and resolve data (don't get tags for preview)
+    updateIncludedTags(user, data) {
         return new Promise(async (resolve, reject) => {
+
+            // Get updated user
+            if (data) user = await Server.fn.dbMethods.user.get(user.id)
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get user', 'get user updateIncludedTags() error', err)));
 
             let includedTags = [];
             let allTags = [];
@@ -172,19 +177,21 @@ module.exports = {
             let locationTags = this.getIncludedTagsFromText(user.twitelo.location.content);
             let urlTags = this.getIncludedTagsFromText(user.twitelo.url.content);
 
-            let nameSize = await this.getProfileTextLength(user.id, user.twitelo.name.content, nameTags)
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get name size', 'getProfileTextLength() error', err)));
-            let descriptionSize = await this.getProfileTextLength(user.id, user.twitelo.description.content, descriptionTags)
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get description size', 'getProfileTextLength() error', err)));
-            let locationSize = await this.getProfileTextLength(user.id, user.twitelo.location.content, locationTags)
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get location size', 'getProfileTextLength() error', err)));
-            let urlSize = await this.getProfileTextLength(user.id, user.twitelo.url.content, urlTags)
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get url size', 'getProfileTextLength() error', err)));
+            if (!data) {
+                let nameSize = await this.getProfileTextLength(user.id, user.twitelo.name.content, nameTags)
+                    .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get name size', 'getProfileTextLength() error', err)));
+                let descriptionSize = await this.getProfileTextLength(user.id, user.twitelo.description.content, descriptionTags)
+                    .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get description size', 'getProfileTextLength() error', err)));
+                let locationSize = await this.getProfileTextLength(user.id, user.twitelo.location.content, locationTags)
+                    .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get location size', 'getProfileTextLength() error', err)));
+                let urlSize = await this.getProfileTextLength(user.id, user.twitelo.url.content, urlTags)
+                    .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get url size', 'getProfileTextLength() error', err)));
 
-            if (nameSize > config.constant.twitterLimits.name) reject(Server.fn.api.jsonError(400, 'Too many characters in name'));
-            if (descriptionSize > config.constant.twitterLimits.description) reject(Server.fn.api.jsonError(400, 'Too many characters in description'));
-            if (locationSize > config.constant.twitterLimits.location) reject(Server.fn.api.jsonError(400, 'Too many characters in location'));
-            if (urlSize > config.constant.twitterLimits.url) reject(Server.fn.api.jsonError(400, 'Too many characters in url'));
+                if (nameSize > config.constant.twitterLimits.name) reject(Server.fn.api.jsonError(400, 'Too many characters in name'));
+                if (descriptionSize > config.constant.twitterLimits.description) reject(Server.fn.api.jsonError(400, 'Too many characters in description'));
+                if (locationSize > config.constant.twitterLimits.location) reject(Server.fn.api.jsonError(400, 'Too many characters in location'));
+                if (urlSize > config.constant.twitterLimits.url) reject(Server.fn.api.jsonError(400, 'Too many characters in url'));
+            }
 
             if (user.switch) {
                 if (user.twitelo.name.status) includedTags = _.concat(includedTags, nameTags);
@@ -206,31 +213,23 @@ module.exports = {
 
             // Set tags included tags to included
             await Server.fn.dbMethods.tag.updateByUserAndIDs(user.id, includedTags, {
-                    included: true
-                })
-                .then((result) => resolve({
-                    tags: _.map(result.changes, 'new_val'),
-                    profile: {
-                        name: user.twitelo.name.content,
-                        description: user.twitelo.description.content,
-                        location: user.twitelo.location.content,
-                        url: user.twitelo.url.content
-                    }
-                }))
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update user\'s tags', '[DB] updateIncludedTags() error', err)));
+                included: true
+            }).catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update user\'s tags', '[DB] updateIncludedTags() error', err)));
 
-            // Get all tags in profile
-            Server.fn.dbMethods.tag.getByUserAndIDs(user.id, allTags)
-                .then(tags => resolve({
-                    tags,
-                    profile: {
-                        name: user.twitelo.name.content,
-                        description: user.twitelo.description.content,
-                        location: user.twitelo.location.content,
-                        url: user.twitelo.url.content
-                    }
-                })).catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get user\'s tags', '[DB] updateIncludedTags() error', err)));
-
+            if (data) resolve(data);
+            else {
+                // Get all tags in profile
+                Server.fn.dbMethods.tag.getByUserAndIDs(user.id, allTags)
+                    .then(tags => resolve({
+                        tags,
+                        profile: {
+                            name: user.twitelo.name.content,
+                            description: user.twitelo.description.content,
+                            location: user.twitelo.location.content,
+                            url: user.twitelo.url.content
+                        }
+                    })).catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get user\'s tags', '[DB] updateIncludedTags() error', err)));
+            }
 
         });
     },

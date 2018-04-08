@@ -91,9 +91,7 @@ module.exports.updateByUserAndIDs = (userID, tagIDs, document) => {
         })
         .filter({
             user_id: userID
-        }).update(document, {
-            returnChanges: 'always'
-        }).run();
+        }).update(document).run();
 };
 
 

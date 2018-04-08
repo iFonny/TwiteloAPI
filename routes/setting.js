@@ -58,6 +58,7 @@ module.exports = {
 		}), (req, res) => {
 			Server.fn.routes.setting.checkParamsSwitchStatus(req.params)
 				.then((status) => Server.fn.routes.setting.updateUserGlobalSwitch(req.user.id, status))
+				.then((data) => Server.fn.routes.user.updateIncludedTags(req.user, data))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** ${parseInt(req.params.status, 2) ? ':radio_button:' : ':red_circle:'} Twitelo (global switch)`, data))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
@@ -71,6 +72,7 @@ module.exports = {
 		}), (req, res) => {
 			Server.fn.routes.setting.checkParamsSwitchNameStatus(req.params)
 				.then((params) => Server.fn.routes.setting.updateTwiteloSwitch(req.user.id, params.name, params.status))
+				.then((data) => Server.fn.routes.user.updateIncludedTags(req.user, data))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** ${parseInt(req.params.status, 2) ? ':radio_button:' : ':red_circle:'} update auto de **${req.params.name}**`, data))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
