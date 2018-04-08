@@ -22,6 +22,16 @@ module.exports.getWithFilter = (userID, condition) => {
         .filter(condition).run();
 };
 
+module.exports.getByUserAndIDs = (userID, tagIDs) => {
+    return r.table('tag').getAll(r.args(tagIDs), {
+            index: 'id'
+        })
+        .filter({
+            user_id: userID
+        }).run();
+};
+
+
 
 //=======================================================================//
 //     INSERT                                                            //
@@ -68,6 +78,24 @@ module.exports.updateByTagIDAndFilter = (tagID, condition, document) => {
         .filter(condition)
         .update(document).run();
 };
+
+module.exports.updateByUserID = (userID, document) => {
+    return r.table('tag').getAll(userID, {
+        index: 'user_id'
+    }).update(document).run();
+};
+
+module.exports.updateByUserAndIDs = (userID, tagIDs, document) => {
+    return r.table('tag').getAll(r.args(tagIDs), {
+            index: 'id'
+        })
+        .filter({
+            user_id: userID
+        }).update(document).run();
+};
+
+
+
 
 //=======================================================================//
 //     DELETE                                                            //

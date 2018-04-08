@@ -24,14 +24,14 @@ module.exports = {
     },
 
     useMeBeforeEachRequest(game) {
-        if (_rtCount[game.id].reqCounter >= game.ratelimit.request) {
-            _rtCount[game.id].reqCounter = 0;
-            return new Promise(resolve => setTimeout(() => resolve(_rtCount[game.id].reqCounter), game.ratelimit.every * 1000));
-        } else return Promise.resolve(_rtCount[game.id].reqCounter);
+        if (Server.ratelimitCounters[game.id].reqCounter >= game.ratelimit.request) {
+            Server.ratelimitCounters[game.id].reqCounter = 0;
+            return new Promise(resolve => setTimeout(() => resolve(Server.ratelimitCounters[game.id].reqCounter), game.ratelimit.every * 1000));
+        } else return Promise.resolve(Server.ratelimitCounters[game.id].reqCounter);
     },
     useMeAfterEachRequest(game, requests) {
-        _rtCount[game.id].reqCounter += requests;
-        _rtCount[game.id].totalRequests += requests;
+        Server.ratelimitCounters[game.id].reqCounter += requests;
+        Server.ratelimitCounters[game.id].totalRequests += requests;
     },
 
     getGameDataDoc(data, tag_id, game_id, data_settings, game_account_info) {
@@ -48,7 +48,7 @@ module.exports = {
     },
 
     async updateGameData(data, tag_id, game_id, data_settings, game_account_info) {
-        _rtCount[game_id].totalTags += 1;
+        Server.ratelimitCounters[game_id].totalTags += 1;
         const document = this.getGameDataDoc(data, tag_id, game_id, data_settings, game_account_info);
 
         // Update original tags
@@ -94,7 +94,7 @@ module.exports = {
                         // Insert new data_game
                         await Server.fn.dbMethods.game_data.insert(document).catch(err => __logError(`Can't insert game_data : ${tag_id}`, err));
                     }
-                }).catch(err => __logError(`Can't get game_data : ${tag_id}`, err));
+                }).catch(err => __logError(`Can't get game_data : \`${tag_id}\``, err));
         }
     },
 

@@ -14,7 +14,6 @@
         "config": false,
         "Server": false,
         "__log": false,
-        "_rtCount": false,
         "__logInfo": false,
         "__logRecap": false,
         "__logError": false,
