@@ -264,10 +264,21 @@ module.exports = {
             let mapObj = [];
             const myRegexp = /<{([^<>{} ]+)}>/g;
             let match = myRegexp.exec(text);
+            let gameTag, generator;
 
             while (match != null) {
-                if (tags[match[1]]) mapObj[`<{${match[1]}}>`] = `<{${tags[match[1]].data}}>`;
-                else mapObj[`<{${match[1]}}>`] = '';
+                let tag = tags[match[1]];
+                if (tag) {
+                    try {
+                        gameTag = Server.gameTags[tag.game_id][tag.tag_id];
+                        generator = Server.gameAPI[tag.game_id].generator[gameTag.generator];
+                        mapObj[`<{${match[1]}}>`] = `<{${generator(gameTag, tag.data, tag.settings)}}>`;
+                        console.log(generator(gameTag, tag.data, tag.settings));
+                    } catch (error) {
+                        __logError(`Error with generator or gameTag \`${tag.tag_id}\``, error);
+                        mapObj[`<{${match[1]}}>`] = '';
+                    }
+                } else mapObj[`<{${match[1]}}>`] = '';
                 match = myRegexp.exec(text);
             }
             if (Object.keys(mapObj).length > 0) {

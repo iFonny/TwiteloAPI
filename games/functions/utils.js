@@ -94,7 +94,7 @@ module.exports = {
                         // Insert new data_game
                         await Server.fn.dbMethods.game_data.insert(document).catch(err => __logError(`Can't insert game_data : ${tag_id}`, err));
                     }
-                }).catch(err => __logError(`Can't get game_data : ${tag_id}`, err));
+                }).catch(err => __logError(`Can't get game_data : \`${tag_id}\``, err));
         }
     },
 
