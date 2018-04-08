@@ -51,7 +51,11 @@ module.exports = {
 		});
 
 		/* Toggle global switch */
-		routerMe.post('/switch/global/:status', (req, res) => {
+		routerMe.post('/switch/global/:status', Server.limiter({
+			expire: 1000, // 1 seconds
+			lookup: ['user.id'],
+			total: 1
+		}), (req, res) => {
 			Server.fn.routes.setting.checkParamsSwitchStatus(req.params)
 				.then((status) => Server.fn.routes.setting.updateUserGlobalSwitch(req.user.id, status))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** ${parseInt(req.params.status, 2) ? ':radio_button:' : ':red_circle:'} Twitelo (global switch)`, data))
@@ -60,7 +64,11 @@ module.exports = {
 		});
 
 		/* Toggle twitelo switch */
-		routerMe.post('/switch/twitelo/:name/:status', (req, res) => {
+		routerMe.post('/switch/twitelo/:name/:status', Server.limiter({
+			expire: 1000, // 1 seconds
+			lookup: ['user.id'],
+			total: 1
+		}), (req, res) => {
 			Server.fn.routes.setting.checkParamsSwitchNameStatus(req.params)
 				.then((params) => Server.fn.routes.setting.updateTwiteloSwitch(req.user.id, params.name, params.status))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** ${parseInt(req.params.status, 2) ? ':radio_button:' : ':red_circle:'} update auto de **${req.params.name}**`, data))
@@ -69,7 +77,11 @@ module.exports = {
 		});
 
 		/* Toggle notification switch */
-		routerMe.post('/switch/notification/:name/:status', (req, res) => {
+		routerMe.post('/switch/notification/:name/:status', Server.limiter({
+			expire: 1000, // 1 seconds
+			lookup: ['user.id'],
+			total: 1
+		}), (req, res) => {
 			Server.fn.routes.setting.checkParamsSwitchNameStatus(req.params)
 				.then((params) => Server.fn.routes.setting.updateNotificationSwitch(req.user.id, params.name, params.status))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** ${parseInt(req.params.status, 2) ? ':radio_button:' : ':red_circle:'} update auto de **${req.params.name}**`, data))
@@ -78,7 +90,11 @@ module.exports = {
 		});
 
 		/* Toggle pp_trigger switch */
-		routerMe.post('/switch/pp_trigger/:status', (req, res) => {
+		routerMe.post('/switch/pp_trigger/:status', Server.limiter({
+			expire: 1000, // 1 seconds
+			lookup: ['user.id'],
+			total: 1
+		}), (req, res) => {
 			Server.fn.routes.setting.checkParamsSwitchStatus(req.params)
 				.then((status) => Server.fn.routes.setting.updateSetting(req.user.id, 'pp_trigger', status))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** ${parseInt(req.params.status, 2) ? ':radio_button:' : ':red_circle:'} update auto des **images de profil**`, data))
