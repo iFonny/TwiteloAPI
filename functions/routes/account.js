@@ -95,7 +95,7 @@ module.exports = {
     getAccountID(userID, account) {
         return new Promise((resolve, reject) => {
 
-            Server.gameAPI[account.game_id].getAccountInfo(account.settings)
+            Server.gameAPI[account.game_id].getAccountInfo(account.game_id, account.settings)
                 .then((info) => {
                     if (info) resolve((account.user_id = userID, account.game_account_info = info, account.verified = false, account));
                     else reject(Server.fn.api.jsonError(404, 'Account not found'));

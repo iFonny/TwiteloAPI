@@ -31,7 +31,9 @@ module.exports.getLatestActive = (limit = 10) => {
 //=======================================================================//
 
 module.exports.update = (id, document) => {
-    return r.table('user').get(id).update(document).run();
+    return r.table('user').get(id).update(document, {
+        returnChanges: 'always'
+    }).run();
 };
 
 //=======================================================================//

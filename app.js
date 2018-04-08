@@ -221,4 +221,4 @@ module.exports = app; // for testing
 //     Test game data updater                                            //
 //=======================================================================//
 
-Server.fn.api.getAndUpdateGameData(Server.game['lol']);
+///Server.fn.api.getAndUpdateGameData(Server.game['lol']);

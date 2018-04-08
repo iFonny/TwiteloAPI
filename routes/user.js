@@ -52,6 +52,33 @@ module.exports = {
 				.catch((err) => res.status(err.status).json(err));
 		});
 
+		/* Save twitelo profile */
+		routerMe.post('/save/profile', Server.limiter({
+			expire: 5000, // 5 seconds
+			lookup: ['user.id'],
+			total: 5
+		}), (req, res) => {
+			Server.fn.routes.user.checkParamsSaveProfile(req.body)
+				.then((profile) => Server.fn.routes.user.updateProfile(req.user.id, profile))
+				.then((user) => Server.fn.routes.user.updateIncludedTags(user))
+				.then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile))
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
+		/* Get profile preview */
+		routerMe.post('/preview', Server.limiter({
+			expire: 5000, // 5 seconds
+			lookup: ['user.id'],
+			total: 5
+		}), (req, res) => {
+			Server.fn.routes.user.checkParamsSaveProfile(req.body)
+				.then((profile) => Server.fn.routes.user.getIncludedTags(req.user.id, profile))
+				.then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile))
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
 		/* Delete user */
 		routerMe.delete('/delete', (req, res) => {
 			Server.fn.routes.user.getUser(req.user.id)
