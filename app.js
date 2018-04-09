@@ -87,9 +87,6 @@ global.r = require('rethinkdbdash')({
     db: config.db.name
 });
 
-// Check or create if needed tables doesn't exist
-Server.fn.db.checkOrCreateTable();
-
 /* Getting database functions in the /database/methods folder */
 glob.sync(`${__dirname}/database/methods/*.js`).forEach((file) => {
     const methodName = path.basename(file, '.js');
@@ -98,127 +95,127 @@ glob.sync(`${__dirname}/database/methods/*.js`).forEach((file) => {
     Server.fn.dbMethods[methodName] = require(file);
 });
 
-//=======================================================================//
-//     Game, tag, settings, api                                          //
-//=======================================================================//
-
-glob.sync(`${__dirname}/games/*.js`).forEach((file) => {
-    const gameName = path.basename(file, '.js');
-
-    // global ratelimit counter
-    Server.ratelimitCounters[gameName] = {
-        reqCounter: 0,
-        totalRequests: 0,
-        totalTags: 0
-    };
-    // Require game in /games folder
-    Server.game[gameName] = require(`${__dirname}/games/${gameName}`);
-    // Require game tags in /games/tags folder
-    Server.gameTags[gameName] = require(`${__dirname}/games/tags/${gameName}`);
-    // Require game account settings in /games/settings folder
-    Server.gameSettings[gameName] = require(`${__dirname}/games/settings/${gameName}`);
-    // Require game methods in /games/api folder
-    Server.gameAPI[gameName] = require(`${__dirname}/games/api/${gameName}`);
-});
-
-//=======================================================================//
-//     Games api functions                                               //
-//=======================================================================//
-
-/* Getting games functions in the /games/functions folder */
-glob.sync(`${__dirname}/games/functions/*.js`).forEach((file) => {
-    const name = path.basename(file, '.js');
-
-    // Require games api functions
-    Server.fn.game[name] = require(`${__dirname}/games/functions/${name}`);
-});
-
-
-//=======================================================================//
-//     Express                                                           //
-//=======================================================================//
-
 const app = express();
-app.use(compression());
 
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
+// Check or create if needed tables doesn't exist
+Server.fn.db.checkOrCreateTable().then(() => {
+
+    //=======================================================================//
+    //     Game, tag, settings, api                                          //
+    //=======================================================================//
+
+    glob.sync(`${__dirname}/games/*.js`).forEach((file) => {
+        const gameName = path.basename(file, '.js');
+
+        // global ratelimit counter
+        Server.ratelimitCounters[gameName] = {
+            reqCounter: 0,
+            totalRequests: 0,
+            totalTags: 0
+        };
+        // Require game in /games folder
+        Server.game[gameName] = require(`${__dirname}/games/${gameName}`);
+        // Require game tags in /games/tags folder
+        Server.gameTags[gameName] = require(`${__dirname}/games/tags/${gameName}`);
+        // Require game account settings in /games/settings folder
+        Server.gameSettings[gameName] = require(`${__dirname}/games/settings/${gameName}`);
+        // Require game methods in /games/api folder
+        Server.gameAPI[gameName] = require(`${__dirname}/games/api/${gameName}`);
+    });
+
+    //=======================================================================//
+    //     Games api functions                                               //
+    //=======================================================================//
+
+    /* Getting games functions in the /games/functions folder */
+    glob.sync(`${__dirname}/games/functions/*.js`).forEach((file) => {
+        const name = path.basename(file, '.js');
+
+        // Require games api functions
+        Server.fn.game[name] = require(`${__dirname}/games/functions/${name}`);
+    });
+
+
+    //=======================================================================//
+    //     Express                                                           //
+    //=======================================================================//
+
+    app.use(compression());
+
+    app.use(function (req, res, next) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        next();
+    });
+    app.options('/*', (req, res) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+        res.sendStatus(200);
+    });
+
+    app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
+    app.use('/public/images', express.static(`${__dirname}/public/images`));
+    app.use('/public/media', express.static(`${__dirname}/public/media/${config.env}`));
+
+    app.disable('x-powered-by');
+    app.use(helmet());
+    app.use(bodyParser.json({
+        limit: '2mb'
+    }));
+    app.use(bodyParser.urlencoded({
+        extended: true,
+        limit: '2mb'
+    }));
+
+    // create a write stream (in append mode)
+    const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'access.log'), {
+        flags: 'a'
+    });
+
+    // setup the logger
+    app.use(morgan('combined', {
+        stream: accessLogStream
+    }));
+
+
+    app.listen(config.server.port, () => {
+        __log(`Server is listening on ${config.server.host}:${config.server.port} [**${config.env}**]`);
+    });
+
+    /* Rate limiter */
+    Server.limiter = require('express-limiter')(app, redisClient);
+
+    //=======================================================================//
+    //     Routes          		                                             //
+    //=======================================================================//
+
+    let routes = {};
+
+    /* Getting routes in the /routes folder */
+    glob.sync(`${__dirname}/routes/*.js`).forEach((file) => {
+        const routeName = path.basename(file, '.js');
+
+        // Save routes
+        routes[routeName] = require(file).router(express, routeName);
+
+        // Require routes functions
+        Server.fn.routes[routeName] = require(`${__dirname}/functions/routes/${routeName}`);
+
+        // Use routes
+        app.use(`/${routeName}`, routes[routeName]);
+    });
+
+    /* Other routes */
+
+    app.all('*', Server.fn.error.page404);
+
+    //=======================================================================//
+    //     Test game data updater                                            //
+    //=======================================================================//
+
+    Server.fn.api.getAndUpdateGameData(Server.game['lol']);
+
 });
-app.options('/*', (req, res) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-    res.sendStatus(200);
-});
-
-app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
-app.use('/public/images', express.static(`${__dirname}/public/images`));
-app.use('/public/media', express.static(`${__dirname}/public/media/${config.env}`));
-
-app.disable('x-powered-by');
-app.use(helmet());
-app.use(bodyParser.json({
-    limit: '2mb'
-}));
-app.use(bodyParser.urlencoded({
-    extended: true,
-    limit: '2mb'
-}));
-
-// create a write stream (in append mode)
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'access.log'), {
-    flags: 'a'
-});
-
-// setup the logger
-app.use(morgan('combined', {
-    stream: accessLogStream
-}));
-
-
-app.listen(config.server.port, () => {
-    __log(`API runining on port ${config.server.port} [**${config.env}**]`);
-});
-
-/* Rate limiter */
-Server.limiter = require('express-limiter')(app, redisClient);
-
-//=======================================================================//
-//     Routes          		                                             //
-//=======================================================================//
-
-let routes = {};
-
-/* Getting routes in the /routes folder */
-glob.sync(`${__dirname}/routes/*.js`).forEach((file) => {
-    const routeName = path.basename(file, '.js');
-
-    // Save routes
-    routes[routeName] = require(file).router(express, routeName);
-
-    // Require routes functions
-    Server.fn.routes[routeName] = require(`${__dirname}/functions/routes/${routeName}`);
-
-    // Use routes
-    app.use(`/${routeName}`, routes[routeName]);
-});
-
-/* Other routes */
-
-app.all('*', Server.fn.error.page404);
 
 module.exports = app; // for testing
-
-
-
-
-
-
-
-//=======================================================================//
-//     Test game data updater                                            //
-//=======================================================================//
-
-///Server.fn.api.getAndUpdateGameData(Server.game['lol']);

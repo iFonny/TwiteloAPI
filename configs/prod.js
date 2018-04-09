@@ -2,9 +2,10 @@ const config = {
 	env: 'prod',
 	server: {
 		name: 'api',
-		url: 'localhost',
+		url: 'localhost:3030',
+		host: 'api-beta.twitelo.me',
 		websiteURL: 'https://api.twitelo.me',
-		port: 3031
+		port: 3030
 	},
 	media: {
 		url: 'https://api.twitelo.me/public/media',

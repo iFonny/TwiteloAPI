@@ -3,8 +3,9 @@ const config = {
     server: {
         name: 'api-test',
         url: 'localhost',
+        host: 'api-test.twitelo.me',
         websiteURL: 'https://api-test.twitelo.me',
-        port: 3032
+        port: 3033
     },
     media: {
         url: 'https://api-test.twitelo.me/public/media',

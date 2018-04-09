@@ -133,7 +133,7 @@ module.exports.deleteByIDs = (userID, ids) => {
 module.exports.getTagsToUpdate = (game, time) => {
     return r.table('tag')
         .filter({
-            included: false, // TODO: changer to true
+            included: true,
             game_id: game
         })
         .filter(r.row('updated').lt(Date.now() - (time * 1000)))

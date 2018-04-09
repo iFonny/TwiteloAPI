@@ -2,12 +2,13 @@ const config = {
 	env: 'dev',
 	server: {
 		name: 'api-dev',
-		url: 'localhost',
-		websiteURL: 'https://api-dev.twitelo.me',
-		port: 3030
+		url: 'localhost:3032',
+		host: 'localhost',
+		websiteURL: 'http://localhost:3032',
+		port: 3032
 	},
 	media: {
-		url: 'https://api-dev.twitelo.me/public/media',
+		url: 'http://localhost:3032/public/media',
 		path: {
 			root: '/public/media/dev'
 		}
