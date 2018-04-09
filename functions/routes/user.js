@@ -22,13 +22,13 @@ module.exports = {
             if (params.name && typeof params.name == 'string' && params.name.trim() != '') profile.name = params.name;
             else return reject((Server.fn.api.jsonError(400, 'Bad or Missing name')));
 
-            if (params.description && typeof params.description == 'string') profile.description = params.description;
+            if (typeof params.description == 'string') profile.description = params.description;
             else return reject((Server.fn.api.jsonError(400, 'Bad or Missing description')));
 
-            if (params.location && typeof params.location == 'string') profile.location = params.location;
+            if (typeof params.location == 'string') profile.location = params.location;
             else return reject((Server.fn.api.jsonError(400, 'Bad or Missing location')));
 
-            if (params.url && typeof params.url == 'string') profile.url = params.url;
+            if (typeof params.url == 'string') profile.url = params.url;
             else return reject((Server.fn.api.jsonError(400, 'Bad or Missing url')));
 
             resolve(profile);
