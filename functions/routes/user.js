@@ -273,7 +273,6 @@ module.exports = {
                         gameTag = Server.gameTags[tag.game_id][tag.tag_id];
                         generator = Server.gameAPI[tag.game_id].generator[gameTag.generator];
                         mapObj[`<{${match[1]}}>`] = `<{${generator(gameTag, tag.data, tag.settings)}}>`;
-                        console.log(generator(gameTag, tag.data, tag.settings));
                     } catch (error) {
                         __logError(`Error with generator or gameTag \`${tag.tag_id}\``, error);
                         mapObj[`<{${match[1]}}>`] = '';

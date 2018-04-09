@@ -1,4 +1,5 @@
 const devConfig = require('./dev');
+const betaConfig = require('./beta');
 const prodConfig = require('./prod');
 const testConfig = require('./test');
 
@@ -13,11 +14,17 @@ let config = {};
 switch (env) {
 
     case 'dev': // Development
+    case 'development':
         config = devConfig;
         break;
 
     case 'prod': // Production
+    case 'production':
         config = prodConfig;
+        break;
+
+    case 'beta': // Production
+        config = betaConfig;
         break;
 
     case 'test': // Test
@@ -35,7 +42,6 @@ config.logs.fullErrorDiscordWebhook = 'https://discordapp.com/api/webhooks/42083
 config.logs.recapDiscordWebhook = 'https://discordapp.com/api/webhooks/419691884022333441/pnt3P5VpWnPfBe6h7TsqAkZF13h-WQGbec4vSXl_V1ABcZhT5FVjwwfiaNjHsq7jITay';
 config.logs.newUserDiscordWebhook = 'https://discordapp.com/api/webhooks/419691088329048071/qiZ0T7taRT4ULy1FBZbfUiYCgBUVxwmcvb0JfOLb-JHMnTMsdJWvNAafN6hFg9eEFLog';
 config.logs.userActionsDiscordWebhook = 'https://discordapp.com/api/webhooks/419700001367654413/b9-DeYHl_Tpmw9oYAGAtQESYLLEFSXQfmqSXEb8uKsYM9_r2LfN47HNvtw74XyDYMa42';
-
 
 
 
