@@ -41,7 +41,7 @@
       "key": "~/.ssh/ssh_ifo_vps",
       "ref": "origin/beta",
       "repo": "git@github.com:iFonny/TwiteloAPI.git",
-      "path": "/root/www/twitelo/beta/api/",
+      "path": "/root/www/TwiteloAPI/beta/",
       "post-deploy": "cp /root/configs/TwiteloAPI/secret.json ./configs/; npm install && pm2 startOrRestart pm2-config.json --only twitelo-api-beta",
       "env": {
         "NODE_ENV": "beta"
@@ -53,7 +53,7 @@
       "key": "~/.ssh/ssh_ifo_vps",
       "ref": "origin/master",
       "repo": "git@github.com:iFonny/TwiteloAPI.git",
-      "path": "/root/www/twitelo/production/api/",
+      "path": "/root/www/TwiteloAPI/production/",
       "post-deploy": "cp /root/configs/TwiteloAPI/secret.json ./configs/; npm install && pm2 startOrRestart pm2-config.json --only twitelo-api",
       "env": {
         "NODE_ENV": "prod"
