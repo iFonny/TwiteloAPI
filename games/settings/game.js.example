@@ -1,0 +1,41 @@
+//=======================================================================//
+//     ACCOUNT SETTINGS                                                    //
+//=======================================================================//
+
+module.exports = {
+    region: { // SETTING ID - unique
+
+        label: { // Label
+            en: 'Region',
+            fr: 'Region'
+        },
+
+        tooltip: false | { // Show a question mark icon with help
+            en: 'Your region in LoL',
+            fr: 'Votre région dans LoL'
+        },
+        // false: No tooltip
+        // object: {tooltip help} (ex: {en: 'Your region in LoL', 'fr': 'Votre région dans LoL'})
+
+
+        type: 'string' | 'select' | 'verify', // Control type of input
+        // string : text input / DONT NEED: input
+        // select : select in "array"(object) / NEED: input
+        // verify: special type - button - used to verify account owner / DONT NEED: input
+
+
+        input: false | {
+            euw: { // OPTION ID - unique
+                en: 'Europe West', // Option value in english
+                fr: 'Europe Ouest' // Option value in french
+            },
+            na: {}
+            // ...
+        },
+        // false: If nothing to choose (ex: for type string, verify)
+        // object: {optionID: {values}} (ex: {en: 'Europe West', 'fr': 'Europe Ouest'})
+
+    },
+    username: {}
+    // ...
+};

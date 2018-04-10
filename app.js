@@ -211,10 +211,16 @@ Server.fn.db.checkOrCreateTable().then(() => {
     app.all('*', Server.fn.error.page404);
 
     //=======================================================================//
-    //     Test game data updater                                            //
+    //     Game data updater                                                 //
     //=======================================================================//
 
-    Server.fn.api.getAndUpdateGameData(Server.game['lol']);
+    function updater(game) {
+        Server.fn.api.getAndUpdateGameData(game).then(() => setTimeout(() => updater(game), 60 * 1000));
+    }
+
+    /*for (const gameID in Server.game) {
+        updater(Server.game[gameID]);
+    }*/
 
 });
 

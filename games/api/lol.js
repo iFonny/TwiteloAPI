@@ -77,7 +77,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
  **
  */
 
-module.exports.updateGameData = (game, tags) => {
+module.exports.updateFullGameData = (game, tags) => {
     return new Promise(async (resolve) => {
 
         const time = process.hrtime();
@@ -108,6 +108,7 @@ module.exports.updateGameData = (game, tags) => {
 //     GENERATOR                                                         //
 //=======================================================================//
 
+// User to generate a new formated data with settings
 module.exports.generator = {
     tier(gameTag, data, settings) {
         let result = data;

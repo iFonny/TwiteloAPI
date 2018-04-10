@@ -1,3 +1,7 @@
+//=======================================================================//
+//     ACCOUNT SETTINGS                                                    //
+//=======================================================================//
+
 module.exports = {
     username: {
         type: 'string', // text input
@@ -62,8 +66,8 @@ module.exports = {
             }
         }
     },
-    verified: {
-        type: 'verified', // button (edition only)
+    verify: {
+        type: 'verify', // button (edition only)
         input: false, // already handled by the component
         tooltip: {
             en: 'Prove that the account belongs to you',

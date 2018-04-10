@@ -1,7 +1,8 @@
 //=======================================================================//
-//     FIELD SETTINGS                                                    //
+//     FORMAT SETTINGS                                                   //
 //=======================================================================//
 
+// Settings applied to the retrieved data (ex: format, size...)
 const fieldSettings = {
     size: {
         type: 'select', // select
@@ -15,7 +16,7 @@ const fieldSettings = {
         },
         input: {
             default: {
-                value: 0,
+                value: 0, // Size add or sub
                 en: 'Default size',
                 fr: 'Taille par défaut'
             },
@@ -58,6 +59,11 @@ const fieldSettings = {
     }
 };
 
+//=======================================================================//
+//     DATA SETTINGS                                                     //
+//=======================================================================//
+
+// Settings applied at the time of data retrieve (Like: game, category...)
 const dataSettings = {
     game: {
         type: 'string', // text input
@@ -69,6 +75,8 @@ const dataSettings = {
         },
     }
 };
+
+
 
 //=======================================================================//
 //     TAGS                                                              //
@@ -85,11 +93,11 @@ module.exports = {
         size: 10, // default size
         account: true, // need account or not
         useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
-        fieldSettings: {
+        fieldSettings: { // Settings applied to the retrieved data (ex: format, size...)
             size: fieldSettings.size, // existing setting
             format: fieldSettings.format // existing setting
         },
-        dataSettings: {
+        dataSettings: { // Settings applied at the time of data retrieve (Like: game, category...)
             game: dataSettings.game, // existing setting
         },
         settingsOrder: ['size', 'format'], // settings order
