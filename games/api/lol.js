@@ -77,7 +77,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
  **
  */
 
-module.exports.updateGameData = (game, tags) => {
+module.exports.updateFullGameData = (game, tags) => {
     return new Promise(async (resolve) => {
 
         const time = process.hrtime();

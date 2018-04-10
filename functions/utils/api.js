@@ -104,7 +104,7 @@ module.exports = {
 
           if (tagsToUpdate.length <= 0) return resolve(null);
           else {
-            Server.gameAPI[game.id].updateGameData(game, tagsToUpdate)
+            Server.gameAPI[game.id].updateFullGameData(game, tagsToUpdate)
               .then((recap) => {
                 Server.ratelimitCounters[game.id] = {
                   reqCounter: 0,

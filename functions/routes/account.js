@@ -21,8 +21,8 @@ module.exports = {
 
             if (params.settings && Server.gameSettings[account.game_id]) {
                 for (const key in Server.gameSettings[account.game_id]) {
-                    if (key == 'verified' || params.settings[key] != null && ['boolean', 'string', 'number'].includes(typeof params.settings[key])) {
-                        if (key != 'verified') account.settings[key] = params.settings[key];
+                    if (key == 'verify' || params.settings[key] != null && ['boolean', 'string', 'number'].includes(typeof params.settings[key])) {
+                        if (key != 'verify') account.settings[key] = params.settings[key];
                     } else return reject((Server.fn.api.jsonError(400, `Bad or Missing '${key}' setting`)));
                 }
             } else return reject((Server.fn.api.jsonError(400, 'Bad or Missing settings')));
@@ -50,8 +50,8 @@ module.exports = {
 
             if (bodyParams.settings && Server.gameSettings[account.game_id]) {
                 for (const key in Server.gameSettings[account.game_id]) {
-                    if (key == 'verified' || bodyParams.settings[key] != null && ['boolean', 'string', 'number'].includes(typeof bodyParams.settings[key])) {
-                        if (key != 'verified') account.settings[key] = bodyParams.settings[key];
+                    if (key == 'verify' || bodyParams.settings[key] != null && ['boolean', 'string', 'number'].includes(typeof bodyParams.settings[key])) {
+                        if (key != 'verify') account.settings[key] = bodyParams.settings[key];
                     } else return reject((Server.fn.api.jsonError(400, `Bad or Missing '${key}' setting`)));
                 }
             } else return reject((Server.fn.api.jsonError(400, 'Bad or Missing settings')));
