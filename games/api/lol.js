@@ -108,6 +108,7 @@ module.exports.updateFullGameData = (game, tags) => {
 //     GENERATOR                                                         //
 //=======================================================================//
 
+// User to generate a new formated data with settings
 module.exports.generator = {
     tier(gameTag, data, settings) {
         let result = data;
