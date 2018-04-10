@@ -88,7 +88,7 @@ module.exports = {
                     verified: profile.verified,
                     followers: profile.followers_count,
                     lang: profile.lang,
-                    profile_image_url: profile.profile_image_url.replace('_normal', '_400x400'),
+                    profile_image_url: profile.profile_image_url_https.replace('_normal', '_400x400'),
                     description: profile.description,
                     updated: Date.now()
                 });
@@ -337,7 +337,7 @@ module.exports = {
                                 twitter_id: twUser.id_str,
                                 username: twUser.screen_name,
                                 name: twUser.name,
-                                profile_image_url: twUser.profile_image_url
+                                profile_image_url: twUser.profile_image_url_https
                             });
                         }
                         resolve(Server.fn.api.jsonSuccess(200, users));
