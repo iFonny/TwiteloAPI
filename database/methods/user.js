@@ -11,13 +11,22 @@ module.exports.getLatestActive = (limit = 10) => {
             index: r.desc('created')
         })
         .filter(
-            r.row('switch').eq(true)
+            r.row('disabled').lt(config.constant.disabledAfter)
+            .and(r.row('switch').eq(true))
             .and(r.row('twitelo')('description')('status').eq(true))
             .and(r.row('twitelo')('description')('content').match('<{[^<>{} ]+}>'))
         )
         .limit(limit)
         .pluck('id', 'name', 'username', 'twitter_id')
         .run();
+};
+
+module.exports.getUsersToUpdate = () => {
+    return r.table('user')
+        .filter(
+            r.row('disabled').lt(config.constant.disabledAfter)
+            .and(r.row('switch').eq(true))
+        ).run();
 };
 
 

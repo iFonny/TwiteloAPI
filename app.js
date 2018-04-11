@@ -19,6 +19,7 @@ const isBase64 = require('is-base64');
 const base64Img = require('base64-img');
 const MTwitter = require('mtwitter');
 const Twitter = require('twitter');
+const twitterText = require('twitter-text');
 const makeDir = require('make-dir');
 // Set default lifetime to 60 seconds for all entries
 const cache = require('express-redis-cache')({
@@ -65,6 +66,7 @@ global.Server = {
         error: require('./functions/utils/error'),
         api: require('./functions/utils/api'),
         db: require('./functions/utils/db'),
+        twitterUpdater: require('./functions/utils/twitterUpdater'),
         game: {}, // game functions
         routes: {}, // Look Routes (end of app.js)
         dbMethods: {}
@@ -180,7 +182,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
 
     app.listen(config.server.port, () => {
-        __log(`Server is listening on ${config.server.host}:${config.server.port} [**${config.env}**]`);
+        __logInfo(`Server is listening on ${config.server.host}:${config.server.port} [**${config.env}**]`);
     });
 
     /* Rate limiter */
@@ -210,6 +212,9 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
     app.all('*', Server.fn.error.page404);
 
+
+
+
     //=======================================================================//
     //     Game data updater                                                 //
     //=======================================================================//
@@ -218,9 +223,24 @@ Server.fn.db.checkOrCreateTable().then(() => {
         Server.fn.api.getAndUpdateGameData(game).then(() => setTimeout(() => updater(game), 60 * 1000));
     }
 
+    //updater(Server.game['lol']);
+
     /*for (const gameID in Server.game) {
         updater(Server.game[gameID]);
     }*/
+
+
+    //=======================================================================//
+    //     Twitter updater                                                   //
+    //=======================================================================//
+
+    //Server.fn.twitterUpdater.update();
+
+    // Get tous les profils avec le global switch ON et disabled < 10
+    // Decoder tokens
+    // Connecter a twitter
+    // Get previews
+    // 4 if (name, desc, loc) et update en fonction
 
 });
 

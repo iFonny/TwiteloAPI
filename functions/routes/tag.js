@@ -254,9 +254,6 @@ module.exports = {
                 },
                 location: {
                     content: user.twitelo.location.content.replace(`<{${id}}>`, '').trim()
-                },
-                url: {
-                    content: user.twitelo.url.content.replace(`<{${id}}>`, '').trim()
                 }
             };
 
