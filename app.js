@@ -218,7 +218,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
     // Wait 10s before starting updaters
     setTimeout(() => {
-        
+
 
         //=======================================================================//
         //     Game data updater                                                 //
@@ -241,8 +241,11 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
         const twitterUpdater = new TwitterUpdater();
 
-        twitterUpdater.update().then(() => setTimeout(() => twitterUpdater.update(), 60 * 1000)); // 1 minute
+        function twUpdater() {
+            twitterUpdater.update().then(() => setTimeout(() => twUpdater(), 60 * 1000)); // 1 minute
+        }
 
+        twUpdater();
 
 
     }, 10 * 1000); // 10s
