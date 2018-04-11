@@ -187,9 +187,6 @@ module.exports = {
                 },
                 location: {
                     content: removeFromProfile(user.twitelo.location.content.trim(), ids)
-                },
-                url: {
-                    content: removeFromProfile(user.twitelo.url.content.trim(), ids)
                 }
             };
 

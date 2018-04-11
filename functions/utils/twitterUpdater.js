@@ -32,8 +32,7 @@ module.exports = {
                         let profile = await Server.fn.routes.user.getIncludedTags(user.id, {
                                 description: user.twitelo.description.content,
                                 location: user.twitelo.location.content,
-                                name: user.twitelo.name.content,
-                                url: user.twitelo.url.content
+                                name: user.twitelo.name.content
                             })
                             .then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile, true))
                             .then((data) => data.data)
@@ -43,10 +42,11 @@ module.exports = {
                         if (!user.twitelo.name.status) delete profile.name;
                         if (!user.twitelo.description.status) delete profile.description;
                         if (!user.twitelo.location.status) delete profile.location;
-                        if (!user.twitelo.url.status) delete profile.url;
 
                         profile.include_entities = false;
                         profile.skip_status = true;
+
+                        console.log(profile);
                         
                         /*
                         twitterUser.post('account/update_profile', {location: Server.twitterText.htmlEscape('#hello < @world >')})

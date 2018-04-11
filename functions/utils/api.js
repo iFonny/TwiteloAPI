@@ -60,8 +60,8 @@ module.exports = {
           if (error) __logWarning(`[WELCOME] Can't follow @${user.username}`, error);
 
           let welcomeMessage = '';
-          if (user.settings.locale == 'fr') welcomeMessage = 'Bienvenue !\n\nEmbellissez votre description, nom, url, localisation twitter et montrez votre skill (ou pas) !\nVous pouvez activer/désactiver la modification automatique ici: : https://twitelo.me/settings (ou en envoyant  "ON"|"OFF" ici)\n\nVous pouvez également nous rejoindre sur discord : http://discord.gg/F75CNy2\nContact: https://twitelo.me/contact';
-          else welcomeMessage = 'Welcome!\n\nEmbellish your twitter description, name, url, location and show your skill (or not)!\nYou can enable/disable auto updater here : https://twitelo.me/settings (or by sending "ON"|"OFF" here)\n\nYou can also join us on discord: http://discord.gg/F75CNy2\nContact: https://twitelo.me/contact';
+          if (user.settings.locale == 'fr') welcomeMessage = 'Bienvenue !\n\nEmbellissez votre description, nom, localisation twitter et montrez votre skill (ou pas) !\nVous pouvez activer/désactiver la modification automatique ici: : https://twitelo.me/settings (ou en envoyant  "ON"|"OFF" ici)\n\nVous pouvez également nous rejoindre sur discord : http://discord.gg/F75CNy2\nContact: https://twitelo.me/contact';
+          else welcomeMessage = 'Welcome!\n\nEmbellish your twitter description, name, location and show your skill (or not)!\nYou can enable/disable auto updater here : https://twitelo.me/settings (or by sending "ON"|"OFF" here)\n\nYou can also join us on discord: http://discord.gg/F75CNy2\nContact: https://twitelo.me/contact';
 
           Server.twitterBot.post('direct_messages/new', {
             user_id: user.twitter_id,

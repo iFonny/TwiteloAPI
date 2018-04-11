@@ -240,7 +240,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
     // Decoder tokens
     // Connecter a twitter
     // Get previews
-    // 4 if (name, desc, loc, url) et update en fonction
+    // 4 if (name, desc, loc) et update en fonction
 
 });
 

@@ -14,8 +14,7 @@ module.exports = {
             let profile = {
                 name: '',
                 description: '',
-                location: '',
-                url: ''
+                location: ''
             };
 
             // Check mandatory params
@@ -27,9 +26,6 @@ module.exports = {
 
             if (typeof params.location == 'string') profile.location = params.location;
             else return reject((Server.fn.api.jsonError(400, 'Bad or Missing location')));
-
-            if (typeof params.url == 'string') profile.url = params.url;
-            else return reject((Server.fn.api.jsonError(400, 'Bad or Missing url')));
 
             resolve(profile);
 
@@ -117,9 +113,6 @@ module.exports = {
                         },
                         location: {
                             content: profile.location
-                        },
-                        url: {
-                            content: profile.url
                         }
                     }
                 }).then(result => resolve(result.changes[0].new_val))
@@ -175,7 +168,6 @@ module.exports = {
             let nameTags = this.getIncludedTagsFromText(user.twitelo.name.content);
             let descriptionTags = this.getIncludedTagsFromText(user.twitelo.description.content);
             let locationTags = this.getIncludedTagsFromText(user.twitelo.location.content);
-            let urlTags = this.getIncludedTagsFromText(user.twitelo.url.content);
 
             if (!data) {
                 let nameSize = await this.getProfileTextLength(user.id, user.twitelo.name.content, nameTags)
@@ -184,23 +176,19 @@ module.exports = {
                     .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get description size', 'getProfileTextLength() error', err)));
                 let locationSize = await this.getProfileTextLength(user.id, user.twitelo.location.content, locationTags)
                     .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get location size', 'getProfileTextLength() error', err)));
-                let urlSize = await this.getProfileTextLength(user.id, user.twitelo.url.content, urlTags)
-                    .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get url size', 'getProfileTextLength() error', err)));
 
                 if (nameSize > config.constant.twitterLimits.name) reject(Server.fn.api.jsonError(400, 'Too many characters in name'));
                 if (descriptionSize > config.constant.twitterLimits.description) reject(Server.fn.api.jsonError(400, 'Too many characters in description'));
                 if (locationSize > config.constant.twitterLimits.location) reject(Server.fn.api.jsonError(400, 'Too many characters in location'));
-                if (urlSize > config.constant.twitterLimits.url) reject(Server.fn.api.jsonError(400, 'Too many characters in url'));
             }
 
             if (user.switch && user.disabled < config.constant.disabledAfter) {
                 if (user.twitelo.name.status) includedTags = _.concat(includedTags, nameTags);
                 if (user.twitelo.description.status) includedTags = _.concat(includedTags, descriptionTags);
                 if (user.twitelo.location.status) includedTags = _.concat(includedTags, locationTags);
-                if (user.twitelo.url.status) includedTags = _.concat(includedTags, urlTags);
             }
 
-            allTags = _.concat(nameTags, descriptionTags, locationTags, urlTags);
+            allTags = _.concat(nameTags, descriptionTags, locationTags);
 
             // Remove duplicate tags
             includedTags = _.uniq(includedTags);
@@ -225,8 +213,7 @@ module.exports = {
                         profile: {
                             name: user.twitelo.name.content,
                             description: user.twitelo.description.content,
-                            location: user.twitelo.location.content,
-                            url: user.twitelo.url.content
+                            location: user.twitelo.location.content
                         }
                     })).catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get user\'s tags', '[DB] updateIncludedTags() error', err)));
             }
@@ -242,9 +229,8 @@ module.exports = {
             let nameTags = this.getIncludedTagsFromText(profile.name);
             let descriptionTags = this.getIncludedTagsFromText(profile.description);
             let locationTags = this.getIncludedTagsFromText(profile.location);
-            let urlTags = this.getIncludedTagsFromText(profile.url);
 
-            allTags = _.concat(nameTags, descriptionTags, locationTags, urlTags);
+            allTags = _.concat(nameTags, descriptionTags, locationTags);
 
             // Remove duplicate tags
             allTags = _.uniq(allTags);
@@ -295,7 +281,6 @@ module.exports = {
         profile.name = getProfileTextPreview(profile.name, tags, forTwitter) || '';
         profile.description = getProfileTextPreview(profile.description, tags, forTwitter) || '';
         profile.location = getProfileTextPreview(profile.location, tags, forTwitter) || '';
-        profile.url = getProfileTextPreview(profile.url, tags, forTwitter) || '';
         return Server.fn.api.jsonSuccess(200, profile);
     },
 
