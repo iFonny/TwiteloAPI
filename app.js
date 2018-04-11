@@ -234,7 +234,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
     //     Twitter updater                                                   //
     //=======================================================================//
 
-    Server.fn.twitterUpdater.update();
+    //Server.fn.twitterUpdater.update();
 
     // Get tous les profils avec le global switch ON et disabled < 10
     // Decoder tokens
