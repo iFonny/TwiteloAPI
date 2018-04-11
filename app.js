@@ -19,7 +19,7 @@ const isBase64 = require('is-base64');
 const base64Img = require('base64-img');
 const MTwitter = require('mtwitter');
 const Twitter = require('twitter');
-const twitterText = require('twitter-text');
+const TwitterUpdater = require('./functions/class/TwitterUpdater');
 const makeDir = require('make-dir');
 // Set default lifetime to 60 seconds for all entries
 const cache = require('express-redis-cache')({
@@ -66,7 +66,6 @@ global.Server = {
         error: require('./functions/utils/error'),
         api: require('./functions/utils/api'),
         db: require('./functions/utils/db'),
-        twitterUpdater: require('./functions/utils/twitterUpdater'),
         game: {}, // game functions
         routes: {}, // Look Routes (end of app.js)
         dbMethods: {}
@@ -213,34 +212,42 @@ Server.fn.db.checkOrCreateTable().then(() => {
     app.all('*', Server.fn.error.page404);
 
 
-
-
     //=======================================================================//
-    //     Game data updater                                                 //
+    //     Updaters                                                          //
     //=======================================================================//
 
-    function updater(game) {
-        Server.fn.api.getAndUpdateGameData(game).then(() => setTimeout(() => updater(game), 60 * 1000));
-    }
+    // Wait 10s before starting updaters
+    setTimeout(() => {
+        
 
-    //updater(Server.game['lol']);
+        //=======================================================================//
+        //     Game data updater                                                 //
+        //=======================================================================//
 
-    /*for (const gameID in Server.game) {
-        updater(Server.game[gameID]);
-    }*/
+        function gameUpdater(game) {
+            Server.fn.api.getAndUpdateGameData(game).then(() => setTimeout(() => gameUpdater(game), 60 * 1000)); // 1 minute
+        }
+
+        //gameUpdater(Server.game['lol']);
+
+        /*for (const gameID in Server.game) {
+            gameUpdater(Server.game[gameID]);
+        }*/
 
 
-    //=======================================================================//
-    //     Twitter updater                                                   //
-    //=======================================================================//
+        //=======================================================================//
+        //     Twitter updater                                                   //
+        //=======================================================================//
 
-    //Server.fn.twitterUpdater.update();
+        const twitterUpdater = new TwitterUpdater();
 
-    // Get tous les profils avec le global switch ON et disabled < 10
-    // Decoder tokens
-    // Connecter a twitter
-    // Get previews
-    // 4 if (name, desc, loc) et update en fonction
+        twitterUpdater.update().then(() => setTimeout(() => twitterUpdater.update(), 60 * 1000)); // 1 minute
+
+
+
+    }, 10 * 1000); // 10s
+
+
 
 });
 

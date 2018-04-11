@@ -15,11 +15,12 @@
         "Server": false,
         "__log": false,
         "__logInfo": false,
-        "__logRecap": false,
         "__logError": false,
         "__logWarning": false,
         "__logJoinLeave": false,
-        "__logUserAction": false
+        "__logUserAction": false,
+        "__logRecapGame": false,
+        "__logRecapTwitter": false
     },
     "rules": {
         "no-console": 0,

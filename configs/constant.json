@@ -1,10 +1,10 @@
 {
     "roles": ["USER", "ADMIN"],
     "locales": ["en", "fr"],
-    "disabledAfter": 10,
+    "disabledAfter": 5,
     "twitterLimits": {
         "description": 160,
-        "location": 30,
+        "location": 50,
         "name": 50
     },
     "limits": {
