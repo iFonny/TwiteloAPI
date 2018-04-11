@@ -193,7 +193,7 @@ module.exports = {
                 if (urlSize > config.constant.twitterLimits.url) reject(Server.fn.api.jsonError(400, 'Too many characters in url'));
             }
 
-            if (user.switch) {
+            if (user.switch && user.disabled < 10) {
                 if (user.twitelo.name.status) includedTags = _.concat(includedTags, nameTags);
                 if (user.twitelo.description.status) includedTags = _.concat(includedTags, descriptionTags);
                 if (user.twitelo.location.status) includedTags = _.concat(includedTags, locationTags);
@@ -268,7 +268,7 @@ module.exports = {
 
             while (match != null) {
                 let tag = tags[match[1]];
-                if (tag) {
+                if (tag && tag.data) {
                     try {
                         gameTag = Server.gameTags[tag.game_id][tag.tag_id];
                         generator = Server.gameAPI[tag.game_id].generator[gameTag.generator];

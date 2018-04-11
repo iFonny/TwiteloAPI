@@ -11,7 +11,8 @@ module.exports.getLatestActive = (limit = 10) => {
             index: r.desc('created')
         })
         .filter(
-            r.row('switch').eq(true)
+            r.row('disabled').lt(10)
+            .and(r.row('switch').eq(true))
             .and(r.row('twitelo')('description')('status').eq(true))
             .and(r.row('twitelo')('description')('content').match('<{[^<>{} ]+}>'))
         )

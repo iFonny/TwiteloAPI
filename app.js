@@ -218,6 +218,8 @@ Server.fn.db.checkOrCreateTable().then(() => {
         Server.fn.api.getAndUpdateGameData(game).then(() => setTimeout(() => updater(game), 60 * 1000));
     }
 
+    //updater(Server.game['lol']);
+
     /*for (const gameID in Server.game) {
         updater(Server.game[gameID]);
     }*/
