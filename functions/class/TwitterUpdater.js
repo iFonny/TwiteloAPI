@@ -2,7 +2,7 @@
 //     Twitter updater                                                   //
 //=======================================================================//
 
-module.exports = class twitterUpdater {
+module.exports = class TwitterUpdater {
     constructor() {
         this.total = {
             updated: 0,
