@@ -47,7 +47,8 @@
     "request": "^2.83.0",
     "rethinkdbdash": "^2.3.31",
     "serve-favicon": "^2.4.5",
-    "twitter": "^1.7.1"
+    "twitter": "^1.7.1",
+    "twitter-text": "^2.0.4"
   },
   "devDependencies": {
     "eslint": "^4.18.2",

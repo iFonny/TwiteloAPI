@@ -193,7 +193,7 @@ module.exports = {
                 if (urlSize > config.constant.twitterLimits.url) reject(Server.fn.api.jsonError(400, 'Too many characters in url'));
             }
 
-            if (user.switch && user.disabled < 10) {
+            if (user.switch && user.disabled < config.constant.disabledAfter) {
                 if (user.twitelo.name.status) includedTags = _.concat(includedTags, nameTags);
                 if (user.twitelo.description.status) includedTags = _.concat(includedTags, descriptionTags);
                 if (user.twitelo.location.status) includedTags = _.concat(includedTags, locationTags);
@@ -259,8 +259,8 @@ module.exports = {
         });
     },
 
-    getPreview(tags, profile) {
-        function getTextPreview(text, tags) {
+    getPreview(tags, profile, forTwitter) {
+        function getProfileTextPreview(text, tags, forTwitter) {
             let mapObj = [];
             const myRegexp = /<{([^<>{} ]+)}>/g;
             let match = myRegexp.exec(text);
@@ -272,7 +272,8 @@ module.exports = {
                     try {
                         gameTag = Server.gameTags[tag.game_id][tag.tag_id];
                         generator = Server.gameAPI[tag.game_id].generator[gameTag.generator];
-                        mapObj[`<{${match[1]}}>`] = `<{${generator(gameTag, tag.data, tag.settings)}}>`;
+                        if (forTwitter) mapObj[`<{${match[1]}}>`] = generator(gameTag, tag.data, tag.settings);
+                        else mapObj[`<{${match[1]}}>`] = `<{${generator(gameTag, tag.data, tag.settings)}}>`;
                     } catch (error) {
                         __logError(`Error with generator or gameTag \`${tag.tag_id}\``, error);
                         mapObj[`<{${match[1]}}>`] = '';
@@ -284,16 +285,17 @@ module.exports = {
                 var re = new RegExp(Object.keys(mapObj).join('|').replace(/{/g, '\\{'), 'g');
                 text = text.replace(re, (matched) => mapObj[matched]);
             }
-            text = text.trim();
+            if (forTwitter) text = text.trim().replace('<', '').replace('>', '');
+            else text = text.trim();
             return text;
         }
 
         tags = _.keyBy(tags, 'id');
 
-        profile.name = getTextPreview(profile.name, tags);
-        profile.description = getTextPreview(profile.description, tags);
-        profile.location = getTextPreview(profile.location, tags);
-        profile.url = getTextPreview(profile.url, tags);
+        profile.name = getProfileTextPreview(profile.name, tags, forTwitter) || '';
+        profile.description = getProfileTextPreview(profile.description, tags, forTwitter) || '';
+        profile.location = getProfileTextPreview(profile.location, tags, forTwitter) || '';
+        profile.url = getProfileTextPreview(profile.url, tags, forTwitter) || '';
         return Server.fn.api.jsonSuccess(200, profile);
     },
 

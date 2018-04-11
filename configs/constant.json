@@ -1,6 +1,7 @@
 {
     "roles": ["USER", "ADMIN"],
     "locales": ["en", "fr"],
+    "disabledAfter": 10,
     "twitterLimits": {
         "description": 160,
         "url": 100,
