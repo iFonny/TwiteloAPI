@@ -2,7 +2,7 @@
   "apps": [{
       "name": "twitelo-api-beta",
       "script": "./app.js",
-      "watch": true,
+      "watch": false,
       "restart_delay": 1000,
       "ignore_watch": [
         "node_modules",
@@ -19,7 +19,7 @@
     {
       "name": "twitelo-api",
       "script": "./app.js",
-      "watch": true,
+      "watch": false,
       "restart_delay": 1000,
       "ignore_watch": [
         "node_modules",
