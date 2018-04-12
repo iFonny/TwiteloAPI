@@ -76,6 +76,65 @@ const dataSettings = {
     }
 };
 
+//=======================================================================//
+//     UTIL DATA (to avoid code duplication)                             //
+//=======================================================================//
+
+const someData = {
+    tier: {
+        size: { // setting property
+            default: { // setting value
+                'UNRANKED': 'UNRANKED',
+                'BRONZE': 'BRONZE',
+                'SILVER': 'SILVER',
+                'GOLD': 'GOLD',
+                'PLATINUM': 'PLATINUM',
+                'DIAMOND': 'DIAMOND',
+                'MASTER': 'MASTER',
+                'CHALLENGER': 'CHALLENGER',
+            },
+            short: { // setting value
+                'UNRANKED': 'UNRANK',
+                'BRONZE': 'BRONZE',
+                'SILVER': 'SILVER',
+                'GOLD': 'GOLD',
+                'PLATINUM': 'PLAT',
+                'DIAMOND': 'DIAM',
+                'MASTER': 'MASTER',
+                'CHALLENGER': 'CHALL',
+            }
+        },
+        format: { // setting property
+            original: _.trim,
+            lowercase: _.toLower, // setting value
+            uppercase: _.toUpper, // setting value
+            capitalize: _.capitalize // setting value
+        }
+    }
+};
+
+const someExamples = {
+    tier: {
+        size: { // setting property
+            default: { // setting value
+                format: { // setting property
+                    original: 'DIAMOND',
+                    uppercase: 'DIAMOND', // setting value
+                    lowercase: 'diamond', // setting value
+                    capitalize: 'Diamond' // setting value
+                }
+            },
+            short: { // setting value
+                format: { // setting property
+                    original: 'DIAM',
+                    uppercase: 'DIAM', // setting value
+                    lowercase: 'diam', // setting value
+                    capitalize: 'Diam' // setting value
+                }
+            }
+        }
+    }
+};
 
 
 //=======================================================================//
@@ -93,24 +152,18 @@ const dataSettings = {
 
 
     - LOL__TOP_SOLO_SR__LEAGUE_NAME : TODO
-    - LOL__TOP_SOLO_SR__TIER : TODO
-    - LOL__TOP_SOLO_SR__RANK : TODO
     - LOL__TOP_SOLO_SR__LP : TODO
     - LOL__TOP_SOLO_SR__WINS : TODO
     - LOL__TOP_SOLO_SR__LOSSES : TODO
     - LOL__TOP_SOLO_SR__WINRATE : TODO
     
     - LOL__TOP_FLEX_SR__LEAGUE_NAME : TODO
-    - LOL__TOP_FLEX_SR__TIER : TODO
-    - LOL__TOP_FLEX_SR__RANK : TODO
     - LOL__TOP_FLEX_SR__LP : TODO
     - LOL__TOP_FLEX_SR__WINS : TODO
     - LOL__TOP_FLEX_SR__LOSSES : TODO
     - LOL__TOP_FLEX_SR__WINRATE : TODO
 
     - LOL__TOP_FLEX_TT__LEAGUE_NAME : TODO
-    - LOL__TOP_FLEX_TT__TIER : TODO
-    - LOL__TOP_FLEX_TT__RANK : TODO
     - LOL__TOP_FLEX_TT__LP : TODO
     - LOL__TOP_FLEX_TT__WINS : TODO
     - LOL__TOP_FLEX_TT__LOSSES : TODO
@@ -184,56 +237,8 @@ module.exports = {
         },
         settingsOrder: ['size', 'format'], // settings order
         generator: 'tier', // function called to generate data 
-        data: {
-            size: { // setting property
-                default: { // setting value
-                    'UNRANKED': 'UNRANKED',
-                    'BRONZE': 'BRONZE',
-                    'SILVER': 'SILVER',
-                    'GOLD': 'GOLD',
-                    'PLATINUM': 'PLATINUM',
-                    'DIAMOND': 'DIAMOND',
-                    'MASTER': 'MASTER',
-                    'CHALLENGER': 'CHALLENGER',
-                },
-                short: { // setting value
-                    'UNRANKED': 'UNRANK',
-                    'BRONZE': 'BRONZE',
-                    'SILVER': 'SILVER',
-                    'GOLD': 'GOLD',
-                    'PLATINUM': 'PLAT',
-                    'DIAMOND': 'DIAM',
-                    'MASTER': 'MASTER',
-                    'CHALLENGER': 'CHALL',
-                }
-            },
-            format: { // setting property
-                original: _.trim,
-                lowercase: _.toLower, // setting value
-                uppercase: _.toUpper, // setting value
-                capitalize: _.capitalize // setting value
-            }
-        },
-        exampleOriginal: 'PLAT',
-        example: {
-            size: { // setting property
-                default: { // setting value
-                    format: { // setting property
-                        original: 'DIAMOND',
-                        uppercase: 'DIAMOND', // setting value
-                        lowercase: 'diamond', // setting value
-                        capitalize: 'Diamond' // setting value
-                    }
-                },
-                short: { // setting value
-                    format: { // setting property
-                        original: 'DIAM',
-                        uppercase: 'DIAM', // setting value
-                        lowercase: 'diam', // setting value
-                        capitalize: 'Diam' // setting value
-                    }
-                }
-            }
-        }
+        data: someData.tier,
+        exampleOriginal: 'DIAMOND',
+        example: someExamples.tier
     }
 };
