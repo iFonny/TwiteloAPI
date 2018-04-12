@@ -61,7 +61,7 @@ module.exports = {
 			Server.fn.routes.user.checkParamsSaveProfile(req.body)
 				.then((profile) => Server.fn.routes.user.updateProfile(req.user.id, profile))
 				.then((user) => Server.fn.routes.user.updateIncludedTags(user))
-				.then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile))
+				.then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile, false))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});
@@ -74,7 +74,7 @@ module.exports = {
 		}), (req, res) => {
 			Server.fn.routes.user.checkParamsSaveProfile(req.body)
 				.then((profile) => Server.fn.routes.user.getIncludedTags(req.user.id, profile))
-				.then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile))
+				.then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile, false))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});
@@ -107,7 +107,6 @@ module.exports = {
 			}
 		}), (req, res) => {
 			Server.fn.routes.user.getLatestActiveUsers(10)
-				.then((twitterUsers) => Server.fn.routes.user.getUpdatedTwitterUser(twitterUsers))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});

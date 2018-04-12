@@ -45,6 +45,12 @@ module.exports.update = (userID, document) => {
         }).run();
 };
 
+module.exports.updateWithFilter = (condition, document) => {
+    return r.table('account')
+        .filter(condition)
+        .update(document).run();
+};
+
 //=======================================================================//
 //     DELETE                                                            //
 //=======================================================================//

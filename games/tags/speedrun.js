@@ -1,5 +1,5 @@
 //=======================================================================//
-//     FIELD SETTINGS                                                    //
+//     FORMAT SETTINGS                                                   //
 //=======================================================================//
 
 const fieldSettings = {
@@ -18,7 +18,26 @@ const fieldSettings = {
 //     DATA SETTINGS                                                     //
 //=======================================================================//
 
-// TODO
+const dataSettings = {
+    game: {
+        type: 'string', // text input // TODO: changer pour un type special 
+        tooltip: false,
+        input: false, // because string type
+        label: {
+            en: 'Game',
+            fr: 'Jeu'
+        },
+    },
+    category: {
+        type: 'string', // text input // TODO: changer pour un type special 
+        tooltip: false,
+        input: false, // because string type
+        label: {
+            en: 'Category',
+            fr: 'Categorie'
+        },
+    }
+};
 
 
 //=======================================================================//

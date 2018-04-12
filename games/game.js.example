@@ -1,0 +1,27 @@
+//=======================================================================//
+//     GAME SETTINGS                                                     //
+//=======================================================================//
+
+module.exports = {
+
+    id: 'lol', // gameID lowercase (ex: 'lol')
+
+    small_name: 'LoL', // Small game name (ex: 'LoL')
+
+    name: 'League Of Legends', // Full name game (ex: 'League Of Legends')
+
+    icon: '/public/images/game/lol/icon.png', // Game quared icon
+
+    image: '/public/images/game/lol/image.png', // Game long image (horizontal)
+
+    color: '#f9d380', // Game color in hex
+
+    ratelimit: { // Game ratelimits (in seconds)
+
+        request: 50, // Number of requests every X seconds
+        every: 5, // Keep between 1 and 10s
+
+        total: 60 * 5 // Game data cache 
+
+    }
+};

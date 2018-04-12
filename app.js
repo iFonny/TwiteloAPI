@@ -19,6 +19,7 @@ const isBase64 = require('is-base64');
 const base64Img = require('base64-img');
 const MTwitter = require('mtwitter');
 const Twitter = require('twitter');
+const TwitterUpdater = require('./functions/class/TwitterUpdater');
 const makeDir = require('make-dir');
 // Set default lifetime to 60 seconds for all entries
 const cache = require('express-redis-cache')({
@@ -135,7 +136,6 @@ Server.fn.db.checkOrCreateTable().then(() => {
         Server.fn.game[name] = require(`${__dirname}/games/functions/${name}`);
     });
 
-
     //=======================================================================//
     //     Express                                                           //
     //=======================================================================//
@@ -158,6 +158,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
     app.use('/public/images', express.static(`${__dirname}/public/images`));
     app.use('/public/media', express.static(`${__dirname}/public/media/${config.env}`));
 
+    app.enable('trust proxy');
     app.disable('x-powered-by');
     app.use(helmet());
     app.use(bodyParser.json({
@@ -180,11 +181,20 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
 
     app.listen(config.server.port, () => {
-        __log(`Server is listening on ${config.server.host}:${config.server.port} [**${config.env}**]`);
+        __logInfo(`Server is listening on ${config.server.host}:${config.server.port} [**${config.env}**]`);
     });
 
     /* Rate limiter */
     Server.limiter = require('express-limiter')(app, redisClient);
+
+    Server.limiter({
+        path: '*',
+        method: 'all',
+        lookup: ['connection.remoteAddress'],
+        // 150 requests per 5min
+        total: 150,
+        expire: 1000 * 60 * 5
+    });
 
     //=======================================================================//
     //     Routes          		                                             //
@@ -210,11 +220,44 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
     app.all('*', Server.fn.error.page404);
 
+
     //=======================================================================//
-    //     Test game data updater                                            //
+    //     Updaters                                                          //
     //=======================================================================//
 
-    Server.fn.api.getAndUpdateGameData(Server.game['lol']);
+    // Wait 10s before starting updaters
+    setTimeout(() => {
+
+
+        //=======================================================================//
+        //     Game data updater                                                 //
+        //=======================================================================//
+
+        function gameUpdater(game) {
+            Server.fn.api.getAndUpdateGameData(game).then(() => setTimeout(() => gameUpdater(game), 60 * 1000)); // 1 minute
+        }
+
+        for (const gameID in Server.game) {
+            gameUpdater(Server.game[gameID]);
+        }
+
+
+        //=======================================================================//
+        //     Twitter updater                                                   //
+        //=======================================================================//
+
+        const twitterUpdater = new TwitterUpdater();
+
+        function twUpdater() {
+            twitterUpdater.update().then(() => setTimeout(() => twUpdater(), 60 * 1000)); // 1 minute
+        }
+
+        twUpdater();
+
+
+    }, 10 * 1000); // 10s
+
+
 
 });
 
