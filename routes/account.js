@@ -53,7 +53,6 @@ module.exports = {
 			Server.fn.routes.account.checkParamsAccountCreate(req.body)
 				.then((account) => Server.fn.routes.account.getAccountID(req.user, account))
 				.then((account) => Server.fn.routes.account.createAccount(account))
-				.then((account) => Server.fn.routes.account.updateAccountGameData(account))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient d'ajouter :heavy_plus_sign: un compte **${data.data.game_id}** : \`${data.data.settings.username}\``, data))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));

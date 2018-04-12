@@ -115,25 +115,12 @@ module.exports = {
                     account.created = Date.now();
                     account.included = false;
                     Server.fn.dbMethods.account.insert(account)
-                        .then((result) => resolve(result.changes[0].new_val))
+                        .then((result) => resolve(Server.fn.api.jsonSuccess(200, result.changes[0].new_val)))
                         .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t create account', '[DB] createAccount() error', err)));
                 } else reject(Server.fn.api.jsonError(405, `Can't add more accounts (limit: ${config.constant.limits.accountbyGame})`, `Can't add more accounts (limit: ${config.constant.limits.accountbyGame})`));
 
             }).catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] count account error', err)));
 
-        });
-    },
-
-    updateAccountGameData(account) {
-        return new Promise((resolve, reject) => {
-
-            resolve(Server.fn.api.jsonSuccess(200, account));
-
-            /*Server.gameAPI[account.game_id].getAccountsGameData([account]) // TODO: create an error if ratelimit
-                //.then((accountsData) => Server.gameAPI[account.game_id].updateAccountsGameData(accountsData))
-                .then(() => resolve(Server.fn.api.jsonSuccess(200, account)))
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update game data', '[DB] updateAccountGameData() error', err)));
-*/
         });
     },
 
