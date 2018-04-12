@@ -107,7 +107,6 @@ module.exports = {
 			}
 		}), (req, res) => {
 			Server.fn.routes.user.getLatestActiveUsers(10)
-				.then((twitterUsers) => Server.fn.routes.user.getUpdatedTwitterUser(twitterUsers))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});

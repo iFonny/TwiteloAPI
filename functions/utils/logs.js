@@ -51,32 +51,38 @@ module.exports.initLogs = () => {
 				break;
 		}
 
-		if (typeof message != 'string') {
-			console.log(typeof message);
-			message = util.inspect(message, {
-				showHidden: true,
-				depth: null
-			}); // TODO: A TESTER, JSON.stringify(message);
-		}
+		try {
 
-		if (discordWebHook === null) return;
-
-		request.post({
-			url: discordWebHook,
-			json: {
-				username: `Twitelo API - Logs [${config.env}]`,
-				avatar_url: 'https://ifonny.en-f.eu/3047f9b25045.png', // TODO: Remplacer en prod par : `${config.server.websiteURL}/public/images/logo.png`,
-				embeds: [{
-					color,
-					description: message.substr(0, 1998),
-					timestamp: Server.moment().format(),
-					footer: {
-						icon_url: 'https://ifonny.en-f.eu/4c12c62c15f3.jpg', // TODO: Remplacer en prod
-						text: type
-					}
-				}]
+			if (typeof message != 'string') {
+				console.log(typeof message);
+				message = util.inspect(message, {
+					showHidden: true,
+					depth: null
+				}); // TODO: A TESTER, JSON.stringify(message);
 			}
-		});
+
+			if (discordWebHook === null) return;
+
+
+			request.post({
+				url: discordWebHook,
+				json: {
+					username: `Twitelo API - Logs [${config.env}]`,
+					avatar_url: 'https://ifonny.en-f.eu/3047f9b25045.png', // TODO: Remplacer en prod par : `${config.server.websiteURL}/public/images/logo.png`,
+					embeds: [{
+						color,
+						description: message.substr(0, 1998),
+						timestamp: Server.moment().format(),
+						footer: {
+							icon_url: 'https://ifonny.en-f.eu/4c12c62c15f3.jpg', // TODO: Remplacer en prod
+							text: type
+						}
+					}]
+				}
+			});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	global.__logJoinLeave = ({

@@ -17,7 +17,7 @@ module.exports.getLatestActive = (limit = 10) => {
             .and(r.row('twitelo')('description')('content').match('<{[^<>{} ]+}>'))
         )
         .limit(limit)
-        .pluck('id', 'name', 'username', 'twitter_id')
+        .pluck('id', 'name', 'username', 'twitter_id', 'profile_image_url')
         .run();
 };
 
