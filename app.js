@@ -159,6 +159,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
     app.use('/public/images', express.static(`${__dirname}/public/images`));
     app.use('/public/media', express.static(`${__dirname}/public/media/${config.env}`));
 
+    app.enable('trust proxy');
     app.disable('x-powered-by');
     app.use(helmet());
     app.use(bodyParser.json({
@@ -186,6 +187,15 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
     /* Rate limiter */
     Server.limiter = require('express-limiter')(app, redisClient);
+
+    Server.limiter({
+        path: '*',
+        method: 'all',
+        lookup: ['connection.remoteAddress'],
+        // 150 requests per 5min
+        total: 150,
+        expire: 1000 * 60 * 5
+    });
 
     //=======================================================================//
     //     Routes          		                                             //
