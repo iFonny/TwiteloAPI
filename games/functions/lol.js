@@ -1,7 +1,94 @@
+//=======================================================================//
+//     Config game lib                                                   //
+//=======================================================================//
+
+const {
+    Kayn,
+    RedisCache
+} = require('kayn');
+const xregexp = require('xregexp');
+
+const redisCache = new RedisCache();
+
+const kayn = Kayn(config.secret.game.lol.apiKey)({
+    region: 'euw',
+    debugOptions: {
+        isEnabled: true,
+        showKey: false,
+    },
+    requestOptions: {
+        shouldRetry: true,
+        numberOfRetriesBeforeAbort: 2,
+        delayBeforeRetry: 1000,
+        burst: true,
+    },
+    cacheOptions: {
+        cache: redisCache,
+        timeToLives: {
+            useDefault: true,
+            byGroup: {
+                THIRD_PARTY_CODE: 0, // no cache
+                CHAMPION_MASTERY: Server.game.lol.ratelimit.total, // cache for 5min
+                LEAGUE: Server.game.lol.ratelimit.total, // cache for 5min
+                LOL_STATUS: Server.game.lol.ratelimit.total, // cache for 5min
+                MATCH: Server.game.lol.ratelimit.total, // cache for 5min
+                SPECTATOR: Server.game.lol.ratelimit.total, // cache for 5min
+                SUMMONER: Server.game.lol.ratelimit.total, // cache for 5min
+                TOURNAMENT_STUB: Server.game.lol.ratelimit.total, // cache for 5min
+                TOURNAMENT: Server.game.lol.ratelimit.total, // cache for 5min
+                STATIC: 1000 * 60 * 60 * 24 * 7, // cache for a week
+                CHAMPION: 1000 * 60 * 60 * 24 * 7, // cache for a week
+            }
+        },
+    },
+});
+
+//=======================================================================//
+//     Game utils functions                                              //
+//=======================================================================//
+
 module.exports = {
+
+    getSummonerByName(username, region) {
+        return new Promise((resolve, reject) => {
+
+            const usernameRegex = xregexp('^[0-9\\pL _.]+$');
+
+            if (usernameRegex.test(username) && username.length <= 16) {
+
+                kayn.Summoner.by.name(username)
+                    .region(region.toLowerCase())
+                    .then((summoner) => {
+                        resolve({
+                            summoner_id: summoner.id,
+                            account_id: summoner.accountId,
+                            region: region.toLowerCase()
+                        });
+                    })
+                    .catch((error) => {
+                        if (error.statusCode == 404) resolve(null); // Doesn't exist
+                        else reject(error);
+                    });
+            } else resolve(null); // Invalid or too long
+
+        });
+    },
+
+    updateDBAccountUsername(game_account_info, username) {
+        Server.fn.dbMethods.account.updateWithFilter({
+                game_account_info
+            }, {
+                settings: {
+                    username
+                }
+            }).then((result) => console.log(result))
+            .catch((error) => __logError('[DB] Can\'t update account', error));
+    },
 
     fonctionCoolQuiRecupereDesChoses: (summonerID, region) => {
         return new Promise((resolve) => {
+
+            //console.log(kayn.config.cacheOptions);
 
             let data = {
                 username: null,

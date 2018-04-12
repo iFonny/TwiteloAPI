@@ -6,19 +6,29 @@
  **
  ** Return (Promise): 
  ** - string: account infos in game
+ **
+ ** Reject error format : {
+ **     code: 500,
+ **     messsage: 'Can\'t get game account',
+ **     full: error // full error
+ ** }
+ **
  */
 module.exports.getAccountInfo = (gameID, settings) => {
     return new Promise((resolve, reject) => {
 
+        Server.fn.game[gameID].getSummonerByName(settings.username, settings.region)
+            .then((summoner) => {
+                Server.fn.game.utils.useMeAfterEachRequest(Server.game[gameID], 1);
 
-        // IMPORTANT : Server.fn.game.utils.useMeAfterEachRequest(Server.game[gameID], res.requests);
-
-        // TODO
-        resolve({
-            summoner_id: '46741395',
-            account_id: '204805322',
-            region: settings.region
-        });
+                if (summoner) resolve(summoner);
+                else resolve(null);
+            })
+            .catch(error => reject({
+                code: 500,
+                message: 'Can\'t get game account',
+                full: error
+            }));
 
     });
 };
@@ -43,6 +53,8 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
         const res = await Server.fn.game[game.id].fonctionCoolQuiRecupereDesChoses(game_account_info.summoner_id, game_account_info.region);
 
         if (res.data) {
+            Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username); // Namechange handler (only front)
+
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.tier, 'LOL__RANKED_SOLO_SR__TIER', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.rank, 'LOL__RANKED_SOLO_SR__RANK', game.id, data_settings, game_account_info);
         }

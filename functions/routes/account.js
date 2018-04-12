@@ -92,15 +92,15 @@ module.exports = {
         });
     },
 
-    getAccountID(userID, account) {
+    getAccountID(user, account) {
         return new Promise((resolve, reject) => {
 
             Server.gameAPI[account.game_id].getAccountInfo(account.game_id, account.settings)
                 .then((info) => {
-                    if (info) resolve((account.user_id = userID, account.game_account_info = info, account.verified = false, account));
-                    else reject(Server.fn.api.jsonError(404, 'Account not found'));
+                    if (info) resolve((account.user_id = user.id, account.game_account_info = info, account.verified = false, account));
+                    else reject(Server.fn.api.jsonError(404, user.settings.locale == 'fr' ? 'Le compte n\'est pas valide ou n\'existe pas.' : 'Account invalid or does not exist.'));
                 })
-                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get game account', '[DB] getAccountID() error', err)));
+                .catch(err => reject(Server.fn.api.jsonError(err.code, err.message, '[GAME] getAccountInfo() error', err.full)));
 
         });
     },

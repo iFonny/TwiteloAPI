@@ -21,7 +21,7 @@ module.exports = {
         request: 50, // Number of requests every X seconds
         every: 5, // Keep between 1 and 10s
 
-        total: 300 // Game data cache 
+        total: 60 * 5 // Game data cache 
 
     }
 };
