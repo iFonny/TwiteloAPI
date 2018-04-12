@@ -84,17 +84,8 @@ const dataSettings = {
 const someData = {
     tier: {
         size: { // setting property
-            default: { // setting value
-                'UNRANKED': 'UNRANKED',
-                'BRONZE': 'BRONZE',
-                'SILVER': 'SILVER',
-                'GOLD': 'GOLD',
-                'PLATINUM': 'PLATINUM',
-                'DIAMOND': 'DIAMOND',
-                'MASTER': 'MASTER',
-                'CHALLENGER': 'CHALLENGER',
-            },
-            short: { // setting value
+            default: data => data, // setting value
+            short: data => _.get({ // setting value
                 'UNRANKED': 'UNRANK',
                 'BRONZE': 'BRONZE',
                 'SILVER': 'SILVER',
@@ -103,10 +94,10 @@ const someData = {
                 'DIAMOND': 'DIAM',
                 'MASTER': 'MASTER',
                 'CHALLENGER': 'CHALL',
-            }
+            }, data),
         },
         format: { // setting property
-            original: _.trim,
+            original: data => data, // setting value
             lowercase: _.toLower, // setting value
             uppercase: _.toUpper, // setting value
             capitalize: _.capitalize // setting value
