@@ -12,6 +12,6 @@ module.exports = {
     ratelimit: {
         request: 50, // (Max: 500/10s) // TODO: repasser a 200 quand prod
         every: 5, // 200 requests / 5 seconds
-        total: 300 // 5 minutes - Game data cache 
+        total: 60 * 5 // 5 minutes - Game data cache 
     }
 };

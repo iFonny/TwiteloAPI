@@ -47,6 +47,40 @@ module.exports.getUnarchivedByUserLimit = (userID, limit) => {
 //     INSERT                                                            //
 //=======================================================================//
 
+module.exports.sendNotification = (destination, icon, type, content) => {
+    let color;
+
+    switch (type) {
+        case 'success':
+            color = 'is-lightgreen';
+            break;
+        case 'info':
+            color = 'is-lightblue';
+            break;
+        case 'error':
+            color = 'is-lightred';
+            break;
+        case 'warn':
+            color = 'is-warning';
+            break;
+        default:
+            color = 'is-lightblue';
+            break;
+    }
+
+    return r.table('notification')
+        .insert({
+            icon,
+            color,
+            type,
+            destination,
+            en: content.en,
+            fr: content.fr,
+            created: Date.now(),
+            archived: false
+        }).run();
+};
+
 
 //=======================================================================//
 //     EDIT                                                              //

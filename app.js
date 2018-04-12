@@ -19,7 +19,7 @@ const isBase64 = require('is-base64');
 const base64Img = require('base64-img');
 const MTwitter = require('mtwitter');
 const Twitter = require('twitter');
-const twitterText = require('twitter-text');
+const TwitterUpdater = require('./functions/class/TwitterUpdater');
 const makeDir = require('make-dir');
 // Set default lifetime to 60 seconds for all entries
 const cache = require('express-redis-cache')({
@@ -66,7 +66,6 @@ global.Server = {
         error: require('./functions/utils/error'),
         api: require('./functions/utils/api'),
         db: require('./functions/utils/db'),
-        twitterUpdater: require('./functions/utils/twitterUpdater'),
         game: {}, // game functions
         routes: {}, // Look Routes (end of app.js)
         dbMethods: {}
@@ -137,7 +136,6 @@ Server.fn.db.checkOrCreateTable().then(() => {
         Server.fn.game[name] = require(`${__dirname}/games/functions/${name}`);
     });
 
-
     //=======================================================================//
     //     Express                                                           //
     //=======================================================================//
@@ -160,6 +158,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
     app.use('/public/images', express.static(`${__dirname}/public/images`));
     app.use('/public/media', express.static(`${__dirname}/public/media/${config.env}`));
 
+    app.enable('trust proxy');
     app.disable('x-powered-by');
     app.use(helmet());
     app.use(bodyParser.json({
@@ -188,6 +187,15 @@ Server.fn.db.checkOrCreateTable().then(() => {
     /* Rate limiter */
     Server.limiter = require('express-limiter')(app, redisClient);
 
+    Server.limiter({
+        path: '*',
+        method: 'all',
+        lookup: ['connection.remoteAddress'],
+        // 150 requests per 5min
+        total: 150,
+        expire: 1000 * 60 * 5
+    });
+
     //=======================================================================//
     //     Routes          		                                             //
     //=======================================================================//
@@ -213,34 +221,43 @@ Server.fn.db.checkOrCreateTable().then(() => {
     app.all('*', Server.fn.error.page404);
 
 
-
-
     //=======================================================================//
-    //     Game data updater                                                 //
+    //     Updaters                                                          //
     //=======================================================================//
 
-    function updater(game) {
-        Server.fn.api.getAndUpdateGameData(game).then(() => setTimeout(() => updater(game), 60 * 1000));
-    }
-
-    //updater(Server.game['lol']);
-
-    /*for (const gameID in Server.game) {
-        updater(Server.game[gameID]);
-    }*/
+    // Wait 10s before starting updaters
+    setTimeout(() => {
 
 
-    //=======================================================================//
-    //     Twitter updater                                                   //
-    //=======================================================================//
+        //=======================================================================//
+        //     Game data updater                                                 //
+        //=======================================================================//
 
-    //Server.fn.twitterUpdater.update();
+        function gameUpdater(game) {
+            Server.fn.api.getAndUpdateGameData(game).then(() => setTimeout(() => gameUpdater(game), 60 * 1000)); // 1 minute
+        }
 
-    // Get tous les profils avec le global switch ON et disabled < 10
-    // Decoder tokens
-    // Connecter a twitter
-    // Get previews
-    // 4 if (name, desc, loc) et update en fonction
+        for (const gameID in Server.game) {
+            gameUpdater(Server.game[gameID]);
+        }
+
+
+        //=======================================================================//
+        //     Twitter updater                                                   //
+        //=======================================================================//
+
+        const twitterUpdater = new TwitterUpdater();
+
+        function twUpdater() {
+            twitterUpdater.update().then(() => setTimeout(() => twUpdater(), 60 * 1000)); // 1 minute
+        }
+
+        twUpdater();
+
+
+    }, 10 * 1000); // 10s
+
+
 
 });
 
