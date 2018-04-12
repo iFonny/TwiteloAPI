@@ -122,7 +122,7 @@ module.exports = {
 
     getIncludedTagsFromText(text) {
         let includedTags = [];
-        const myRegexp = /<{([^<>{} ]+)}>/g;
+        const myRegexp = /<{([^<>{} ]+?)}>/g;
         let match = myRegexp.exec(text);
 
         while (match != null) {
@@ -135,7 +135,7 @@ module.exports = {
     async getProfileTextLength(userID, text, tags) {
         let counter = 0;
         let removeArray = [];
-        const myRegexp = /<{([^<>{} ]+)}>/g;
+        const myRegexp = /<{([^<>{} ]+?)}>/g;
         let match = myRegexp.exec(text);
 
         tags = await Server.fn.dbMethods.tag.getByUserAndIDs(userID, tags);
@@ -248,7 +248,7 @@ module.exports = {
     getPreview(tags, profile, forTwitter) {
         function getProfileTextPreview(text, tags, forTwitter) {
             let mapObj = [];
-            const myRegexp = /<{([^<>{} ]+)}>/g;
+            const myRegexp = /<{([^<>{} ]+?)}>/g;
             let match = myRegexp.exec(text);
             let gameTag, generator;
 

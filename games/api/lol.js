@@ -50,10 +50,10 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
     if (tag_ids.LOL__RANKED_SOLO_SR__TIER || tag_ids.LOL__RANKED_SOLO_SR__RANK || tag_ids.LOL__RANKED_SOLO_SR__LP) {
         await Server.fn.game.utils.useMeBeforeEachRequest(game);
 
-        const res = await Server.fn.game[game.id].fonctionCoolQuiRecupereDesChoses(game_account_info.summoner_id, game_account_info.region);
+        const res = await Server.fn.game[game.id].getLeaguePositionsBySummonerID(game_account_info.summoner_id, game_account_info.region);
 
         if (res.data) {
-            Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username); // Namechange handler (only front)
+            if (res.data.username) Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username); // Namechange handler (only front)
 
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.tier, 'LOL__RANKED_SOLO_SR__TIER', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.rank, 'LOL__RANKED_SOLO_SR__RANK', game.id, data_settings, game_account_info);
