@@ -180,5 +180,23 @@ module.exports.generator = {
         }
 
         return result;
+    },
+    rank(gameTag, data, settings) {
+        let result = data;
+
+        for (const key of gameTag.settingsOrder) {
+            const setting = settings[key];
+
+            switch (key) {
+                case 'format':
+                    result = gameTag.data[key][setting](result) || result;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        return result;
     }
 };

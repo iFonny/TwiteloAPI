@@ -56,6 +56,31 @@ const fieldSettings = {
                 fr: 'Exemple'
             }
         }
+    },
+    formatRank: {
+        type: 'select', // select
+        tooltip: false,
+        label: {
+            en: 'Formatting',
+            fr: 'Mise en forme'
+        },
+        input: {
+            original: {
+                value: 0,
+                en: 'No change',
+                fr: 'Aucune modification'
+            },
+            roman: {
+                value: 0,
+                en: 'Roman numbers',
+                fr: 'Chiffres romain'
+            },
+            number: {
+                value: -2,
+                en: 'Number',
+                fr: 'Chiffre'
+            }
+        }
     }
 };
 
@@ -102,6 +127,19 @@ const someData = {
             uppercase: _.toUpper, // setting value
             capitalize: _.capitalize // setting value
         }
+    },
+    rank: {
+        format: {
+            original: data => data,
+            roman: data => data,
+            number: data => _.get({
+                'I': '1',
+                'II': '2',
+                'III': '3',
+                'IV': '4',
+                'V': '5'
+            }, data)
+        }
     }
 };
 
@@ -124,6 +162,13 @@ const someExamples = {
                     capitalize: 'Diam' // setting value
                 }
             }
+        }
+    },
+    rank: {
+        format: {
+            original: 'IV',
+            roman: 'IV',
+            number: '4'
         }
     }
 };
@@ -258,7 +303,26 @@ module.exports = {
         exampleOriginal: 'DIAMOND',
         example: someExamples.tier // existing example
     },
-    // TODO: LOL__RANKED_SOLO_SR__RANK
+    LOL__RANKED_SOLO_SR__RANK: {
+        id: 'LOL__RANKED_SOLO_SR__RANK',
+        gameID: 'lol',
+        category: 'Ranked Solo Summoner\'s Rift',
+        categorySmall: 'Ranked Solo SR',
+        name: 'Rank',
+        nameSmall: 'Rank',
+        size: 3,
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: { // Settings applied to the retrieved data (ex: format, size...)
+            format: fieldSettings.formatRank // existing setting
+        },
+        dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
+        settingsOrder: ['format'],
+        generator: 'rank', // function called to generate data 
+        data: someData.rank, // existing data
+        exampleOriginal: 'IV',
+        example: someExamples.rank // existing example
+    },
     // TODO: LOL__RANKED_SOLO_SR__LP
     // TODO: LOL__RANKED_SOLO_SR__WINS
     // TODO: LOL__RANKED_SOLO_SR__LOSSES
@@ -281,13 +345,32 @@ module.exports = {
             format: fieldSettings.format // existing setting
         },
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
-        settingsOrder: ['size', 'format'], // settings order
+        settingsOrder: ['size', 'format'],
         generator: 'tier', // function called to generate data 
         data: someData.tier, // existing data
         exampleOriginal: 'DIAMOND',
         example: someExamples.tier // existing example
     },
-    // - LOL__RANKED_FLEX_SR__RANK : TODO
+    LOL__RANKED_FLEX_SR__RANK: {
+        id: 'LOL__RANKED_FLEX_SR__RANK',
+        gameID: 'lol',
+        category: 'Ranked Flex Summoner\'s Rift',
+        categorySmall: 'Ranked Flex SR',
+        name: 'Rank',
+        nameSmall: 'Rank',
+        size: 3,
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: { // Settings applied to the retrieved data (ex: format, size...)
+            format: fieldSettings.formatRank // existing setting
+        },
+        dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
+        settingsOrder: ['format'],
+        generator: 'rank', // function called to generate data 
+        data: someData.rank, // existing data
+        exampleOriginal: 'IV',
+        example: someExamples.rank // existing example
+    },
     // - LOL__RANKED_FLEX_SR__LP : TODO
     // - LOL__RANKED_FLEX_SR__WINS : TODO
     // - LOL__RANKED_FLEX_SR__LOSSES : TODO
@@ -315,7 +398,26 @@ module.exports = {
         exampleOriginal: 'DIAMOND',
         example: someExamples.tier // existing example
     },
-    // - LOL__RANKED_FLEX_TT__RANK : TODO
+    LOL__RANKED_FLEX_TT__RANK: {
+        id: 'LOL__RANKED_FLEX_TT__RANK',
+        gameID: 'lol',
+        category: 'Ranked Flex Twisted Treeline',
+        categorySmall: 'Ranked Flex TT',
+        name: 'Rank',
+        nameSmall: 'Rank',
+        size: 3,
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: { // Settings applied to the retrieved data (ex: format, size...)
+            format: fieldSettings.formatRank // existing setting
+        },
+        dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
+        settingsOrder: ['format'],
+        generator: 'rank', // function called to generate data 
+        data: someData.rank, // existing data
+        exampleOriginal: 'IV',
+        example: someExamples.rank // existing example
+    },
     // - LOL__RANKED_FLEX_TT__LP : TODO
     // - LOL__RANKED_FLEX_TT__WINS : TODO
     // - LOL__RANKED_FLEX_TT__LOSSES : TODO
