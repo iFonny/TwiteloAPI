@@ -46,17 +46,55 @@ module.exports.getAccountInfo = (gameID, settings) => {
  */
 module.exports.getDataOneByOne = async (game, data_settings, game_account_info, tag_ids) => {
 
-    // If one of this tag -> update data
-    if (tag_ids.LOL__RANKED_SOLO_SR__TIER || tag_ids.LOL__RANKED_SOLO_SR__RANK || tag_ids.LOL__RANKED_SOLO_SR__LP) {
+    // League tags
+    if (tag_ids.LOL__RANKED_SOLO_SR__LEAGUE_NAME || tag_ids.LOL__RANKED_SOLO_SR__TIER ||
+        tag_ids.LOL__RANKED_SOLO_SR__RANK || tag_ids.LOL__RANKED_SOLO_SR__LP ||
+        tag_ids.LOL__RANKED_SOLO_SR__WINS || tag_ids.LOL__RANKED_SOLO_SR__LOSSES ||
+        tag_ids.LOL__RANKED_SOLO_SR__WINRATE ||
+        tag_ids.LOL__RANKED_FLEX_SR__LEAGUE_NAME || tag_ids.LOL__RANKED_FLEX_SR__TIER ||
+        tag_ids.LOL__RANKED_FLEX_SR__RANK || tag_ids.LOL__RANKED_FLEX_SR__LP ||
+        tag_ids.LOL__RANKED_FLEX_SR__WINS || tag_ids.LOL__RANKED_FLEX_SR__LOSSES ||
+        tag_ids.LOL__RANKED_FLEX_SR__WINRATE ||
+        tag_ids.LOL__RANKED_FLEX_TT__LEAGUE_NAME || tag_ids.LOL__RANKED_FLEX_TT__TIER ||
+        tag_ids.LOL__RANKED_FLEX_TT__RANK || tag_ids.LOL__RANKED_FLEX_TT__LP ||
+        tag_ids.LOL__RANKED_FLEX_TT__WINS || tag_ids.LOL__RANKED_FLEX_TT__LOSSES ||
+        tag_ids.LOL__RANKED_FLEX_TT__WINRATE
+    ) {
         await Server.fn.game.utils.useMeBeforeEachRequest(game);
 
         const res = await Server.fn.game[game.id].getLeaguePositionsBySummonerID(game_account_info.summoner_id, game_account_info.region);
 
         if (res.data) {
-            if (res.data.username) Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username); // Namechange handler (only front)
 
+            // Update account username in database (namechange handler)
+            if (res.data.username) Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username);
+
+            // Ranked Solo 5v5
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.leagueName, 'LOL__RANKED_SOLO_SR__LEAGUE_NAME', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.tier, 'LOL__RANKED_SOLO_SR__TIER', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.rank, 'LOL__RANKED_SOLO_SR__RANK', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.leaguePoints, 'LOL__RANKED_SOLO_SR__LP', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.wins, 'LOL__RANKED_SOLO_SR__WINS', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.losses, 'LOL__RANKED_SOLO_SR__LOSSES', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.winrate, 'LOL__RANKED_SOLO_SR__WINRATE', game.id, data_settings, game_account_info);
+
+            // Ranked Flex 5v5
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.leagueName, 'LOL__RANKED_FLEX_SR__LEAGUE_NAME', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.tier, 'LOL__RANKED_FLEX_SR__TIER', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.rank, 'LOL__RANKED_FLEX_SR__RANK', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.leaguePoints, 'LOL__RANKED_FLEX_SR__LP', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.wins, 'LOL__RANKED_FLEX_SR__WINS', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.losses, 'LOL__RANKED_FLEX_SR__LOSSES', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.winrate, 'LOL__RANKED_FLEX_SR__WINRATE', game.id, data_settings, game_account_info);
+
+            // Ranked Flex 3v3
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.leagueName, 'LOL__RANKED_FLEX_TT__LEAGUE_NAME', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.tier, 'LOL__RANKED_FLEX_TT__TIER', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.rank, 'LOL__RANKED_FLEX_TT__RANK', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.leaguePoints, 'LOL__RANKED_FLEX_TT__LP', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.wins, 'LOL__RANKED_FLEX_TT__WINS', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.losses, 'LOL__RANKED_FLEX_TT__LOSSES', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.winrate, 'LOL__RANKED_FLEX_TT__WINRATE', game.id, data_settings, game_account_info);
         }
 
         Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
