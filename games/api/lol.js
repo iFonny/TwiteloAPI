@@ -168,7 +168,7 @@ module.exports.generator = {
 
             switch (key) {
                 case 'size':
-                    result = gameTag.data[key][setting](result.toUpperCase()) || result;
+                    result = gameTag.data[key][setting](result) || result;
                     break;
                 case 'format':
                     result = gameTag.data[key][setting](result) || result;

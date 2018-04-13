@@ -27,6 +27,34 @@ const fieldSettings = {
             }
         },
     },
+    sizeLP: {
+        type: 'select', // select
+        tooltip: {
+            en: 'Text size in the profile',
+            fr: 'Taille du texte dans le profil'
+        },
+        label: {
+            en: 'Size',
+            fr: 'Taille'
+        },
+        input: {
+            default: {
+                value: 0, // Size add or sub
+                en: 'Without "Lp"',
+                fr: 'Sans "Lp"'
+            },
+            withLPSpace: {
+                value: 3,
+                en: 'With a space and "Lp"',
+                fr: 'Avec un espace et "Lp"'
+            },
+            withLPNoSpace: {
+                value: 2,
+                en: 'With "Lp"',
+                fr: 'Avec "Lp"'
+            }
+        },
+    },
     format: {
         type: 'select', // select
         tooltip: false,
@@ -35,7 +63,7 @@ const fieldSettings = {
             fr: 'Mise en forme'
         },
         input: {
-            original: {
+            default: {
                 value: 0,
                 en: 'No change',
                 fr: 'Aucune modification'
@@ -57,6 +85,31 @@ const fieldSettings = {
             }
         }
     },
+    formatNoCapitalize: {
+        type: 'select', // select
+        tooltip: false,
+        label: {
+            en: 'Formatting',
+            fr: 'Mise en forme'
+        },
+        input: {
+            default: {
+                value: 0,
+                en: 'No change',
+                fr: 'Aucune modification'
+            },
+            uppercase: {
+                value: 0,
+                en: 'UPPERCASE',
+                fr: 'majuscule'
+            },
+            lowercase: {
+                value: 0,
+                en: 'lowercase',
+                fr: 'minuscule'
+            }
+        }
+    },
     formatRank: {
         type: 'select', // select
         tooltip: false,
@@ -65,7 +118,7 @@ const fieldSettings = {
             fr: 'Mise en forme'
         },
         input: {
-            original: {
+            default: {
                 value: 0,
                 en: 'No change',
                 fr: 'Aucune modification'
@@ -122,7 +175,7 @@ const someData = {
             }, data),
         },
         format: { // setting property
-            original: data => data, // setting value
+            default: data => data, // setting value
             lowercase: _.toLower, // setting value
             uppercase: _.toUpper, // setting value
             capitalize: _.capitalize // setting value
@@ -130,7 +183,7 @@ const someData = {
     },
     rank: {
         format: {
-            original: data => data,
+            default: data => data,
             roman: data => data,
             number: data => _.get({
                 'I': '1',
@@ -140,6 +193,18 @@ const someData = {
                 'V': '5'
             }, data)
         }
+    },
+    lp: {
+        size: {
+            default: data => data,
+            withLPSpace: data => data + ' Lp',
+            withLPNoSpace: data => data + 'Lp'
+        },
+        format: {
+            default: data => data,
+            lowercase: _.toLower,
+            uppercase: _.toUpper
+        }
     }
 };
 
@@ -148,7 +213,7 @@ const someExamples = {
         size: { // setting property
             default: { // setting value
                 format: { // setting property
-                    original: 'DIAMOND',
+                    default: 'DIAMOND',
                     uppercase: 'DIAMOND', // setting value
                     lowercase: 'diamond', // setting value
                     capitalize: 'Diamond' // setting value
@@ -156,7 +221,7 @@ const someExamples = {
             },
             short: { // setting value
                 format: { // setting property
-                    original: 'DIAM',
+                    default: 'DIAM',
                     uppercase: 'DIAM', // setting value
                     lowercase: 'diam', // setting value
                     capitalize: 'Diam' // setting value
@@ -166,9 +231,34 @@ const someExamples = {
     },
     rank: {
         format: {
-            original: 'IV',
+            default: 'IV',
             roman: 'IV',
             number: '4'
+        }
+    },
+    lp: {
+        size: {
+            default: {
+                format: {
+                    default: '86',
+                    uppercase: '86',
+                    lowercase: '86'
+                }
+            },
+            withLPSpace: {
+                format: {
+                    default: '86 Lp',
+                    uppercase: '86 LP',
+                    lowercase: '86 lp'
+                }
+            },
+            withLPNoSpace: {
+                format: {
+                    default: '86Lp',
+                    uppercase: '86LP',
+                    lowercase: '86lp'
+                }
+            }
         }
     }
 };
@@ -323,7 +413,28 @@ module.exports = {
         exampleOriginal: 'IV',
         example: someExamples.rank // existing example
     },
-    // TODO: LOL__RANKED_SOLO_SR__LP
+    // TODO: LOL__RANKED_SOLO_SR__LP : WIP
+    LOL__RANKED_SOLO_SR__LP: {
+        id: 'LOL__RANKED_SOLO_SR__LP',
+        gameID: 'lol',
+        category: 'Ranked Solo Summoner\'s Rift',
+        categorySmall: 'Ranked Solo SR',
+        name: 'League points',
+        nameSmall: 'LP',
+        size: 3,
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: { // Settings applied to the retrieved data (ex: format, size...)
+            size: fieldSettings.sizeLP, // existing setting
+            format: fieldSettings.formatNoCapitalize // existing setting
+        },
+        dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
+        settingsOrder: ['size', 'format'],
+        generator: 'tier', // function called to generate data 
+        data: someData.lp, // existing data
+        exampleOriginal: '86',
+        example: someExamples.lp // existing example
+    },
     // TODO: LOL__RANKED_SOLO_SR__WINS
     // TODO: LOL__RANKED_SOLO_SR__LOSSES
     // TODO: LOL__RANKED_SOLO_SR__WINRATE
