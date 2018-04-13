@@ -304,27 +304,27 @@ const someExamples = {
     - LOL__RANKED_SOLO_SR__TIER 
     - LOL__RANKED_SOLO_SR__RANK
     - LOL__RANKED_SOLO_SR__LP
-    - LOL__RANKED_SOLO_SR__WINS : TODO
-    - LOL__RANKED_SOLO_SR__LOSSES : TODO
-    - LOL__RANKED_SOLO_SR__GAMES : TODO
+    - LOL__RANKED_SOLO_SR__WINS
+    - LOL__RANKED_SOLO_SR__LOSSES
+    - LOL__RANKED_SOLO_SR__GAMES
     - LOL__RANKED_SOLO_SR__WINRATE : TODO
 
     - LOL__RANKED_FLEX_SR__LEAGUE_NAME : TODO
     - LOL__RANKED_FLEX_SR__TIER
     - LOL__RANKED_FLEX_SR__RANK
     - LOL__RANKED_FLEX_SR__LP
-    - LOL__RANKED_FLEX_SR__WINS : TODO
-    - LOL__RANKED_FLEX_SR__LOSSES : TODO
-    - LOL__RANKED_FLEX_SR__GAMES : TODO
+    - LOL__RANKED_FLEX_SR__WINS
+    - LOL__RANKED_FLEX_SR__LOSSES
+    - LOL__RANKED_FLEX_SR__GAMES
     - LOL__RANKED_FLEX_SR__WINRATE : TODO
 
     - LOL__RANKED_FLEX_TT__LEAGUE_NAME : TODO
     - LOL__RANKED_FLEX_TT__TIER
     - LOL__RANKED_FLEX_TT__RANK
     - LOL__RANKED_FLEX_TT__LP
-    - LOL__RANKED_FLEX_TT__WINS : TODO
-    - LOL__RANKED_FLEX_TT__LOSSES : TODO
-    - LOL__RANKED_FLEX_TT__GAMES : TODO
+    - LOL__RANKED_FLEX_TT__WINS
+    - LOL__RANKED_FLEX_TT__LOSSES
+    - LOL__RANKED_FLEX_TT__GAMES
     - LOL__RANKED_FLEX_TT__WINRATE : TODO
 
 
@@ -443,9 +443,60 @@ module.exports = {
         exampleOriginal: '86',
         example: someExamples.lp // existing example
     },
-    // TODO: LOL__RANKED_SOLO_SR__WINS
-    // TODO: LOL__RANKED_SOLO_SR__LOSSES
-    // - LOL__RANKED_SOLO_SR__GAMES : TODO
+    LOL__RANKED_SOLO_SR__WINS: {
+        id: 'LOL__RANKED_SOLO_SR__WINS',
+        gameID: 'lol',
+        category: 'Ranked Solo Summoner\'s Rift',
+        categorySmall: 'Ranked Solo SR',
+        name: 'Wins',
+        nameSmall: 'Wins',
+        size: 5,
+        account: true,
+        useExample: false,
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '149',
+        example: '149'
+    },
+    LOL__RANKED_SOLO_SR__LOSSES: {
+        id: 'LOL__RANKED_SOLO_SR__LOSSES',
+        gameID: 'lol',
+        category: 'Ranked Solo Summoner\'s Rift',
+        categorySmall: 'Ranked Solo SR',
+        name: 'Losses',
+        nameSmall: 'Losses',
+        size: 5,
+        account: true,
+        useExample: false,
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '102',
+        example: '102'
+    },
+    LOL__RANKED_SOLO_SR__GAMES: {
+        id: 'LOL__RANKED_SOLO_SR__GAMES',
+        gameID: 'lol',
+        category: 'Ranked Solo Summoner\'s Rift',
+        categorySmall: 'Ranked Solo SR',
+        name: 'Games',
+        nameSmall: 'Games',
+        size: 6,
+        account: true,
+        useExample: false,
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '470',
+        example: '470'
+    },
     // TODO: LOL__RANKED_SOLO_SR__WINRATE
 
 
@@ -512,9 +563,60 @@ module.exports = {
         exampleOriginal: '86',
         example: someExamples.lp // existing example
     },
-    // - LOL__RANKED_FLEX_SR__WINS : TODO
-    // - LOL__RANKED_FLEX_SR__LOSSES : TODO
-    // - LOL__RANKED_FLEX_SR__GAMES : TODO
+    LOL__RANKED_FLEX_SR__WINS: {
+        id: 'LOL__RANKED_FLEX_SR__WINS',
+        gameID: 'lol',
+        category: 'Ranked Flex Summoner\'s Rift',
+        categorySmall: 'Ranked Flex SR',
+        name: 'Wins',
+        nameSmall: 'Wins',
+        size: 5,
+        account: true,
+        useExample: false,
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '149',
+        example: '149'
+    },
+    LOL__RANKED_FLEX_SR__LOSSES: {
+        id: 'LOL__RANKED_FLEX_SR__LOSSES',
+        gameID: 'lol',
+        category: 'Ranked Flex Summoner\'s Rift',
+        categorySmall: 'Ranked Flex SR',
+        name: 'Losses',
+        nameSmall: 'Losses',
+        size: 5,
+        account: true,
+        useExample: false,
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '149',
+        example: '149'
+    },
+    LOL__RANKED_FLEX_SR__GAMES: {
+        id: 'LOL__RANKED_FLEX_SR__GAMES',
+        gameID: 'lol',
+        category: 'Ranked Flex Summoner\'s Rift',
+        categorySmall: 'Ranked Flex SR',
+        name: 'Games',
+        nameSmall: 'Games',
+        size: 6,
+        account: true,
+        useExample: false,
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '149',
+        example: '149'
+    },
     // - LOL__RANKED_FLEX_SR__WINRATE : TODO
 
     // - LOL__RANKED_FLEX_TT__LEAGUE_NAME : TODO
@@ -580,9 +682,60 @@ module.exports = {
         exampleOriginal: '86',
         example: someExamples.lp // existing example
     },
-    // - LOL__RANKED_FLEX_TT__WINS : TODO
-    // - LOL__RANKED_FLEX_TT__LOSSES : TODO
-    // - LOL__RANKED_FLEX_TT__GAMES : TODO
+    LOL__RANKED_FLEX_TT__WINS: {
+        id: 'LOL__RANKED_FLEX_TT__WINS',
+        gameID: 'lol',
+        category: 'Ranked Flex Twisted Treeline',
+        categorySmall: 'Ranked Flex TT',
+        name: 'Wins',
+        nameSmall: 'Wins',
+        size: 5,
+        account: true,
+        useExample: false,
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '149',
+        example: '149'
+    },
+    LOL__RANKED_FLEX_TT__LOSSES: {
+        id: 'LOL__RANKED_FLEX_TT__LOSSES',
+        gameID: 'lol',
+        category: 'Ranked Flex Twisted Treeline',
+        categorySmall: 'Ranked Flex TT',
+        name: 'Losses',
+        nameSmall: 'Losses',
+        size: 5,
+        account: true,
+        useExample: false,
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '149',
+        example: '149'
+    },
+    LOL__RANKED_FLEX_TT__GAMES: {
+        id: 'LOL__RANKED_FLEX_TT__GAMES',
+        gameID: 'lol',
+        category: 'Ranked Flex Twisted Treeline',
+        categorySmall: 'Ranked Flex TT',
+        name: 'Games',
+        nameSmall: 'Games',
+        size: 6,
+        account: true,
+        useExample: false,
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '149',
+        example: '149'
+    },
     // - LOL__RANKED_FLEX_TT__WINRATE : TODO
 
     // ...
