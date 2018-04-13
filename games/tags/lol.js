@@ -259,6 +259,14 @@ const someExamples = {
             withPercentNoSpace: '69%'
         }
     },
+    username: {
+        format: {
+            default: 'iFonny',
+            uppercase: 'iFONNY',
+            lowercase: 'ifonny',
+            capitalize: 'Ifonny'
+        }
+    },
     leagueName: {
         format: {
             default: 'Twisted Fate\'s Constellations',
@@ -330,10 +338,10 @@ const someExamples = {
 
  Tags : 
 
-    - LOL__ACCOUNT__USERNAME : TODO
+    - LOL__ACCOUNT__USERNAME
     - LOL__ACCOUNT__REGION : TODO
-    - LOL__ACCOUNT__ID : TODO
-    - LOL__ACCOUNT__LEVEL : TODO
+    - LOL__ACCOUNT__ID
+    - LOL__ACCOUNT__LEVEL
 
 
     - LOL__TOP_SOLO_SR__LEAGUE_NAME : TODO
@@ -410,10 +418,64 @@ const someExamples = {
 
 module.exports = {
 
-    // - LOL__ACCOUNT__USERNAME : WIP
+    LOL__ACCOUNT__USERNAME: {
+        id: 'LOL__ACCOUNT__USERNAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
+        gameID: 'lol',
+        category: 'Account / Informations',
+        categorySmall: 'Account',
+        name: 'Username', // Tag name
+        nameSmall: 'Username', // Tag small name
+        size: 16, // default size
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: { // Settings applied to the retrieved data (ex: format, size...)
+            format: fieldSettings.format // existing setting
+        },
+        dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
+        settingsOrder: ['format'], // settings order
+        generator: 'default', // function called to generate data 
+        data: someData.text, // existing data
+        exampleOriginal: 'iFonny',
+        example: someExamples.username // existing example
+    },
     // - LOL__ACCOUNT__REGION : TODO
-    // - LOL__ACCOUNT__ID : TODO
-    // - LOL__ACCOUNT__LEVEL : TODO
+    LOL__ACCOUNT__ID: {
+        id: 'LOL__ACCOUNT__ID', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
+        gameID: 'lol',
+        category: 'Account / Informations',
+        categorySmall: 'Account',
+        name: 'ID', // Tag name
+        nameSmall: 'ID', // Tag small name
+        size: 10, // default size
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '109009595',
+        example: '109009595'
+    },
+    LOL__ACCOUNT__LEVEL: {
+        id: 'LOL__ACCOUNT__LEVEL',
+        gameID: 'lol',
+        category: 'Account / Informations',
+        categorySmall: 'Account',
+        name: 'Level', // Tag name
+        nameSmall: 'LvL', // Tag small name
+        size: 5, // default size
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '103',
+        example: '103'
+    },
+
 
 
     // - LOL__TOP_SOLO_SR__LEAGUE_NAME : TODO
