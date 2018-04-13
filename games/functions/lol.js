@@ -97,6 +97,7 @@ module.exports = {
                 leaguePoints: null,
                 wins: null,
                 losses: null,
+                games: null,
                 winrate: null
             },
             rankedSoloSR: {
@@ -106,6 +107,7 @@ module.exports = {
                 leaguePoints: null,
                 wins: null,
                 losses: null,
+                games: null,
                 winrate: null
             },
             rankedFlexSR: {
@@ -115,6 +117,7 @@ module.exports = {
                 leaguePoints: null,
                 wins: null,
                 losses: null,
+                games: null,
                 winrate: null
             }
         };
@@ -145,6 +148,7 @@ module.exports = {
                     data[queueType].leaguePoints = position.leaguePoints;
                     data[queueType].wins = position.wins;
                     data[queueType].losses = position.losses;
+                    data[queueType].games = position.wins + position.losses;
                     data[queueType].winrate = Math.round(position.wins / (position.wins + position.losses) * 100);
                 }
             }

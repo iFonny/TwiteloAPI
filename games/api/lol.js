@@ -50,15 +50,17 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
     if (tag_ids.LOL__RANKED_SOLO_SR__LEAGUE_NAME || tag_ids.LOL__RANKED_SOLO_SR__TIER ||
         tag_ids.LOL__RANKED_SOLO_SR__RANK || tag_ids.LOL__RANKED_SOLO_SR__LP ||
         tag_ids.LOL__RANKED_SOLO_SR__WINS || tag_ids.LOL__RANKED_SOLO_SR__LOSSES ||
-        tag_ids.LOL__RANKED_SOLO_SR__WINRATE ||
+        tag_ids.LOL__RANKED_SOLO_SR__GAMES || tag_ids.LOL__RANKED_SOLO_SR__WINRATE ||
+
         tag_ids.LOL__RANKED_FLEX_SR__LEAGUE_NAME || tag_ids.LOL__RANKED_FLEX_SR__TIER ||
         tag_ids.LOL__RANKED_FLEX_SR__RANK || tag_ids.LOL__RANKED_FLEX_SR__LP ||
         tag_ids.LOL__RANKED_FLEX_SR__WINS || tag_ids.LOL__RANKED_FLEX_SR__LOSSES ||
-        tag_ids.LOL__RANKED_FLEX_SR__WINRATE ||
+        tag_ids.LOL__RANKED_FLEX_SR__GAMES || tag_ids.LOL__RANKED_FLEX_SR__WINRATE ||
+
         tag_ids.LOL__RANKED_FLEX_TT__LEAGUE_NAME || tag_ids.LOL__RANKED_FLEX_TT__TIER ||
         tag_ids.LOL__RANKED_FLEX_TT__RANK || tag_ids.LOL__RANKED_FLEX_TT__LP ||
         tag_ids.LOL__RANKED_FLEX_TT__WINS || tag_ids.LOL__RANKED_FLEX_TT__LOSSES ||
-        tag_ids.LOL__RANKED_FLEX_TT__WINRATE
+        tag_ids.LOL__RANKED_FLEX_TT__GAMES || tag_ids.LOL__RANKED_FLEX_TT__WINRATE
     ) {
         await Server.fn.game.utils.useMeBeforeEachRequest(game);
 
@@ -76,6 +78,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.leaguePoints, 'LOL__RANKED_SOLO_SR__LP', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.wins, 'LOL__RANKED_SOLO_SR__WINS', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.losses, 'LOL__RANKED_SOLO_SR__LOSSES', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.games, 'LOL__RANKED_SOLO_SR__GAMES', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.winrate, 'LOL__RANKED_SOLO_SR__WINRATE', game.id, data_settings, game_account_info);
 
             // Ranked Flex 5v5
@@ -85,6 +88,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
             await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.leaguePoints, 'LOL__RANKED_FLEX_SR__LP', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.wins, 'LOL__RANKED_FLEX_SR__WINS', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.losses, 'LOL__RANKED_FLEX_SR__LOSSES', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.games, 'LOL__RANKED_FLEX_SR__GAMES', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.winrate, 'LOL__RANKED_FLEX_SR__WINRATE', game.id, data_settings, game_account_info);
 
             // Ranked Flex 3v3
@@ -94,6 +98,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
             await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.leaguePoints, 'LOL__RANKED_FLEX_TT__LP', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.wins, 'LOL__RANKED_FLEX_TT__WINS', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.losses, 'LOL__RANKED_FLEX_TT__LOSSES', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.games, 'LOL__RANKED_FLEX_TT__GAMES', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.winrate, 'LOL__RANKED_FLEX_TT__WINRATE', game.id, data_settings, game_account_info);
         }
 
@@ -160,7 +165,7 @@ module.exports.updateFullGameData = (game, tags) => {
 
 // User to generate a new formated data with settings
 module.exports.generator = {
-    default(gameTag, data, settings) {
+    default (gameTag, data, settings) {
         let result = data;
 
         for (const key of gameTag.settingsOrder) {
