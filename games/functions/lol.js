@@ -75,14 +75,27 @@ module.exports = {
         });
     },
 
-    updateDBAccountUsername(game_account_info, username) {
-        Server.fn.dbMethods.account.updateWithFilter({
-            game_account_info
-        }, {
-            settings: {
-                username
-            }
-        }).catch((error) => __logError('[DB] Can\'t update account', error));
+    async getSummonerByID(ID, region) {
+        let data = {
+            id: null,
+            username: null,
+            level: null
+        };
+
+        const account = await kayn.Summoner.by.id(parseInt(ID, 10))
+            .region(region.toLowerCase()).then()
+            .catch((error) => (data = null, __logError('[GAME] getSummonerByID() error', error)));
+
+        if (data) {
+            data.id = account.id;
+            data.username = account.name;
+            data.level = account.summonerLevel;
+        }
+
+        return {
+            requests: 1,
+            data
+        };
     },
 
     async getLeaguePositionsBySummonerID(summonerID, region) {
@@ -158,6 +171,19 @@ module.exports = {
             requests: 1,
             data
         };
-    }
+    },
+
+
+
+
+    updateDBAccountUsername(game_account_info, username) {
+        Server.fn.dbMethods.account.updateWithFilter({
+            game_account_info
+        }, {
+            settings: {
+                username
+            }
+        }).catch((error) => __logError('[DB] Can\'t update account', error));
+    },
 
 };

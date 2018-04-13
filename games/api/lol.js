@@ -46,6 +46,11 @@ module.exports.getAccountInfo = (gameID, settings) => {
  */
 module.exports.getDataOneByOne = async (game, data_settings, game_account_info, tag_ids) => {
 
+    let username = null;
+
+    // Set region
+    await Server.fn.game.utils.updateGameData(game_account_info.region, 'LOL__ACCOUNT__REGION', game.id, data_settings, game_account_info);
+
     // League tags
     if (tag_ids.LOL__RANKED_SOLO_SR__LEAGUE_NAME || tag_ids.LOL__RANKED_SOLO_SR__TIER ||
         tag_ids.LOL__RANKED_SOLO_SR__RANK || tag_ids.LOL__RANKED_SOLO_SR__LP ||
@@ -68,8 +73,11 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
 
         if (res.data) {
 
-            // Update account username in database (namechange handler)
-            if (res.data.username) Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username);
+            // Get and update account username in database (namechange handler)
+            if (res.data.username) {
+                username = res.data.username;
+                Server.fn.game[game.id].updateDBAccountUsername(game_account_info, username);
+            }
 
             // Ranked Solo 5v5
             await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.leagueName, 'LOL__RANKED_SOLO_SR__LEAGUE_NAME', game.id, data_settings, game_account_info);
@@ -103,6 +111,46 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
         }
 
         Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
+    }
+
+
+    // Account tags
+    if (tag_ids.LOL__ACCOUNT__ID || tag_ids.LOL__ACCOUNT__LEVEL) {
+        await Server.fn.game.utils.useMeBeforeEachRequest(game);
+
+        const res = await Server.fn.game[game.id].getSummonerByID(game_account_info.summoner_id, game_account_info.region);
+
+        if (res.data) {
+
+            // Get and update account username in database (namechange handler)
+            username = res.data.username;
+            Server.fn.game[game.id].updateDBAccountUsername(game_account_info, username);
+
+            await Server.fn.game.utils.updateGameData(res.data.id, 'LOL__ACCOUNT__ID', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.level, 'LOL__ACCOUNT__LEVEL', game.id, data_settings, game_account_info);
+        }
+
+        Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
+    }
+
+    // Account username
+    if (tag_ids.LOL__ACCOUNT__USERNAME) {
+        if (username) {
+            await Server.fn.game.utils.updateGameData(username, 'LOL__ACCOUNT__USERNAME', game.id, data_settings, game_account_info);
+        } else {
+            await Server.fn.game.utils.useMeBeforeEachRequest(game);
+
+            const res = await Server.fn.game[game.id].getSummonerByID(game_account_info.summoner_id, game_account_info.region);
+
+            if (res.data) {
+
+                // Get and update account username in database (namechange handler)
+                Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username);
+                await Server.fn.game.utils.updateGameData(res.data.username, 'LOL__ACCOUNT__USERNAME', game.id, data_settings, game_account_info);
+            }
+
+            Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
+        }
     }
 
 };
