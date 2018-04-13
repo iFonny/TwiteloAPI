@@ -413,7 +413,6 @@ module.exports = {
         exampleOriginal: 'IV',
         example: someExamples.rank // existing example
     },
-    // TODO: LOL__RANKED_SOLO_SR__LP : WIP
     LOL__RANKED_SOLO_SR__LP: {
         id: 'LOL__RANKED_SOLO_SR__LP',
         gameID: 'lol',
@@ -482,7 +481,27 @@ module.exports = {
         exampleOriginal: 'IV',
         example: someExamples.rank // existing example
     },
-    // - LOL__RANKED_FLEX_SR__LP : TODO
+    LOL__RANKED_FLEX_SR__LP: {
+        id: 'LOL__RANKED_FLEX_SR__LP',
+        gameID: 'lol',
+        category: 'Ranked Flex Summoner\'s Rift',
+        categorySmall: 'Ranked Flex SR',
+        name: 'League points',
+        nameSmall: 'LP',
+        size: 3,
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: { // Settings applied to the retrieved data (ex: format, size...)
+            size: fieldSettings.sizeLP, // existing setting
+            format: fieldSettings.formatNoCapitalize // existing setting
+        },
+        dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
+        settingsOrder: ['size', 'format'],
+        generator: 'default', // function called to generate data 
+        data: someData.lp, // existing data
+        exampleOriginal: '86',
+        example: someExamples.lp // existing example
+    },
     // - LOL__RANKED_FLEX_SR__WINS : TODO
     // - LOL__RANKED_FLEX_SR__LOSSES : TODO
     // - LOL__RANKED_FLEX_SR__WINRATE : TODO
@@ -529,7 +548,27 @@ module.exports = {
         exampleOriginal: 'IV',
         example: someExamples.rank // existing example
     },
-    // - LOL__RANKED_FLEX_TT__LP : TODO
+    LOL__RANKED_FLEX_TT__LP: {
+        id: 'LOL__RANKED_FLEX_TT__LP',
+        gameID: 'lol',
+        category: 'Ranked Flex Twisted Treeline',
+        categorySmall: 'Ranked Flex TT',
+        name: 'League points',
+        nameSmall: 'LP',
+        size: 3,
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: { // Settings applied to the retrieved data (ex: format, size...)
+            size: fieldSettings.sizeLP, // existing setting
+            format: fieldSettings.formatNoCapitalize // existing setting
+        },
+        dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
+        settingsOrder: ['size', 'format'],
+        generator: 'default', // function called to generate data 
+        data: someData.lp, // existing data
+        exampleOriginal: '86',
+        example: someExamples.lp // existing example
+    },
     // - LOL__RANKED_FLEX_TT__WINS : TODO
     // - LOL__RANKED_FLEX_TT__LOSSES : TODO
     // - LOL__RANKED_FLEX_TT__WINRATE : TODO
