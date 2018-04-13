@@ -160,7 +160,7 @@ module.exports.updateFullGameData = (game, tags) => {
 
 // User to generate a new formated data with settings
 module.exports.generator = {
-    tier(gameTag, data, settings) {
+    default(gameTag, data, settings) {
         let result = data;
 
         for (const key of gameTag.settingsOrder) {
@@ -170,24 +170,6 @@ module.exports.generator = {
                 case 'size':
                     result = gameTag.data[key][setting](result) || result;
                     break;
-                case 'format':
-                    result = gameTag.data[key][setting](result) || result;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        return result;
-    },
-    rank(gameTag, data, settings) {
-        let result = data;
-
-        for (const key of gameTag.settingsOrder) {
-            const setting = settings[key];
-
-            switch (key) {
                 case 'format':
                     result = gameTag.data[key][setting](result) || result;
                     break;

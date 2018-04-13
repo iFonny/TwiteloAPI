@@ -388,7 +388,7 @@ module.exports = {
         },
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['size', 'format'], // settings order
-        generator: 'tier', // function called to generate data 
+        generator: 'default', // function called to generate data 
         data: someData.tier, // existing data
         exampleOriginal: 'DIAMOND',
         example: someExamples.tier // existing example
@@ -408,7 +408,7 @@ module.exports = {
         },
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['format'],
-        generator: 'rank', // function called to generate data 
+        generator: 'default', // function called to generate data 
         data: someData.rank, // existing data
         exampleOriginal: 'IV',
         example: someExamples.rank // existing example
@@ -430,7 +430,7 @@ module.exports = {
         },
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['size', 'format'],
-        generator: 'tier', // function called to generate data 
+        generator: 'default', // function called to generate data 
         data: someData.lp, // existing data
         exampleOriginal: '86',
         example: someExamples.lp // existing example
@@ -457,7 +457,7 @@ module.exports = {
         },
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['size', 'format'],
-        generator: 'tier', // function called to generate data 
+        generator: 'default', // function called to generate data 
         data: someData.tier, // existing data
         exampleOriginal: 'DIAMOND',
         example: someExamples.tier // existing example
@@ -477,7 +477,7 @@ module.exports = {
         },
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['format'],
-        generator: 'rank', // function called to generate data 
+        generator: 'default', // function called to generate data 
         data: someData.rank, // existing data
         exampleOriginal: 'IV',
         example: someExamples.rank // existing example
@@ -504,7 +504,7 @@ module.exports = {
         },
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['size', 'format'],
-        generator: 'tier', // function called to generate data 
+        generator: 'default', // function called to generate data 
         data: someData.tier, // existing data
         exampleOriginal: 'DIAMOND',
         example: someExamples.tier // existing example
@@ -524,7 +524,7 @@ module.exports = {
         },
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['format'],
-        generator: 'rank', // function called to generate data 
+        generator: 'default', // function called to generate data 
         data: someData.rank, // existing data
         exampleOriginal: 'IV',
         example: someExamples.rank // existing example
