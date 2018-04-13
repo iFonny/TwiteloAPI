@@ -157,7 +157,7 @@ const fieldSettings = {
             uppercase: {
                 value: 0,
                 en: 'UPPERCASE',
-                fr: 'majuscule'
+                fr: 'MAJUSCULE'
             },
             lowercase: {
                 value: 0,
