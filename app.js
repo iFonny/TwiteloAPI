@@ -252,7 +252,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
             twitterUpdater.update().then(() => setTimeout(() => twUpdater(), 60 * 1000)); // 1 minute
         }
 
-        twUpdater();
+        if (config.env == 'beta' || config.env == 'prod') twUpdater();
 
 
     }, 10 * 1000); // 10s

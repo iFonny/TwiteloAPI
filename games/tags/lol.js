@@ -27,6 +27,34 @@ const fieldSettings = {
             }
         },
     },
+    sizeRegion: {
+        type: 'select', // select
+        tooltip: {
+            en: 'Text size in the profile',
+            fr: 'Taille du texte dans le profil'
+        },
+        label: {
+            en: 'Size',
+            fr: 'Taille'
+        },
+        input: {
+            default: {
+                value: 0, // Size add or sub
+                en: 'Default size',
+                fr: 'Taille par défaut'
+            },
+            longFR: {
+                value: 16,
+                en: 'Full name in French',
+                fr: 'Nom complet en français'
+            },
+            longEN: {
+                value: 16,
+                en: 'Full name in English',
+                fr: 'Nom complet en anglais'
+            }
+        },
+    },
     sizeLP: {
         type: 'select', // select
         tooltip: {
@@ -203,6 +231,37 @@ const someData = {
             withPercentNoSpace: data => data + '%'
         },
     },
+    region: {
+        size: {
+            default: data => data,
+            longFR: data => _.get({
+                'euw': 'Europe Ouest',
+                'na': 'Amérique du Nord',
+                'eune': 'Europe Nord & Est',
+                'kr': 'Corée',
+                'lan': 'Amérique latine Nord',
+                'las': 'Amérique latine Sud',
+                'br': 'Brésil',
+                'oce': 'Océanie',
+                'ru': 'Russie',
+                'tr': 'Turquie',
+                'jp': 'Japon',
+            }, data),
+            longEN: data => _.get({
+                'euw': 'Europe West',
+                'na': 'North America',
+                'eune': 'Europe Nordic & East',
+                'kr': 'Korea',
+                'lan': 'Latin America North',
+                'las': 'Latin America South',
+                'br': 'Brazil',
+                'oce': 'Oceania',
+                'ru': 'Russia',
+                'tr': 'Turkey',
+                'jp': 'Japan',
+            }, data),
+        }
+    },
     tier: {
         size: { // setting property
             default: data => data, // setting value
@@ -275,6 +334,34 @@ const someExamples = {
             capitalize: 'Twisted fate\'s constellations'
         }
     },
+    region: {
+        size: { // setting property
+            default: { // setting value
+                format: { // setting property
+                    default: 'euw',
+                    uppercase: 'EUW', // setting value
+                    lowercase: 'euw', // setting value
+                    capitalize: 'Euw' // setting value
+                }
+            },
+            longFR: { // setting value
+                format: { // setting property
+                    default: 'Europe Ouest',
+                    uppercase: 'EUROPE OUEST', // setting value
+                    lowercase: 'europe ouest', // setting value
+                    capitalize: 'Europe ouest' // setting value
+                }
+            },
+            longEN: { // setting value
+                format: { // setting property
+                    default: 'Europe West',
+                    uppercase: 'EUROPE WEST', // setting value
+                    lowercase: 'europe west', // setting value
+                    capitalize: 'Europe west' // setting value
+                }
+            }
+        }
+    },
     tier: {
         size: { // setting property
             default: { // setting value
@@ -339,7 +426,7 @@ const someExamples = {
  Tags : 
 
     - LOL__ACCOUNT__USERNAME
-    - LOL__ACCOUNT__REGION : TODO
+    - LOL__ACCOUNT__REGION
     - LOL__ACCOUNT__ID
     - LOL__ACCOUNT__LEVEL
 
@@ -438,9 +525,32 @@ module.exports = {
         exampleOriginal: 'iFonny',
         example: someExamples.username // existing example
     },
-    // - LOL__ACCOUNT__REGION : TODO
+    LOL__ACCOUNT__REGION: {
+        id: 'LOL__ACCOUNT__REGION',
+        gameID: 'lol',
+        category: 'Account / Informations',
+        categorySmall: 'Account',
+        name: 'Region',
+        nameSmall: 'Region',
+        size: 4,
+        account: true,
+        useExample: false,
+        fieldSettings: {
+            size: fieldSettings.sizeRegion, // existing setting
+            format: fieldSettings.format // existing setting
+        },
+        dataSettings: {},
+        settingsOrder: ['size', 'format'],
+        generator: 'default',
+        data: {
+            size: someData.region.size, // existing data
+            format: someData.text.format // existing data
+        },
+        exampleOriginal: 'euw',
+        example: someExamples.region // existing example
+    },
     LOL__ACCOUNT__ID: {
-        id: 'LOL__ACCOUNT__ID', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
+        id: 'LOL__ACCOUNT__ID',
         gameID: 'lol',
         category: 'Account / Informations',
         categorySmall: 'Account',
@@ -537,7 +647,10 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['size', 'format'], // settings order
         generator: 'default', // function called to generate data 
-        data: someData.tier, // existing data
+        data: {
+            size: someData.tier.size, // existing data
+            format: someData.text.format // existing data
+        },
         exampleOriginal: 'DIAMOND',
         example: someExamples.tier // existing example
     },
