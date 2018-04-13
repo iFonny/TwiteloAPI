@@ -55,6 +55,34 @@ const fieldSettings = {
             }
         },
     },
+    sizePercent: {
+        type: 'select', // select
+        tooltip: {
+            en: 'Text size in the profile',
+            fr: 'Taille du texte dans le profil'
+        },
+        label: {
+            en: 'Size',
+            fr: 'Taille'
+        },
+        input: {
+            default: {
+                value: 0, // Size add or sub
+                en: 'Without "%"',
+                fr: 'Sans "%"'
+            },
+            withPercentSpace: {
+                value: 2,
+                en: 'With a space and "%"',
+                fr: 'Avec un espace et "%"'
+            },
+            withPercentNoSpace: {
+                value: 1,
+                en: 'With "%"',
+                fr: 'Avec "%"'
+            }
+        },
+    },
     format: {
         type: 'select', // select
         tooltip: false,
@@ -168,6 +196,13 @@ const someData = {
             capitalize: _.capitalize
         }
     },
+    percentage: {
+        size: {
+            default: data => data,
+            withPercentSpace: data => data + ' %',
+            withPercentNoSpace: data => data + '%'
+        },
+    },
     tier: {
         size: { // setting property
             default: data => data, // setting value
@@ -215,9 +250,15 @@ const someData = {
         }
     }
 };
-//sivir's commanders
 
 const someExamples = {
+    percentage: {
+        size: {
+            default: '69',
+            withPercentSpace: '69 %',
+            withPercentNoSpace: '69%'
+        }
+    },
     leagueName: {
         format: {
             default: 'Twisted Fate\'s Constellations',
@@ -317,32 +358,32 @@ const someExamples = {
     - LOL__TOP_FLEX_TT__WINRATE : TODO
 
 
-    - LOL__RANKED_SOLO_SR__LEAGUE_NAME : TODO
+    - LOL__RANKED_SOLO_SR__LEAGUE_NAME
     - LOL__RANKED_SOLO_SR__TIER 
     - LOL__RANKED_SOLO_SR__RANK
     - LOL__RANKED_SOLO_SR__LP
     - LOL__RANKED_SOLO_SR__WINS
     - LOL__RANKED_SOLO_SR__LOSSES
     - LOL__RANKED_SOLO_SR__GAMES
-    - LOL__RANKED_SOLO_SR__WINRATE : TODO
+    - LOL__RANKED_SOLO_SR__WINRATE
 
-    - LOL__RANKED_FLEX_SR__LEAGUE_NAME : TODO
+    - LOL__RANKED_FLEX_SR__LEAGUE_NAME
     - LOL__RANKED_FLEX_SR__TIER
     - LOL__RANKED_FLEX_SR__RANK
     - LOL__RANKED_FLEX_SR__LP
     - LOL__RANKED_FLEX_SR__WINS
     - LOL__RANKED_FLEX_SR__LOSSES
     - LOL__RANKED_FLEX_SR__GAMES
-    - LOL__RANKED_FLEX_SR__WINRATE : TODO
+    - LOL__RANKED_FLEX_SR__WINRATE
 
-    - LOL__RANKED_FLEX_TT__LEAGUE_NAME : TODO
+    - LOL__RANKED_FLEX_TT__LEAGUE_NAME
     - LOL__RANKED_FLEX_TT__TIER
     - LOL__RANKED_FLEX_TT__RANK
     - LOL__RANKED_FLEX_TT__LP
     - LOL__RANKED_FLEX_TT__WINS
     - LOL__RANKED_FLEX_TT__LOSSES
     - LOL__RANKED_FLEX_TT__GAMES
-    - LOL__RANKED_FLEX_TT__WINRATE : TODO
+    - LOL__RANKED_FLEX_TT__WINRATE
 
 
     - LOL__GAME__LAST_GAME_RESULT : TODO
@@ -369,7 +410,7 @@ const someExamples = {
 
 module.exports = {
 
-    // - LOL__ACCOUNT__USERNAME : TODO
+    // - LOL__ACCOUNT__USERNAME : WIP
     // - LOL__ACCOUNT__REGION : TODO
     // - LOL__ACCOUNT__ID : TODO
     // - LOL__ACCOUNT__LEVEL : TODO
@@ -533,7 +574,28 @@ module.exports = {
         exampleOriginal: '470',
         example: '470'
     },
-    // TODO: LOL__RANKED_SOLO_SR__WINRATE
+    LOL__RANKED_SOLO_SR__WINRATE: {
+        id: 'LOL__RANKED_SOLO_SR__WINRATE',
+        gameID: 'lol',
+        category: 'Ranked Solo Summoner\'s Rift',
+        categorySmall: 'Ranked Solo SR',
+        name: 'Winrate',
+        nameSmall: 'WR',
+        size: 3,
+        account: true,
+        useExample: false,
+        fieldSettings: {
+            size: fieldSettings.sizePercent, // existing setting
+        },
+        dataSettings: {},
+        settingsOrder: ['size'],
+        generator: 'default',
+        data: someData.percentage, // existing data
+        exampleOriginal: '69',
+        example: someExamples.percentage // existing example
+    },
+
+
 
     LOL__RANKED_FLEX_SR__LEAGUE_NAME: {
         id: 'LOL__RANKED_FLEX_SR__LEAGUE_NAME',
@@ -671,9 +733,29 @@ module.exports = {
         exampleOriginal: '149',
         example: '149'
     },
-    // - LOL__RANKED_FLEX_SR__WINRATE : TODO
+    LOL__RANKED_FLEX_SR__WINRATE: {
+        id: 'LOL__RANKED_FLEX_SR__WINRATE',
+        gameID: 'lol',
+        category: 'Ranked Flex Summoner\'s Rift',
+        categorySmall: 'Ranked Flex SR',
+        name: 'Winrate',
+        nameSmall: 'WR',
+        size: 3,
+        account: true,
+        useExample: false,
+        fieldSettings: {
+            size: fieldSettings.sizePercent, // existing setting
+        },
+        dataSettings: {},
+        settingsOrder: ['size'],
+        generator: 'default',
+        data: someData.percentage, // existing data
+        exampleOriginal: '69',
+        example: someExamples.percentage // existing example
+    },
 
-    // - LOL__RANKED_FLEX_TT__LEAGUE_NAME : WIP
+
+
     LOL__RANKED_FLEX_TT__LEAGUE_NAME: {
         id: 'LOL__RANKED_FLEX_TT__LEAGUE_NAME',
         gameID: 'lol',
@@ -810,7 +892,26 @@ module.exports = {
         exampleOriginal: '149',
         example: '149'
     },
-    // - LOL__RANKED_FLEX_TT__WINRATE : TODO
+    LOL__RANKED_FLEX_TT__WINRATE: {
+        id: 'LOL__RANKED_FLEX_TT__WINRATE',
+        gameID: 'lol',
+        category: 'Ranked Flex Twisted Treeline',
+        categorySmall: 'Ranked Flex TT',
+        name: 'Winrate',
+        nameSmall: 'WR',
+        size: 3,
+        account: true,
+        useExample: false,
+        fieldSettings: {
+            size: fieldSettings.sizePercent, // existing setting
+        },
+        dataSettings: {},
+        settingsOrder: ['size'],
+        generator: 'default',
+        data: someData.percentage, // existing data
+        exampleOriginal: '69',
+        example: someExamples.percentage // existing example
+    },
 
     // ...
 
