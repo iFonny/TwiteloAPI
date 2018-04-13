@@ -160,6 +160,14 @@ const dataSettings = {
 //=======================================================================//
 
 const someData = {
+    text: {
+        format: {
+            default: data => data,
+            lowercase: _.toLower,
+            uppercase: _.toUpper,
+            capitalize: _.capitalize
+        }
+    },
     tier: {
         size: { // setting property
             default: data => data, // setting value
@@ -207,8 +215,17 @@ const someData = {
         }
     }
 };
+//sivir's commanders
 
 const someExamples = {
+    leagueName: {
+        format: {
+            default: 'Twisted Fate\'s Constellations',
+            uppercase: 'TWISTED FATE\'S CONSTELLATIONS',
+            lowercase: 'twisted fate\'s constellations',
+            capitalize: 'Twisted fate\'s constellations'
+        }
+    },
     tier: {
         size: { // setting property
             default: { // setting value
@@ -380,7 +397,26 @@ module.exports = {
     // - LOL__TOP_FLEX_TT__WINRATE : TODO
 
 
-    // TODO: LOL__RANKED_SOLO_SR__LEAGUE_NAME
+    LOL__RANKED_SOLO_SR__LEAGUE_NAME: {
+        id: 'LOL__RANKED_SOLO_SR__LEAGUE_NAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
+        gameID: 'lol', // game ID
+        category: 'Ranked Solo Summoner\'s Rift', // Category name
+        categorySmall: 'Ranked Solo SR', // Category small name
+        name: 'League name', // Tag name
+        nameSmall: 'League name', // Tag small name
+        size: 29, // default size
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: { // Settings applied to the retrieved data (ex: format, size...)
+            format: fieldSettings.format // existing setting
+        },
+        dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
+        settingsOrder: ['format'], // settings order
+        generator: 'default', // function called to generate data 
+        data: someData.text, // existing data
+        exampleOriginal: 'Twisted Fate\'s Constellations',
+        example: someExamples.leagueName // existing example
+    },
     LOL__RANKED_SOLO_SR__TIER: {
         id: 'LOL__RANKED_SOLO_SR__TIER', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
         gameID: 'lol', // game ID
@@ -499,8 +535,26 @@ module.exports = {
     },
     // TODO: LOL__RANKED_SOLO_SR__WINRATE
 
-
-    // - LOL__RANKED_FLEX_SR__LEAGUE_NAME : TODO
+    LOL__RANKED_FLEX_SR__LEAGUE_NAME: {
+        id: 'LOL__RANKED_FLEX_SR__LEAGUE_NAME',
+        gameID: 'lol',
+        category: 'Ranked Flex Summoner\'s Rift',
+        categorySmall: 'Ranked Flex SR',
+        name: 'League name',
+        nameSmall: 'League name',
+        size: 29,
+        account: true,
+        useExample: false,
+        fieldSettings: {
+            format: fieldSettings.format // existing setting
+        },
+        dataSettings: {},
+        settingsOrder: ['format'],
+        generator: 'default',
+        data: someData.text, // existing data
+        exampleOriginal: 'Twisted Fate\'s Constellations',
+        example: someExamples.leagueName // existing example
+    },
     LOL__RANKED_FLEX_SR__TIER: {
         id: 'LOL__RANKED_FLEX_SR__TIER',
         gameID: 'lol',
@@ -619,7 +673,27 @@ module.exports = {
     },
     // - LOL__RANKED_FLEX_SR__WINRATE : TODO
 
-    // - LOL__RANKED_FLEX_TT__LEAGUE_NAME : TODO
+    // - LOL__RANKED_FLEX_TT__LEAGUE_NAME : WIP
+    LOL__RANKED_FLEX_TT__LEAGUE_NAME: {
+        id: 'LOL__RANKED_FLEX_TT__LEAGUE_NAME',
+        gameID: 'lol',
+        category: 'Ranked Flex Twisted Treeline',
+        categorySmall: 'Ranked Flex TT',
+        name: 'League name',
+        nameSmall: 'League name',
+        size: 29,
+        account: true,
+        useExample: false,
+        fieldSettings: {
+            format: fieldSettings.format // existing setting
+        },
+        dataSettings: {},
+        settingsOrder: ['format'],
+        generator: 'default',
+        data: someData.text, // existing data
+        exampleOriginal: 'Twisted Fate\'s Constellations',
+        example: someExamples.leagueName // existing example
+    },
     LOL__RANKED_FLEX_TT__TIER: {
         id: 'LOL__RANKED_FLEX_TT__TIER',
         gameID: 'lol',
