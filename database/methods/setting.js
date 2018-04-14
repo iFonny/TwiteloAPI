@@ -58,6 +58,13 @@ module.exports.deleteByIDs = (userID, IDs) => {
         .delete().run();
 };
 
+module.exports.deleteByUserID = (userID) => {
+    return r.table('setting')
+        .getAll(userID, {
+            index: 'user_id'
+        }).delete().run();
+};
+
 //=======================================================================//
 //     OTHER                                                             //
 //=======================================================================//
