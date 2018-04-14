@@ -271,7 +271,7 @@ module.exports = {
                 var re = new RegExp(Object.keys(mapObj).join('|').replace(/{/g, '\\{'), 'g');
                 text = text.replace(re, (matched) => mapObj[matched]);
             }
-            if (forTwitter) text = text.trim().replace('<', '').replace('>', '');
+            if (forTwitter) text = text.trim().replace(/</g, '').replace(/>/g, '');
             else text = text.trim();
             return text;
         }
