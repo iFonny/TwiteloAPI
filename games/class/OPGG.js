@@ -17,8 +17,23 @@ class OPGG {
 
     renew(summonerID) {
         return this.axios.get(`/summoner/ajax/renew.json/summonerId=${summonerID}`)
-            .then(() => !this.debug || console.log(`OPGG: summonner '${summonerID}' renewed.`))
-            .then(() => true)
+            .then((res) => {
+                if (res.status == 200) {
+                    const html = res.data;
+                    const $ = this.cheerio.load(html);
+                    let error = $('.SectionHeadLine');
+
+                    if (error.length) {
+                        error = error.text();
+                        if (error.includes('Cannot find summoner name') || error.includes('An error has occurred'))
+                            throw Error(`OPGG: summonner '${summonerID}' not found.`);
+                        else throw Error('OPGG: Ratelimited.');
+                    }
+
+                    !this.debug || console.log(`OPGG: summonner '${summonerID}' renewed.`);
+                    return true;
+                } else throw Error(`OPGG: Can't renew (status code: ${res.status}).`);
+            })
             .catch((error) => {
                 if (error.response && error.response.status == 418) {
                     !this.debug || console.error(`OPGG: summonner '${summonerID}' already renewed.`);
@@ -34,7 +49,6 @@ class OPGG {
                     const html = res.data;
                     const $ = this.cheerio.load(html);
                     let mmr = $('.MMR').text().trim().replace(/,/g, '');
-
                     return parseInt(mmr, 10) || null;
                 } else throw Error(`OPGG: Can't get mmr (status code: ${res.status}).`);
             })
@@ -52,10 +66,13 @@ class OPGG {
                 if (res.status == 200) {
                     const html = res.data;
                     const $ = this.cheerio.load(html);
+                    let error = $('.SectionHeadLine');
 
-                    if ($('.SectionHeadLine').text().trim() != '') {
-                        !this.debug || console.error(`OPGG: summonner '${summonerName}' not found.`);
-                        return null;
+                    if (error.length) {
+                        error = error.text();
+                        if (error.includes('Cannot find summoner name') || error.includes('An error has occurred'))
+                            throw Error(`OPGG: summonner '${summonerName}' not found.`);
+                        else throw Error('OPGG: Ratelimited.');
                     }
 
                     let summoner = {
@@ -80,7 +97,7 @@ class OPGG {
                     });
 
                     return summoner;
-                } else throw Error(`OPGG: Can't get mmr (status code: ${res.status}).`);
+                } else throw Error(`OPGG: Can't get summoner (status code: ${res.status}).`);
             });
     }
 
