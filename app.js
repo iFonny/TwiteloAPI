@@ -278,11 +278,11 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
     // Test class OPGG
 
-    const opgg = new Server.class.game.OPGG('euw', true);
+    /*const opgg = new Server.class.game.OPGG('euw', true);
 
     opgg.renew(21705348)
         .then(() => opgg.getSummoner('Jihad Jayce'))
-        .then((data) => console.log(data));
+        .then((data) => console.log(data));*/
 
 });
 
