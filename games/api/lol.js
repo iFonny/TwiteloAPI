@@ -46,7 +46,7 @@ module.exports.getAccountInfo = (gameID, settings) => {
  */
 module.exports.getDataOneByOne = async (game, data_settings, game_account_info, tag_ids) => {
 
-    const opgg = new Server.class.game.OPGG(game_account_info.region.toLowerCase());
+    const opgg = new Server.class.game.OPGG(game_account_info.region.toLowerCase(), true);
     let username = null;
 
     // Set region
@@ -178,7 +178,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
             const mmr = await opgg.getMMR(username);
             const summoner = await opgg.getSummoner(username);
 
-            if (mmr) await Server.fn.game.utils.updateGameData(mmr, 'LOL__OPGG__MMR', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(mmr, 'LOL__OPGG__MMR', game.id, data_settings, game_account_info);
             if (summoner) {
                 await Server.fn.game.utils.updateGameData(summoner.rank, 'LOL__OPGG__RANK', game.id, data_settings, game_account_info);
                 await Server.fn.game.utils.updateGameData(summoner.percentOfTop, 'LOL__OPGG__PERCENT_OF_TOP', game.id, data_settings, game_account_info);
