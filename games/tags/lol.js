@@ -1165,8 +1165,8 @@ module.exports = {
         gameID: 'lol',
         category: 'OPGG',
         categorySmall: 'OPGG',
-        name: 'mmr', // Tag name
-        nameSmall: 'mmr', // Tag small name
+        name: 'MMR', // Tag name
+        nameSmall: 'MMR', // Tag small name
         size: 4, // default size
         account: true, // need account or not
         useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
