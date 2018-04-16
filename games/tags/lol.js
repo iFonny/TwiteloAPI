@@ -1183,7 +1183,7 @@ module.exports = {
         gameID: 'lol',
         category: 'OPGG',
         categorySmall: 'OPGG',
-        name: 'Old season tier',
+        name: 'Previous seasons tier',
         nameSmall: 'Season tier',
         size: 10,
         account: true,
