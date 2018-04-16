@@ -24,8 +24,10 @@
   },
   "homepage": "https://github.com/iFonny/TwiteloAPI#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "base64-img": "^1.0.3",
     "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
     "compression": "^1.7.2",
     "deep-freeze": "0.0.1",
     "express": "^4.16.2",

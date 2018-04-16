@@ -157,7 +157,7 @@ const fieldSettings = {
             uppercase: {
                 value: 0,
                 en: 'UPPERCASE',
-                fr: 'majuscule'
+                fr: 'MAJUSCULE'
             },
             lowercase: {
                 value: 0,
@@ -197,17 +197,37 @@ const fieldSettings = {
 //     DATA SETTINGS                                                     //
 //=======================================================================//
 
-// TODO: supprimer, useless pour LoL
-// Settings applied at the time of data retrieve (Like: game, category...)
+// Settings applied at the time of data retrieve (Like: game, category, season...)
 const dataSettings = {
-    game: {
-        type: 'string', // text input
+    season: {
+        type: 'select', // select
         tooltip: false,
-        input: false, // because string type
         label: {
-            en: 'Game',
-            fr: 'Jeu'
+            en: 'Season',
+            fr: 'Saison'
         },
+        input: {
+            S3: {
+                en: 'Season 3',
+                fr: 'Saison 3'
+            },
+            S4: {
+                en: 'Season 4',
+                fr: 'Saison 4'
+            },
+            S5: {
+                en: 'Season 5',
+                fr: 'Saison 5'
+            },
+            S6: {
+                en: 'Season 6',
+                fr: 'Saison 6'
+            },
+            S7: {
+                en: 'Season 7',
+                fr: 'Saison 7'
+            }
+        }
     }
 };
 
@@ -324,6 +344,13 @@ const someExamples = {
             uppercase: 'iFONNY',
             lowercase: 'ifonny',
             capitalize: 'Ifonny'
+        }
+    },
+    percentageOfTop: {
+        size: {
+            default: '5.2007',
+            withPercentSpace: '5.2007 %',
+            withPercentNoSpace: '5.2007%'
         }
     },
     leagueName: {
@@ -480,6 +507,11 @@ const someExamples = {
     - LOL__RANKED_FLEX_TT__GAMES
     - LOL__RANKED_FLEX_TT__WINRATE
 
+    - LOL__OPGG__RANK
+    - LOL__OPGG__PERCENT_OF_TOP
+    - LOL__OPGG__MMR
+    - LOL__OPGG__SEASON_TIER
+
 
     - LOL__GAME__LAST_GAME_RESULT : TODO
     - LOL__GAME__LAST_GAME_KDA : TODO
@@ -505,6 +537,7 @@ const someExamples = {
 
 module.exports = {
 
+    // Account infos
     LOL__ACCOUNT__USERNAME: {
         id: 'LOL__ACCOUNT__USERNAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
         gameID: 'lol',
@@ -587,7 +620,6 @@ module.exports = {
     },
 
 
-
     // - LOL__TOP_SOLO_SR__LEAGUE_NAME : TODO
     // - LOL__TOP_SOLO_SR__LP : TODO
     // - LOL__TOP_SOLO_SR__WINS : TODO
@@ -610,6 +642,7 @@ module.exports = {
     // - LOL__TOP_FLEX_TT__WINRATE : TODO
 
 
+    // Solo 5v5
     LOL__RANKED_SOLO_SR__LEAGUE_NAME: {
         id: 'LOL__RANKED_SOLO_SR__LEAGUE_NAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
         gameID: 'lol', // game ID
@@ -771,7 +804,7 @@ module.exports = {
     },
 
 
-
+    // Flex 5v5
     LOL__RANKED_FLEX_SR__LEAGUE_NAME: {
         id: 'LOL__RANKED_FLEX_SR__LEAGUE_NAME',
         gameID: 'lol',
@@ -930,7 +963,7 @@ module.exports = {
     },
 
 
-
+    // Flex 3v3
     LOL__RANKED_FLEX_TT__LEAGUE_NAME: {
         id: 'LOL__RANKED_FLEX_TT__LEAGUE_NAME',
         gameID: 'lol',
@@ -1086,6 +1119,90 @@ module.exports = {
         data: someData.percentage, // existing data
         exampleOriginal: '69',
         example: someExamples.percentage // existing example
+    },
+
+    // OPGG
+    LOL__OPGG__RANK: {
+        id: 'LOL__OPGG__RANK',
+        gameID: 'lol',
+        category: 'OPGG',
+        categorySmall: 'OPGG',
+        name: 'Rank ladder', // Tag name
+        nameSmall: 'Rank', // Tag small name
+        size: 7, // default size
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '51499',
+        example: '51499'
+    },
+    LOL__OPGG__PERCENT_OF_TOP: {
+        id: 'LOL__OPGG__PERCENT_OF_TOP',
+        gameID: 'lol',
+        category: 'OPGG',
+        categorySmall: 'OPGG',
+        name: '% of top',
+        nameSmall: '% of top',
+        size: 7,
+        account: true,
+        useExample: false,
+        fieldSettings: {
+            size: fieldSettings.sizePercent, // existing setting
+        },
+        dataSettings: {},
+        settingsOrder: ['size'],
+        generator: 'default',
+        data: someData.percentage, // existing data
+        exampleOriginal: '5.2007',
+        example: someExamples.percentageOfTop // existing example
+    },
+    LOL__OPGG__MMR: {
+        id: 'LOL__OPGG__MMR',
+        gameID: 'lol',
+        category: 'OPGG',
+        categorySmall: 'OPGG',
+        name: 'MMR', // Tag name
+        nameSmall: 'MMR', // Tag small name
+        size: 4, // default size
+        account: true, // need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default',
+        data: null, // because no settings
+        exampleOriginal: '2129',
+        example: '2129'
+    },
+    LOL__OPGG__SEASON_TIER: {
+        id: 'LOL__OPGG__SEASON_TIER',
+        gameID: 'lol',
+        category: 'OPGG',
+        categorySmall: 'OPGG',
+        name: 'Previous seasons tier',
+        nameSmall: 'Season tier',
+        size: 10,
+        account: true,
+        useExample: false,
+        fieldSettings: {
+            size: fieldSettings.size, // existing setting
+            format: fieldSettings.format // existing setting
+        },
+        dataSettings: {
+            season: dataSettings.season
+        },
+        settingsOrder: ['size', 'format'],
+        generator: 'default',
+        data: {
+            size: someData.tier.size, // existing data
+            format: someData.text.format // existing data
+        },
+        exampleOriginal: 'DIAMOND',
+        example: someExamples.tier // existing example
     },
 
     // ...

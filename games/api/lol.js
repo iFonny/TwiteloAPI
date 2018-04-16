@@ -46,6 +46,7 @@ module.exports.getAccountInfo = (gameID, settings) => {
  */
 module.exports.getDataOneByOne = async (game, data_settings, game_account_info, tag_ids) => {
 
+    const opgg = new Server.class.game.OPGG(game_account_info.region.toLowerCase(), true);
     let username = null;
 
     // Set region
@@ -145,11 +146,50 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
             if (res.data) {
 
                 // Get and update account username in database (namechange handler)
+                username = res.data.username;
                 Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username);
                 await Server.fn.game.utils.updateGameData(res.data.username, 'LOL__ACCOUNT__USERNAME', game.id, data_settings, game_account_info);
             }
 
             Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
+        }
+    }
+
+    // OPGG tags
+    if (tag_ids.LOL__OPGG__RANK || tag_ids.LOL__OPGG__PERCENT_OF_TOP ||
+        tag_ids.LOL__OPGG__MMR || tag_ids.LOL__OPGG__SEASON_TIER) {
+        if (!username) {
+            await Server.fn.game.utils.useMeBeforeEachRequest(game);
+
+            const res = await Server.fn.game[game.id].getSummonerByID(game_account_info.summoner_id, game_account_info.region);
+
+            if (res.data) {
+
+                // Get and update account username in database (namechange handler)
+                username = res.data.username;
+                Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username);
+            }
+
+            Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
+        }
+
+        try {
+            await opgg.renew(game_account_info.summoner_id);
+            const mmr = await opgg.getMMR(username);
+            const summoner = await opgg.getSummoner(username);
+
+            await Server.fn.game.utils.updateGameData(mmr, 'LOL__OPGG__MMR', game.id, data_settings, game_account_info);
+            if (summoner) {
+                await Server.fn.game.utils.updateGameData(summoner.rank, 'LOL__OPGG__RANK', game.id, data_settings, game_account_info);
+                await Server.fn.game.utils.updateGameData(summoner.percentOfTop, 'LOL__OPGG__PERCENT_OF_TOP', game.id, data_settings, game_account_info);
+
+                if (tag_ids.LOL__OPGG__SEASON_TIER) {
+                    await Server.fn.game.utils.updateGameData(summoner.seasons[data_settings.season], 'LOL__OPGG__SEASON_TIER', game.id, data_settings, game_account_info);
+                }
+            }
+
+        } catch (error) {
+            __logError('[OPGG] Unknown error', error);
         }
     }
 

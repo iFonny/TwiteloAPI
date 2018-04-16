@@ -15,6 +15,7 @@ const deepFreeze = require('deep-freeze');
 const moment = require('moment');
 const glob = require('glob');
 const jwt = require('jwt-simple');
+const axios = require('axios');
 const isBase64 = require('is-base64');
 const base64Img = require('base64-img');
 const MTwitter = require('mtwitter');
@@ -43,6 +44,7 @@ global.Server = {
     fs,
     hat,
     jwt,
+    axios,
     cache,
     makeDir,
     moment,
@@ -69,6 +71,9 @@ global.Server = {
         game: {}, // game functions
         routes: {}, // Look Routes (end of app.js)
         dbMethods: {}
+    },
+    class: {
+        game: {}
     },
     limiter: null, // rate limiter
     game: {}, // by game
@@ -134,6 +139,18 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
         // Require games api functions
         Server.fn.game[name] = require(`${__dirname}/games/functions/${name}`);
+    });
+
+    //=======================================================================//
+    //     Games api classes                                                 //
+    //=======================================================================//
+
+    /* Getting games class in the /games/class folder */
+    glob.sync(`${__dirname}/games/class/*.js`).forEach((file) => {
+        const name = path.basename(file, '.js');
+
+        // Require games api class
+        Server.class.game[name] = require(`${__dirname}/games/class/${name}`);
     });
 
     //=======================================================================//
@@ -258,6 +275,14 @@ Server.fn.db.checkOrCreateTable().then(() => {
     }, 10 * 1000); // 10s
 
 
+
+    // Test class OPGG
+
+    /*const opgg = new Server.class.game.OPGG('euw', true);
+
+    opgg.renew(21705348)
+        .then(() => opgg.getSummoner('Jihad Jayce'))
+        .then((data) => console.log(data));*/
 
 });
 

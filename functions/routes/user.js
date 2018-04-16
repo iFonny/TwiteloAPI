@@ -271,7 +271,7 @@ module.exports = {
                 var re = new RegExp(Object.keys(mapObj).join('|').replace(/{/g, '\\{'), 'g');
                 text = text.replace(re, (matched) => mapObj[matched]);
             }
-            if (forTwitter) text = text.trim().replace('<', '').replace('>', '');
+            if (forTwitter) text = text.trim().replace(/</g, '').replace(/>/g, '');
             else text = text.trim();
             return text;
         }
@@ -282,6 +282,19 @@ module.exports = {
         profile.description = getProfileTextPreview(profile.description, tags, forTwitter) || '';
         profile.location = getProfileTextPreview(profile.location, tags, forTwitter) || '';
         return Server.fn.api.jsonSuccess(200, profile);
+    },
+
+    deleteUserData(user) {
+        return new Promise((resolve, reject) => {
+
+            Server.fn.dbMethods.setting.deleteByUserID(user.id)
+                .then(() => Server.fn.dbMethods.notification.deleteByUserID(user.id))
+                .then(() => Server.fn.dbMethods.tag.deleteByUserID(user.id))
+                .then(() => Server.fn.dbMethods.account.deleteByUserID(user.id))
+                .then(() => resolve(user))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] deleteUserData() error', err)));
+
+        });
     },
 
     deleteUser(user) {
