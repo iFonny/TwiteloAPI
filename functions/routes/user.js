@@ -101,21 +101,33 @@ module.exports = {
         });
     },
 
-    updateProfile(userID, profile) {
+    updateProfile(user, profile) {
         return new Promise((resolve, reject) => {
-            Server.fn.dbMethods.user.update(userID, {
-                    twitelo: {
-                        name: {
-                            content: profile.name,
-                        },
-                        description: {
-                            content: profile.description
-                        },
-                        location: {
-                            content: profile.location
-                        }
+
+            let document = {
+                twitelo: {
+                    name: {
+                        content: profile.name,
+                    },
+                    description: {
+                        content: profile.description
+                    },
+                    location: {
+                        content: profile.location
                     }
-                }).then(result => resolve(result.changes[0].new_val))
+                }
+            };
+
+            if (user.freshUser) {
+                document.freshUser = false;
+                document.switch = true;
+                document.twitelo.name.status = true;
+                document.twitelo.location.status = true;
+                document.twitelo.description.status = true;
+            }
+
+            Server.fn.dbMethods.user.update(user.id, document)
+                .then(result => resolve(result.changes[0].new_val))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update profile', '[DB] updateProfile() error', err)));
         });
     },

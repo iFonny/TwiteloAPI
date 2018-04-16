@@ -59,7 +59,7 @@ module.exports = {
 			total: 5
 		}), (req, res) => {
 			Server.fn.routes.user.checkParamsSaveProfile(req.body)
-				.then((profile) => Server.fn.routes.user.updateProfile(req.user.id, profile))
+				.then((profile) => Server.fn.routes.user.updateProfile(req.user, profile))
 				.then((user) => Server.fn.routes.user.updateIncludedTags(user))
 				.then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile, false))
 				.then((data) => res.status(data.status).json(data))
