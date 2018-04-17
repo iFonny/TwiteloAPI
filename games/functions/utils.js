@@ -23,6 +23,16 @@ module.exports = {
         } else return null;
     },
 
+    updateDBAccountUsername(game_account_info, username) {
+        Server.fn.dbMethods.account.updateWithFilter({
+            game_account_info
+        }, {
+            settings: {
+                username
+            }
+        }).catch((error) => __logError('[DB] Can\'t update account', error));
+    },
+
     useMeBeforeEachRequest(game) {
         if (Server.ratelimitCounters[game.id].reqCounter >= game.ratelimit.request) {
             Server.ratelimitCounters[game.id].reqCounter = 0;

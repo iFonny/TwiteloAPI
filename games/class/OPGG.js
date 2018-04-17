@@ -1,8 +1,8 @@
 class OPGG {
     constructor(region, debug) {
-        this.region = region;
-        this.debug = debug;
         if (!region) throw Error('OPGG: region is missing.');
+        this.region = region.toLowerCase();
+        this.debug = debug;
 
         this.cheerio = require('cheerio');
         this.axios = require('axios').create({

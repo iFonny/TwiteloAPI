@@ -84,7 +84,7 @@ module.exports = {
 
         const account = await kayn.Summoner.by.id(parseInt(ID, 10))
             .region(region.toLowerCase()).then()
-            .catch((error) => (data = null, __logError('[GAME] getSummonerByID() error', error)));
+            .catch((error) => (data = null, __logError('[LoL] getSummonerByID() error', error)));
 
         if (data) {
             data.id = account.id;
@@ -138,7 +138,7 @@ module.exports = {
         // Get summoner positions
         const positions = await kayn.LeaguePositions.by.summonerID(parseInt(summonerID, 10))
             .region(region.toLowerCase()).then()
-            .catch((error) => (data = null, __logError('[GAME] getLeaguePositionsBySummonerID() error', error)));
+            .catch((error) => (data = null, __logError('[LoL] getLeaguePositionsBySummonerID() error', error)));
 
         if (data) { // If no errors
 
@@ -171,19 +171,6 @@ module.exports = {
             requests: 1,
             data
         };
-    },
-
-
-
-
-    updateDBAccountUsername(game_account_info, username) {
-        Server.fn.dbMethods.account.updateWithFilter({
-            game_account_info
-        }, {
-            settings: {
-                username
-            }
-        }).catch((error) => __logError('[DB] Can\'t update account', error));
-    },
+    }
 
 };
