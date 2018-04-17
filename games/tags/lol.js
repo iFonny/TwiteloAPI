@@ -111,6 +111,26 @@ const fieldSettings = {
             }
         },
     },
+    ordinal: {
+        type: 'select', // select
+        tooltip: false,
+        label: {
+            en: 'Formatting',
+            fr: 'Mise en forme'
+        },
+        input: {
+            withoutOrdinal: {
+                value: 0,
+                en: 'With ordinal indicator',
+                fr: 'Sans indicateur ordinal'
+            },
+            withOrdinal: {
+                value: 2,
+                en: 'Without ordinal indicator',
+                fr: 'Avec indicateur ordinal'
+            },
+        }
+    },
     format: {
         type: 'select', // select
         tooltip: false,
@@ -327,7 +347,11 @@ const someData = {
             lowercase: _.toLower,
             uppercase: _.toUpper
         }
-    }
+    },
+    ordinal: {
+        withoutOrdinal: data => data,
+        withOrdinal: data => data + (['st', 'nd', 'rd'][(((parseInt(data) < 0 ? -parseInt(data) : parseInt(data)) + 90) % 100 - 10) % 10 - 1] || 'th'),
+    },
 };
 
 const someExamples = {
@@ -351,6 +375,12 @@ const someExamples = {
             default: '5.2007',
             withPercentSpace: '5.2007 %',
             withPercentNoSpace: '5.2007%'
+        }
+    },
+    ordinal: {
+        format: {
+            withoutOrdinal: '51499',
+            withOrdinal: '51499th'
         }
     },
     leagueName: {
@@ -1132,13 +1162,17 @@ module.exports = {
         size: 7, // default size
         account: true, // need account or not
         useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
-        fieldSettings: {},
+        fieldSettings: {
+            format: fieldSettings.ordinal
+        },
         dataSettings: {},
-        settingsOrder: [],
+        settingsOrder: ['format'],
         generator: 'default',
-        data: null, // because no settings
+        data: {
+            format: someData.ordinal // existing data
+        },
         exampleOriginal: '51499',
-        example: '51499'
+        example: someExamples.ordinal
     },
     LOL__OPGG__PERCENT_OF_TOP: {
         id: 'LOL__OPGG__PERCENT_OF_TOP',
