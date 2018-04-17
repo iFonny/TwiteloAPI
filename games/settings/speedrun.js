@@ -12,4 +12,16 @@ module.exports = {
             fr: 'Nom d\'utilisateur'
         },
     },
+    verify: {
+        type: 'verify', // button (edition only)
+        input: false, // already handled by the component
+        tooltip: {
+            en: 'Prove that the account belongs to you',
+            fr: 'Prouver que le compte vous appartient'
+        },
+        label: {
+            en: 'Verify my account',
+            fr: 'Vérifier mon compte'
+        },
+    }
 };

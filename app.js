@@ -13,6 +13,8 @@ const favicon = require('serve-favicon');
 const hat = require('hat');
 const deepFreeze = require('deep-freeze');
 const moment = require('moment');
+const momentDurationFormatSetup = require('moment-duration-format');
+momentDurationFormatSetup(moment);
 const glob = require('glob');
 const jwt = require('jwt-simple');
 const axios = require('axios');
@@ -274,16 +276,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
     }, 10 * 1000); // 10s
 
-
-
-    // Test class OPGG
-
-    /*const opgg = new Server.class.game.OPGG('euw', true);
-
-    opgg.renew(21705348)
-        .then(() => opgg.getSummoner('Jihad Jayce'))
-        .then((data) => console.log(data));*/
-
+    
 });
 
 module.exports = app; // for testing

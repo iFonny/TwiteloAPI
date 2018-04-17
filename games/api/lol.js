@@ -5,7 +5,7 @@
  ** - settings (required: account settings)
  **
  ** Return (Promise): 
- ** - string: account infos in game
+ ** - object: account infos in game
  **
  ** Reject error format : {
  **     code: 500,
@@ -46,11 +46,12 @@ module.exports.getAccountInfo = (gameID, settings) => {
  */
 module.exports.getDataOneByOne = async (game, data_settings, game_account_info, tag_ids) => {
 
-    const opgg = new Server.class.game.OPGG(game_account_info.region.toLowerCase(), true);
+    const opgg = new Server.class.game.OPGG(game_account_info.region, true);
     let username = null;
 
-    // Set region
+    // Set region && ID
     await Server.fn.game.utils.updateGameData(game_account_info.region, 'LOL__ACCOUNT__REGION', game.id, data_settings, game_account_info);
+    await Server.fn.game.utils.updateGameData(game_account_info.summoner_id, 'LOL__ACCOUNT__ID', game.id, data_settings, game_account_info);
 
     // League tags
     if (tag_ids.LOL__RANKED_SOLO_SR__LEAGUE_NAME || tag_ids.LOL__RANKED_SOLO_SR__TIER ||
@@ -77,7 +78,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
             // Get and update account username in database (namechange handler)
             if (res.data.username) {
                 username = res.data.username;
-                Server.fn.game[game.id].updateDBAccountUsername(game_account_info, username);
+                Server.fn.game.utils.updateDBAccountUsername(game_account_info, username);
             }
 
             // Ranked Solo 5v5
@@ -116,7 +117,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
 
 
     // Account tags
-    if (tag_ids.LOL__ACCOUNT__ID || tag_ids.LOL__ACCOUNT__LEVEL) {
+    if (tag_ids.LOL__ACCOUNT__LEVEL) {
         await Server.fn.game.utils.useMeBeforeEachRequest(game);
 
         const res = await Server.fn.game[game.id].getSummonerByID(game_account_info.summoner_id, game_account_info.region);
@@ -125,9 +126,8 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
 
             // Get and update account username in database (namechange handler)
             username = res.data.username;
-            Server.fn.game[game.id].updateDBAccountUsername(game_account_info, username);
+            Server.fn.game.utils.updateDBAccountUsername(game_account_info, username);
 
-            await Server.fn.game.utils.updateGameData(res.data.id, 'LOL__ACCOUNT__ID', game.id, data_settings, game_account_info);
             await Server.fn.game.utils.updateGameData(res.data.level, 'LOL__ACCOUNT__LEVEL', game.id, data_settings, game_account_info);
         }
 
@@ -147,7 +147,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
 
                 // Get and update account username in database (namechange handler)
                 username = res.data.username;
-                Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username);
+                Server.fn.game.utils.updateDBAccountUsername(game_account_info, res.data.username);
                 await Server.fn.game.utils.updateGameData(res.data.username, 'LOL__ACCOUNT__USERNAME', game.id, data_settings, game_account_info);
             }
 
@@ -167,7 +167,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
 
                 // Get and update account username in database (namechange handler)
                 username = res.data.username;
-                Server.fn.game[game.id].updateDBAccountUsername(game_account_info, res.data.username);
+                Server.fn.game.utils.updateDBAccountUsername(game_account_info, res.data.username);
             }
 
             Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
