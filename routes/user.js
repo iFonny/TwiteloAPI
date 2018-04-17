@@ -59,7 +59,7 @@ module.exports = {
 			total: 5
 		}), (req, res) => {
 			Server.fn.routes.user.checkParamsSaveProfile(req.body)
-				.then((profile) => Server.fn.routes.user.updateProfile(req.user.id, profile))
+				.then((profile) => Server.fn.routes.user.updateProfile(req.user, profile))
 				.then((user) => Server.fn.routes.user.updateIncludedTags(user))
 				.then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile, false))
 				.then((data) => res.status(data.status).json(data))
@@ -82,6 +82,7 @@ module.exports = {
 		/* Delete user */
 		routerMe.delete('/delete', (req, res) => {
 			Server.fn.routes.user.getUser(req.user.id)
+				.then((user) => Server.fn.routes.user.deleteUserData(user))
 				.then((user) => Server.fn.routes.user.deleteUser(user.data))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient de supprimer son compte :wastebasket:`, data))
 				.then(() => Server.fn.routes.user.getStats(req.user, false))

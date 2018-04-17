@@ -101,21 +101,33 @@ module.exports = {
         });
     },
 
-    updateProfile(userID, profile) {
+    updateProfile(user, profile) {
         return new Promise((resolve, reject) => {
-            Server.fn.dbMethods.user.update(userID, {
-                    twitelo: {
-                        name: {
-                            content: profile.name,
-                        },
-                        description: {
-                            content: profile.description
-                        },
-                        location: {
-                            content: profile.location
-                        }
+
+            let document = {
+                twitelo: {
+                    name: {
+                        content: profile.name,
+                    },
+                    description: {
+                        content: profile.description
+                    },
+                    location: {
+                        content: profile.location
                     }
-                }).then(result => resolve(result.changes[0].new_val))
+                }
+            };
+
+            if (user.freshUser) {
+                document.freshUser = false;
+                document.switch = true;
+                document.twitelo.name.status = true;
+                document.twitelo.location.status = true;
+                document.twitelo.description.status = true;
+            }
+
+            Server.fn.dbMethods.user.update(user.id, document)
+                .then(result => resolve(result.changes[0].new_val))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t update profile', '[DB] updateProfile() error', err)));
         });
     },
@@ -271,7 +283,7 @@ module.exports = {
                 var re = new RegExp(Object.keys(mapObj).join('|').replace(/{/g, '\\{'), 'g');
                 text = text.replace(re, (matched) => mapObj[matched]);
             }
-            if (forTwitter) text = text.trim().replace('<', '').replace('>', '');
+            if (forTwitter) text = text.trim().replace(/</g, '').replace(/>/g, '');
             else text = text.trim();
             return text;
         }
@@ -282,6 +294,19 @@ module.exports = {
         profile.description = getProfileTextPreview(profile.description, tags, forTwitter) || '';
         profile.location = getProfileTextPreview(profile.location, tags, forTwitter) || '';
         return Server.fn.api.jsonSuccess(200, profile);
+    },
+
+    deleteUserData(user) {
+        return new Promise((resolve, reject) => {
+
+            Server.fn.dbMethods.setting.deleteByUserID(user.id)
+                .then(() => Server.fn.dbMethods.notification.deleteByUserID(user.id))
+                .then(() => Server.fn.dbMethods.tag.deleteByUserID(user.id))
+                .then(() => Server.fn.dbMethods.account.deleteByUserID(user.id))
+                .then(() => resolve(user))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] deleteUserData() error', err)));
+
+        });
     },
 
     deleteUser(user) {

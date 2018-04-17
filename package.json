@@ -24,8 +24,10 @@
   },
   "homepage": "https://github.com/iFonny/TwiteloAPI#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "base64-img": "^1.0.3",
     "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
     "compression": "^1.7.2",
     "deep-freeze": "0.0.1",
     "express": "^4.16.2",
@@ -41,6 +43,7 @@
     "lodash": "^4.17.5",
     "make-dir": "^1.2.0",
     "moment": "^2.20.1",
+    "moment-duration-format": "^2.2.2",
     "morgan": "^1.9.0",
     "mtwitter": "^1.6.4",
     "path": "^0.12.7",
@@ -48,6 +51,7 @@
     "request": "^2.83.0",
     "rethinkdbdash": "^2.3.31",
     "serve-favicon": "^2.4.5",
+    "speedrunapi": "^1.0.1",
     "twitter": "^1.7.1",
     "xregexp": "^4.1.1"
   },

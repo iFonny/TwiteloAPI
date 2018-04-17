@@ -99,6 +99,12 @@ module.exports.update = (userID, IDs, toUpdate) => {
 //     DELETE                                                            //
 //=======================================================================//
 
+module.exports.deleteByUserID = (userID) => {
+    return r.table('notification')
+        .getAll(userID, {
+            index: 'destination'
+        }).delete().run();
+};
 
 //=======================================================================//
 //     OTHER                                                             //

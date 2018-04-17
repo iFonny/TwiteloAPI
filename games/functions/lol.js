@@ -75,14 +75,27 @@ module.exports = {
         });
     },
 
-    updateDBAccountUsername(game_account_info, username) {
-        Server.fn.dbMethods.account.updateWithFilter({
-            game_account_info
-        }, {
-            settings: {
-                username
-            }
-        }).catch((error) => __logError('[DB] Can\'t update account', error));
+    async getSummonerByID(ID, region) {
+        let data = {
+            id: null,
+            username: null,
+            level: null
+        };
+
+        const account = await kayn.Summoner.by.id(parseInt(ID, 10))
+            .region(region.toLowerCase()).then()
+            .catch((error) => (data = null, __logError('[LoL] getSummonerByID() error', error)));
+
+        if (data) {
+            data.id = account.id;
+            data.username = account.name;
+            data.level = account.summonerLevel;
+        }
+
+        return {
+            requests: 1,
+            data
+        };
     },
 
     async getLeaguePositionsBySummonerID(summonerID, region) {
@@ -97,6 +110,7 @@ module.exports = {
                 leaguePoints: null,
                 wins: null,
                 losses: null,
+                games: null,
                 winrate: null
             },
             rankedSoloSR: {
@@ -106,6 +120,7 @@ module.exports = {
                 leaguePoints: null,
                 wins: null,
                 losses: null,
+                games: null,
                 winrate: null
             },
             rankedFlexSR: {
@@ -115,6 +130,7 @@ module.exports = {
                 leaguePoints: null,
                 wins: null,
                 losses: null,
+                games: null,
                 winrate: null
             }
         };
@@ -122,7 +138,7 @@ module.exports = {
         // Get summoner positions
         const positions = await kayn.LeaguePositions.by.summonerID(parseInt(summonerID, 10))
             .region(region.toLowerCase()).then()
-            .catch((error) => (data = null, __logError('[GAME] getLeaguePositionsBySummonerID() error', error)));
+            .catch((error) => (data = null, __logError('[LoL] getLeaguePositionsBySummonerID() error', error)));
 
         if (data) { // If no errors
 
@@ -145,6 +161,7 @@ module.exports = {
                     data[queueType].leaguePoints = position.leaguePoints;
                     data[queueType].wins = position.wins;
                     data[queueType].losses = position.losses;
+                    data[queueType].games = position.wins + position.losses;
                     data[queueType].winrate = Math.round(position.wins / (position.wins + position.losses) * 100);
                 }
             }
