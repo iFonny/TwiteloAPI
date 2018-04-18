@@ -23,6 +23,7 @@ const base64Img = require('base64-img');
 const MTwitter = require('mtwitter');
 const Twitter = require('twitter');
 const TwitterUpdater = require('./functions/class/TwitterUpdater');
+const NotificationBot = require('./functions/class/NotificationBot');
 const makeDir = require('make-dir');
 // Set default lifetime to 60 seconds for all entries
 const cache = require('express-redis-cache')({
@@ -240,6 +241,19 @@ Server.fn.db.checkOrCreateTable().then(() => {
     app.all('*', Server.fn.error.page404);
 
 
+
+
+
+    //=======================================================================//
+    //     Notification bot                                                   //
+    //=======================================================================//
+
+    const notificationBot = new NotificationBot();
+
+    // Send notification on database changes
+    notificationBot.pullDatabaseChanges();
+
+
     //=======================================================================//
     //     Updaters                                                          //
     //=======================================================================//
@@ -276,7 +290,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
     }, 10 * 1000); // 10s
 
-    
+
 });
 
 module.exports = app; // for testing
