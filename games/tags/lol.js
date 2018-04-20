@@ -121,12 +121,12 @@ const fieldSettings = {
         input: {
             withoutOrdinal: {
                 value: 0,
-                en: 'With ordinal indicator',
+                en: 'Without ordinal indicator',
                 fr: 'Sans indicateur ordinal'
             },
             withOrdinal: {
                 value: 2,
-                en: 'Without ordinal indicator',
+                en: 'With ordinal indicator',
                 fr: 'Avec indicateur ordinal'
             },
         }
