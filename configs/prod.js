@@ -3,7 +3,8 @@ const config = {
 	server: {
 		name: 'api',
 		url: 'localhost:3030',
-		host: 'api-beta.twitelo.me',
+		host: 'api.twitelo.me',
+		appURL: 'https://twitelo.me',
 		websiteURL: 'https://api.twitelo.me',
 		port: 3030
 	},

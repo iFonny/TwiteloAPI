@@ -4,6 +4,7 @@ const config = {
 		name: 'api-dev',
 		url: 'localhost:3032',
 		host: 'localhost',
+		appURL: 'localhost',
 		websiteURL: 'http://localhost:3032',
 		port: 3032
 	},
