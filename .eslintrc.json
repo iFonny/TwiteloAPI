@@ -17,6 +17,7 @@
         "__logInfo": false,
         "__logError": false,
         "__logWarning": false,
+        "__logContactMe": false,
         "__logJoinLeave": false,
         "__logUserAction": false,
         "__logRecapGame": false,

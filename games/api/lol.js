@@ -259,16 +259,18 @@ module.exports.generator = {
         for (const key of gameTag.settingsOrder) {
             const setting = settings[key];
 
-            switch (key) {
-                case 'size':
-                    result = gameTag.data[key][setting](result) || result;
-                    break;
-                case 'format':
-                    result = gameTag.data[key][setting](result) || result;
-                    break;
+            if (gameTag.data[key][setting]) {
+                switch (key) {
+                    case 'size':
+                        result = gameTag.data[key][setting](result) || result;
+                        break;
+                    case 'format':
+                        result = gameTag.data[key][setting](result) || result;
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
             }
         }
 

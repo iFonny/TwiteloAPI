@@ -59,6 +59,26 @@ const fieldSettings = {
             }
         }
     },
+    ordinal: {
+        type: 'select', // select
+        tooltip: false,
+        label: {
+            en: 'Formatting',
+            fr: 'Mise en forme'
+        },
+        input: {
+            withoutOrdinal: {
+                value: 0,
+                en: 'With ordinal indicator',
+                fr: 'Sans indicateur ordinal'
+            },
+            withOrdinal: {
+                value: 2,
+                en: 'Without ordinal indicator',
+                fr: 'Avec indicateur ordinal'
+            },
+        }
+    },
     timeFormat: {
         type: 'select', // select
         tooltip: false,
@@ -218,7 +238,11 @@ const someData = {
         h_mm_ss_ms_space: data => Server.moment.duration(parseFloat(data), 'seconds').format('h[h] mm[m] ss[s] SSS[ms]', {
             trim: 'both mid'
         }),
-    }
+    },
+    ordinal: {
+        withoutOrdinal: data => data,
+        withOrdinal: data => data + (['st', 'nd', 'rd'][(((parseInt(data) < 0 ? -parseInt(data) : parseInt(data)) + 90) % 100 - 10) % 10 - 1] || 'th'),
+    },
 
 };
 
@@ -229,6 +253,12 @@ const someExamples = {
             uppercase: 'iFONNY',
             lowercase: 'ifonny',
             capitalize: 'Ifonny'
+        }
+    },
+    ordinal: {
+        format: {
+            withoutOrdinal: '21',
+            withOrdinal: '21st'
         }
     },
     time: {
@@ -399,16 +429,20 @@ module.exports = {
         size: 4,
         account: true,
         useExample: false,
-        fieldSettings: {},
+        fieldSettings: {
+            format: fieldSettings.ordinal
+        },
         dataSettings: {
             game: dataSettings.game,
             category: dataSettings.category
         },
-        settingsOrder: [],
+        settingsOrder: ['format'],
         generator: 'default',
-        data: null, // because no settings
+        data: {
+            format: someData.ordinal // existing data
+        },
         exampleOriginal: '21',
-        example: '21'
+        example: someExamples.ordinal
     },
     SPEEDRUN__PB__TIME: {
         id: 'SPEEDRUN__PB__TIME',
