@@ -94,7 +94,7 @@ module.exports.initLogs = () => {
 		request.post({
 			url: config.logs.newUserDiscordWebhook,
 			json: {
-				username: `Twitelo ${config.env == 'dev' ? '[dev]' : ''}`,
+				username: `Twitelo ${config.env != 'prod' ? `[${config.env}]` : ''}`,
 				avatar_url: 'https://ifonny.en-f.eu/3047f9b25045.png', // TODO: Remplacer en prod par : `${config.server.websiteURL}/public/images/logo.png`,
 				embeds: [{
 					color: join ? 2090547 : 15868707,
@@ -127,6 +127,43 @@ module.exports.initLogs = () => {
 			count,
 			join
 		};
+	};
+
+	global.__logContactMe = ({
+		username,
+		pp,
+		type,
+		title,
+		message
+	}) => {
+		request.post({
+			url: config.logs.contactWebhook,
+			json: {
+				username: (type == 'bug-report' ? 'Vivi ' : 'Twitelo contact ') + (config.env != 'prod' ? `[${config.env}]` : ''),
+				avatar_url: type == 'bug-report' ? 'https://ifonny.en-f.eu/c812b7741b4d.png' : 'https://ifonny.en-f.eu/3047f9b25045.png', // TODO: Remplacer en prod par : `${config.server.websiteURL}/public/images/logo.png`,
+				embeds: [{
+					color: type == 'bug-report' ? 15868707 : 5687273,
+					timestamp: Server.moment().format(),
+					fields: [{
+						name: title,
+						value: message,
+						inline: false
+					}],
+					author: {
+						name: `${username}`,
+						url: `https://twitter.com/${username}`,
+						icon_url: pp || 'https://ifonny.en-f.eu/3047f9b25045.png'
+					},
+					footer: {
+						icon_url: 'https://ifonny.en-f.eu/3047f9b25045.png', // TODO: Remplacer en prod
+						text: type
+					}
+				}]
+			}
+		}, function (err) {
+			if (err) __logError('[WEBHOOK] Can\'t send contact message to discord', err);
+		});
+		return true;
 	};
 
 	global.__log = (str) => {
