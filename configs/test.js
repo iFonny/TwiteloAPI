@@ -4,6 +4,7 @@ const config = {
         name: 'api-test',
         url: 'localhost',
         host: 'api-test.twitelo.me',
+        appURL: 'https://twitelo.me',
         websiteURL: 'https://api-test.twitelo.me',
         port: 3033
     },

@@ -4,6 +4,7 @@ const config = {
 		name: 'api-beta',
 		url: 'localhost:3031',
 		host: 'api-beta.twitelo.me',
+		appURL: 'https://beta.twitelo.me',
 		websiteURL: 'https://api-beta.twitelo.me',
 		port: 3031
 	},
