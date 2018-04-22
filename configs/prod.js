@@ -22,7 +22,8 @@ const config = {
 		recapGameDiscordWebhook: 'https://discordapp.com/api/webhooks/433094945914486784/sJiNU7Ny4v0_Qrzo5tG56EgX7qLtdsDS6TUQEj5-6Wt3caD8k-g76WgjdETL78szleGw',
 		recapTwitterDiscordWebhook: 'https://discordapp.com/api/webhooks/433548913044094988/K9rkpN7WMqY0TCfKzL6yh1DGwfyvOraT2gSCXqxielrUxLPooMz8HmMCupo81VVSzAOI',
 		newUserDiscordWebhook: 'https://discordapp.com/api/webhooks/433094604578095124/3tgaxyiD_g9ebv9Sg_6akmrfdwhHE1XXF891tKjDswyq6Ahz1sXtlG6YnmhFjcHmBmAf',
-		userActionsDiscordWebhook: 'https://discordapp.com/api/webhooks/433095139397861376/GpcYrli56oN-v32YaoG7rf0CxvDayaFExoqk2cL-dKmkrKqM4M6Ev7GBRsWkwi3K5dJy'
+		userActionsDiscordWebhook: 'https://discordapp.com/api/webhooks/433095139397861376/GpcYrli56oN-v32YaoG7rf0CxvDayaFExoqk2cL-dKmkrKqM4M6Ev7GBRsWkwi3K5dJy',
+		contactWebhook: 'https://discordapp.com/api/webhooks/437442908241526784/EP7IqvP8jvbL_e-EYTFvORlMOUjVkWvNymPh0j4czymihehJ7BzUvnCT0OTLsjNJCi5x'
 	},
 	db: {
 		name: 'twitelo'
