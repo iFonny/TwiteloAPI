@@ -123,7 +123,7 @@ module.exports = class TwitterUpdater {
                 default:
                     return __logError(`[Unknown] Can't update user @${this.user.username} (code: ${error.code})`, error);
             }
-        } else __logError('[Unknown] Twitter update error', errors);
+        } else __logError(`[Unknown] Twitter update error @${this.user.username}`, errors);
     }
 
     twiteloAppRevoked(error) {
