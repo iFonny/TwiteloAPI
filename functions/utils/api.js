@@ -19,6 +19,10 @@ module.exports = {
     });
   },
 
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  },
+
   /*
    ** role : 'all' or 'ROLE' or ['role1', 'role2']
    */
