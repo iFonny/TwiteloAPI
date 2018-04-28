@@ -15,35 +15,35 @@ module.exports.initLogs = () => {
 
 		switch (type) {
 			case 'log':
-				discordWebHook = config.logs.logDiscordWebhook;
+				discordWebHook = config.secret.webhooks[config.env].logDiscordWebhook;
 				color = 5687273;
 				break;
 			case 'recap-game':
-				discordWebHook = config.logs.recapGameDiscordWebhook;
+				discordWebHook = config.secret.webhooks[config.env].recapGameDiscordWebhook;
 				color = 5687273;
 				break;
 			case 'recap-twitter':
-				discordWebHook = config.logs.recapTwitterDiscordWebhook;
+				discordWebHook = config.secret.webhooks[config.env].recapTwitterDiscordWebhook;
 				color = 5687273;
 				break;
 			case 'info':
-				discordWebHook = config.logs.infoDiscordWebhook;
+				discordWebHook = config.secret.webhooks[config.env].infoDiscordWebhook;
 				color = 5687273;
 				break;
 			case 'user-action':
-				discordWebHook = config.logs.userActionsDiscordWebhook;
+				discordWebHook = config.secret.webhooks[config.env].userActionsDiscordWebhook;
 				color = 5687273;
 				break;
 			case 'error':
-				discordWebHook = config.logs.errorDiscordWebhook;
+				discordWebHook = config.secret.webhooks[config.env].errorDiscordWebhook;
 				color = 15868707;
 				break;
 			case 'full-error':
-				discordWebHook = config.logs.fullErrorDiscordWebhook;
+				discordWebHook = config.secret.webhooks[config.env].fullErrorDiscordWebhook;
 				color = 15868707;
 				break;
 			case 'warn':
-				discordWebHook = config.logs.errorDiscordWebhook;
+				discordWebHook = config.secret.webhooks[config.env].errorDiscordWebhook;
 				color = 16773214;
 				break;
 
@@ -92,7 +92,7 @@ module.exports.initLogs = () => {
 		join
 	}) => {
 		request.post({
-			url: config.logs.newUserDiscordWebhook,
+			url: config.secret.webhooks[config.env].newUserDiscordWebhook,
 			json: {
 				username: `Twitelo ${config.env != 'prod' ? `[${config.env}]` : ''}`,
 				avatar_url: 'https://ifonny.en-f.eu/3047f9b25045.png', // TODO: Remplacer en prod par : `${config.server.websiteURL}/public/images/logo.png`,
@@ -137,7 +137,7 @@ module.exports.initLogs = () => {
 		message
 	}) => {
 		request.post({
-			url: config.logs.contactWebhook,
+			url: config.secret.webhooks[config.env].contactWebhook,
 			json: {
 				username: (type == 'bug-report' ? 'Vivi ' : 'Twitelo contact ') + (config.env != 'prod' ? `[${config.env}]` : ''),
 				avatar_url: type == 'bug-report' ? 'https://ifonny.en-f.eu/c812b7741b4d.png' : 'https://ifonny.en-f.eu/3047f9b25045.png', // TODO: Remplacer en prod par : `${config.server.websiteURL}/public/images/logo.png`,

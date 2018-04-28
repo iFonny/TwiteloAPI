@@ -76,24 +76,24 @@ module.exports = {
 
             client.get('account/verify_credentials', {
                 skip_status: true
-            }).then((twUser) => {
-                if (twUser.data) {
-                    if (twUser.data.errors) return reject(Server.fn.api.jsonError(403,
-                        (twUser.data.errors[0] && twUser.data.errors[0].message) ? twUser.data.errors[0].message : 'Invalid or expired token.',
-                        `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id})`, twUser.data.errors));
-                    else return resolve({
-                        username: twUser.data.screen_name,
-                        name: twUser.data.name,
-                        protected: twUser.data.protected,
-                        verified: twUser.data.verified,
-                        followers: twUser.data.followers_count,
-                        lang: twUser.data.lang,
-                        profile_image_url: twUser.data.profile_image_url_https.replace('_normal', '_400x400'),
-                        description: twUser.data.description,
+            }, (error, twUser) => {
+                if (!error) {
+                    if (twUser) return resolve({
+                        username: twUser.screen_name,
+                        name: twUser.name,
+                        protected: twUser.protected,
+                        verified: twUser.verified,
+                        followers: twUser.followers_count,
+                        lang: twUser.lang,
+                        profile_image_url: twUser.profile_image_url_https.replace('_normal', '_400x400'),
+                        description: twUser.description,
                         updated: Date.now()
                     });
-                } else return reject(Server.fn.api.jsonError(500, 'Internal server error', `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id}) (no twUser.data)`, twUser));
-            }).catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error.', `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id}) (unknown)`, err)));
+                    else return reject(Server.fn.api.jsonError(500, 'Internal server error', `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id}) (no twUser)`, twUser));
+                } else return reject(Server.fn.api.jsonError(403,
+                    error.message || 'Invalid or expired token.',
+                    `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id})`, error));
+            });
 
         });
     },
