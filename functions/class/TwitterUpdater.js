@@ -35,9 +35,10 @@ module.exports = class TwitterUpdater {
             for (let user of users) {
                 this.user = user;
                 const twitterUser = this.connectToTwitter();
+
                 await this.getTwitterProfileToUpdate()
                     .then((profile) => this.updateTwitterProfile(profile, twitterUser));
-                await Server.fn.api.sleep(2 * 1000);
+                await Server.fn.api.sleep(0.5 * 1000);
             }
         } catch (err) {
             return Promise.reject(err);
@@ -53,8 +54,9 @@ module.exports = class TwitterUpdater {
         return new Server.Twitter({
             consumer_key: config.secret.twitter.consumerKey,
             consumer_secret: config.secret.twitter.consumerSecret,
-            access_token_key: this.user.tokens.token,
-            access_token_secret: this.user.tokens.tokenSecret
+            access_token: this.user.tokens.token,
+            access_token_secret: this.user.tokens.tokenSecret,
+            timeout_ms: 5 * 1000 // 5 seconds
         });
     }
 
@@ -85,8 +87,12 @@ module.exports = class TwitterUpdater {
 
     updateTwitterProfile(profile, twitterUser) {
         return twitterUser.post('account/update_profile', profile)
-            .then(twUser => this.profileUpdated(twUser))
-            .catch(errors => this.profileNotUpdated(errors));
+            .then(twUser => {
+                if (twUser.data) {
+                    if (twUser.data.errors) return this.profileNotUpdated(twUser.data.errors);
+                    else return this.profileUpdated(twUser.data);
+                } else __logError(`[Unknown] Twitter update error NO twUser.data !! @${this.user.username}`, twUser);
+            }).catch(errors => this.profileNotUpdated(errors || []));
     }
 
     profileUpdated(twUser) {
