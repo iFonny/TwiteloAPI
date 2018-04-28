@@ -53,7 +53,7 @@ module.exports = {
       var client = new Server.Twitter({
         consumer_key: config.secret.twitter.consumerKey,
         consumer_secret: config.secret.twitter.consumerSecret,
-        access_token_key: user.tokens.token,
+        access_token: user.tokens.token,
         access_token_secret: user.tokens.tokenSecret
       });
 
