@@ -70,25 +70,30 @@ module.exports = {
             var client = new Server.Twitter({
                 consumer_key: config.secret.twitter.consumerKey,
                 consumer_secret: config.secret.twitter.consumerSecret,
-                access_token_key: user.tokens.token,
+                access_token: user.tokens.token,
                 access_token_secret: user.tokens.tokenSecret
             });
 
             client.get('account/verify_credentials', {
                 skip_status: true
-            }).then((profile) => {
-                resolve({
-                    username: profile.screen_name,
-                    name: profile.name,
-                    protected: profile.protected,
-                    verified: profile.verified,
-                    followers: profile.followers_count,
-                    lang: profile.lang,
-                    profile_image_url: profile.profile_image_url_https.replace('_normal', '_400x400'),
-                    description: profile.description,
-                    updated: Date.now()
-                });
-            }).catch(err => reject(Server.fn.api.jsonError(403, 'Invalid or expired token.', `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id})`, err)));
+            }, (error, twUser) => {
+                if (!error) {
+                    if (twUser) return resolve({
+                        username: twUser.screen_name,
+                        name: twUser.name,
+                        protected: twUser.protected,
+                        verified: twUser.verified,
+                        followers: twUser.followers_count,
+                        lang: twUser.lang,
+                        profile_image_url: twUser.profile_image_url_https.replace('_normal', '_400x400'),
+                        description: twUser.description,
+                        updated: Date.now()
+                    });
+                    else return reject(Server.fn.api.jsonError(500, 'Internal server error', `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id}) (no twUser)`, twUser));
+                } else return reject(Server.fn.api.jsonError(403,
+                    error.message || 'Invalid or expired token.',
+                    `[Twitter] Can't get credentials for @${user.username} (${user.twitter_id})`, error));
+            });
 
         });
     },
@@ -290,9 +295,9 @@ module.exports = {
 
         tags = _.keyBy(tags, 'id');
 
-        profile.name = getProfileTextPreview(profile.name, tags, forTwitter) || '';
-        profile.description = getProfileTextPreview(profile.description, tags, forTwitter) || '';
-        profile.location = getProfileTextPreview(profile.location, tags, forTwitter) || '';
+        profile.name = getProfileTextPreview(profile.name, tags, forTwitter).substr(0, config.constant.twitterLimits.name) || '';
+        profile.description = getProfileTextPreview(profile.description, tags, forTwitter).substr(0, config.constant.twitterLimits.description) || '';
+        profile.location = getProfileTextPreview(profile.location, tags, forTwitter).substr(0, config.constant.twitterLimits.location) || '';
         return Server.fn.api.jsonSuccess(200, profile);
     },
 

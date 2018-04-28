@@ -35,8 +35,10 @@ module.exports = class TwitterUpdater {
             for (let user of users) {
                 this.user = user;
                 const twitterUser = this.connectToTwitter();
+
                 await this.getTwitterProfileToUpdate()
                     .then((profile) => this.updateTwitterProfile(profile, twitterUser));
+                await Server.fn.api.sleep(5 * 1000);
             }
         } catch (err) {
             return Promise.reject(err);
@@ -52,8 +54,9 @@ module.exports = class TwitterUpdater {
         return new Server.Twitter({
             consumer_key: config.secret.twitter.consumerKey,
             consumer_secret: config.secret.twitter.consumerSecret,
-            access_token_key: this.user.tokens.token,
-            access_token_secret: this.user.tokens.tokenSecret
+            access_token: this.user.tokens.token,
+            access_token_secret: this.user.tokens.tokenSecret,
+            timeout_ms: 5 * 1000 // 5 seconds
         });
     }
 
@@ -83,9 +86,12 @@ module.exports = class TwitterUpdater {
 
 
     updateTwitterProfile(profile, twitterUser) {
-        return twitterUser.post('account/update_profile', profile)
-            .then(twUser => this.profileUpdated(twUser))
-            .catch(errors => this.profileNotUpdated(errors));
+        return new Promise((resolve) => {
+            twitterUser.post('account/update_profile', profile, async (error, twUser) => {
+                if (error) resolve(await this.profileNotUpdated(error));
+                else resolve(await this.profileUpdated(twUser));
+            });
+        });
     }
 
     profileUpdated(twUser) {
@@ -105,9 +111,7 @@ module.exports = class TwitterUpdater {
         }).catch(err => __logError('[DB] profileUpdated - Can\'t update user', err));
     }
 
-    profileNotUpdated(errors) {
-        const error = errors[0];
-
+    profileNotUpdated(error) {
         this.total.notUpdated += 1;
 
         if (error && error.code) {
@@ -123,7 +127,7 @@ module.exports = class TwitterUpdater {
                 default:
                     return __logError(`[Unknown] Can't update user @${this.user.username} (code: ${error.code})`, error);
             }
-        } else __logError('[Unknown] Twitter update error', errors);
+        } else return __logError(`[Unknown] Twitter update error @${this.user.username}`, error);
     }
 
     twiteloAppRevoked(error) {

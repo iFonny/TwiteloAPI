@@ -62,6 +62,7 @@ module.exports = {
 				.then((profile) => Server.fn.routes.user.updateProfile(req.user, profile))
 				.then((user) => Server.fn.routes.user.updateIncludedTags(user))
 				.then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile, false))
+				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient de sauvegarder son profil :pencil:`, data))
 				.then((data) => res.status(data.status).json(data))
 				.catch((err) => res.status(err.status).json(err));
 		});

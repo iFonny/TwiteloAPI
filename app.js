@@ -20,8 +20,7 @@ const jwt = require('jwt-simple');
 const axios = require('axios');
 const isBase64 = require('is-base64');
 const base64Img = require('base64-img');
-const MTwitter = require('mtwitter');
-const Twitter = require('twitter');
+const Twitter = require('twit');
 const TwitterUpdater = require('./functions/class/TwitterUpdater');
 const NotificationBot = require('./functions/class/NotificationBot');
 const makeDir = require('make-dir');
@@ -56,15 +55,15 @@ global.Server = {
         isBase64,
         utils: base64Img
     },
-    twitterAPI: new MTwitter({ // Twitter API no-account
+    twitterAPI: new Twitter({ // Twitter API no-account
         consumer_key: config.secret.twitter.consumerKey,
         consumer_secret: config.secret.twitter.consumerSecret,
-        application_only: true
+        app_only_auth: true
     }),
     twitterBot: new Twitter({
         consumer_key: config.secret.twitter.consumerKey,
         consumer_secret: config.secret.twitter.consumerSecret,
-        access_token_key: config.secret.twitter.twiteloAccessToken,
+        access_token: config.secret.twitter.twiteloAccessToken,
         access_token_secret: config.secret.twitter.twiteloAccessTokenSecret
     }),
     fn: {
