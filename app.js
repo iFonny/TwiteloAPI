@@ -61,8 +61,8 @@ global.Server = {
         app_only_auth: true
     }),
     twitterBot: new Twitter({
-        consumer_key: config.secret.twitter.consumerKey,
-        consumer_secret: config.secret.twitter.consumerSecret,
+        consumer_key: config.secret.twitter.twiteloBotConsumerKey,
+        consumer_secret: config.secret.twitter.twiteloBotConsumerSecret,
         access_token: config.secret.twitter.twiteloAccessToken,
         access_token_secret: config.secret.twitter.twiteloAccessTokenSecret
     }),
