@@ -38,7 +38,7 @@ module.exports = class TwitterUpdater {
 
                 await this.getTwitterProfileToUpdate()
                     .then((profile) => this.updateTwitterProfile(profile, twitterUser));
-                await Server.fn.api.sleep(5 * 1000);
+                await Server.fn.api.sleep(1 * 1000);
             }
         } catch (err) {
             return Promise.reject(err);
@@ -56,7 +56,7 @@ module.exports = class TwitterUpdater {
             consumer_secret: config.secret.twitter.consumerSecret,
             access_token: this.user.tokens.token,
             access_token_secret: this.user.tokens.tokenSecret,
-            timeout_ms: 5 * 1000 // 5 seconds
+            //timeout_ms: 5 * 1000 // 5 seconds
         });
     }
 

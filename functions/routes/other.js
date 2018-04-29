@@ -76,4 +76,14 @@ module.exports = {
         });
     },
 
+    getDonations() {
+        return new Promise((resolve, reject) => {
+
+            Server.fn.dbMethods.donation.getAllPublic()
+                .then((donations) => resolve(Server.fn.api.jsonSuccess(200, donations)))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get donations', '[DB] getDonations() error', err)));
+
+        });
+    }
+
 };

@@ -103,6 +103,15 @@ module.exports = {
               __logInfo('RethinkDB: "contact" indexes created.');
             });
           }
+          if (!tables.includes('donation')) {
+            await r.tableCreate('donation').run().then(async () => {
+              __logInfo('RethinkDB: "donation" table created.');
+              await r.table('donation').indexCreate('name').run();
+              await r.table('donation').indexCreate('from').run();
+              await r.table('donation').indexCreate('address').run();
+              __logInfo('RethinkDB: "donation" indexes created.');
+            });
+          }
         });
       });
     } catch (e) {
