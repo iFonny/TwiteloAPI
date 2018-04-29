@@ -23,7 +23,6 @@ module.exports = {
 			Server.fn.api.checkUserAuthorization('ALL', req.headers.authorization)
 				.then((user) => {
 					req.user = user;
-					console.log(3, req.user);
 					next();
 				}) // Go to the routes
 				.catch((err) => res.status(err.status).json(err));
@@ -84,8 +83,8 @@ module.exports = {
 		/* Delete user */
 		routerMe.delete('/delete', (req, res) => {
 			Server.fn.routes.user.getUser(req.user.id)
-				.then((user) => Server.fn.routes.user.deleteUserData(user))
-				.then((user) => Server.fn.routes.user.deleteUser(user.data))
+				.then((user) => Server.fn.routes.user.deleteUserData(user.data))
+				.then((user) => Server.fn.routes.user.deleteUser(user))
 				.then((data) => __logUserAction(`__${routeName}__ - **@${req.user.username}** vient de supprimer son compte :wastebasket:`, data))
 				.then(() => Server.fn.routes.user.getStats(req.user, false))
 				.then((stats) => Server.fn.api.sendWelcomeJoinLeave(stats))
