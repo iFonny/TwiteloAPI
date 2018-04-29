@@ -23,6 +23,7 @@ module.exports = {
 			Server.fn.api.checkUserAuthorization('ALL', req.headers.authorization)
 				.then((user) => {
 					req.user = user;
+					console.log(3, req.user);
 					next();
 				}) // Go to the routes
 				.catch((err) => res.status(err.status).json(err));
