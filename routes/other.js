@@ -27,6 +27,17 @@ module.exports = {
 				.catch((err) => res.status(err.status).json(err));
 		});
 
+		router.get('/donations', Server.cache.route({
+			expire: {
+				200: 1 * 60, // 1 minutes
+				xxx: 1
+			}
+		}), (req, res) => {
+			Server.fn.routes.other.getDonations()
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
 		//=======================================================================//
 		//     Me routes                                                         //
 		//=======================================================================//
