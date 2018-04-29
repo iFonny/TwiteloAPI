@@ -35,7 +35,9 @@ module.exports = {
       if (twiteloToken) {
         Server.fn.db.checkAuth(roles, twiteloToken)
           .then((user) => {
+            console.log(1, user);
             user.tokens = Server.jwt.decode(user.tokens, config.secret.jwtSecret);
+            console.log(2, user);
             resolve(user);
           }) // decode tokens && resolve user
           .catch((err) => {
