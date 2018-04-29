@@ -120,6 +120,7 @@ module.exports = {
   },
 
   checkAuth(roles, twitelo_token) {
+    console.log(roles, twitelo_token);
     return new Promise((resolve, reject) => {
       r.table('user')
         .filter({
@@ -127,7 +128,10 @@ module.exports = {
         })
         .filter((doc) => r.expr(roles).contains(doc('role'))) // Check if user role is in 'roles'
         .run()
-        .then((users) => users.length > 0 && users[0] ? resolve(users[0]) : reject())
+        .then((users) => {
+          console.log(users);
+          users.length > 0 && users[0] ? resolve(users[0]) : reject();
+        })
         .catch(reject);
     });
   },
