@@ -49,12 +49,6 @@ module.exports.update = (id, document) => {
 //     DELETE                                                            //
 //=======================================================================//
 
-module.exports.moveToDeleted = (user) => {
-    return r.table('deleted_user').insert(user, {
-        conflict: 'replace'
-    }).run();
-};
-
 module.exports.delete = (id) => {
     return r.table('user').get(id).delete().run();
 };

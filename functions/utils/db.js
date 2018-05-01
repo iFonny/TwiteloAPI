@@ -25,18 +25,6 @@ module.exports = {
               __logInfo('RethinkDB: "user" indexes created.');
             });
           }
-          if (!tables.includes('deleted_user')) {
-            await r.tableCreate('deleted_user').run().then(async () => {
-              __logInfo('RethinkDB: "deleted_user" table created.');
-              await r.table('deleted_user').indexCreate('twitter_id').run();
-              await r.table('deleted_user').indexCreate('username').run();
-              await r.table('deleted_user').indexCreate('twitelo_token').run();
-              await r.table('deleted_user').indexCreate('api_key').run();
-              await r.table('deleted_user').indexCreate('created').run();
-              await r.table('deleted_user').indexCreate('updated').run();
-              __logInfo('RethinkDB: "deleted_user" indexes created.');
-            });
-          }
           if (!tables.includes('notification')) {
             await r.tableCreate('notification').run().then(async () => {
               __logInfo('RethinkDB: "notification" table created.');
