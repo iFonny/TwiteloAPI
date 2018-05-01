@@ -16,7 +16,7 @@ class OPGG {
     }
 
     renew(summonerID) {
-        return this.axios.get(`/summoner/ajax/renew.json/summonerId=${summonerID}`)
+        return this.axios.get(encodeURI(`/summoner/ajax/renew.json/summonerId=${summonerID}`))
             .then((res) => {
                 if (res.status == 200) {
                     const html = res.data;
@@ -43,7 +43,7 @@ class OPGG {
     }
 
     getMMR(summonerName) {
-        return this.axios.get(`/summoner/ajax/mmr/summonerName=${summonerName}`)
+        return this.axios.get(encodeURI(`/summoner/ajax/mmr/summonerName=${summonerName}`))
             .then((res) => {
                 if (res.status == 200) {
                     const html = res.data;
@@ -61,7 +61,7 @@ class OPGG {
     }
 
     getSummoner(summonerName) {
-        return this.axios.get(`/summoner/header/userName=${summonerName}`)
+        return this.axios.get(encodeURI(`/summoner/header/userName=${summonerName}`))
             .then((res) => {
                 if (res.status == 200) {
                     const html = res.data;
