@@ -317,8 +317,7 @@ module.exports = {
     deleteUser(user) {
         return new Promise((resolve, reject) => {
 
-            Server.fn.dbMethods.user.moveToDeleted(user)
-                .then(() => Server.fn.dbMethods.user.delete(user.id))
+            Server.fn.dbMethods.user.delete(user.id)
                 .then(() => resolve(Server.fn.api.jsonSuccess(200, true)))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Internal server error', '[DB] deleteUser() error', err)));
 
