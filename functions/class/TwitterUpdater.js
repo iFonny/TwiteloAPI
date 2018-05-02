@@ -146,11 +146,11 @@ module.exports = class TwitterUpdater {
                 .then(() => Server.fn.dbMethods.notification.sendNotification(this.user.id, 'exclamation-circle', 'error', {
                     en: {
                         title: 'Twitter error',
-                        content: 'Twitelo no longer has access to your account. If you want to continue using twitelo, please log in again (http://twitelo.me).'
+                        content: `Twitelo no longer has access to your account. If you want to continue using twitelo, please log in again (${config.server.appURL}).`
                     },
                     fr: {
                         title: 'Erreur twitter',
-                        content: 'Twitelo n\'a plus accès a votre compte. Si vous voulez continuer d\'utiliser twitelo, veuillez vous reconnecter (http://twitelo.me).'
+                        content: `Twitelo n'a plus accès a votre compte. Si vous voulez continuer d'utiliser twitelo, veuillez vous reconnecter (${config.server.appURL}).`
                     }
                 }))
                 .catch(err => __logError('[DB] twitterUpdater - Can\'t update user/updateTags/sendNotif', err));
