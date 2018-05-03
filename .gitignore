@@ -22,3 +22,7 @@ public/media/test/*
 \.DS_Store
 dump.rdb
 configs/secret\.json
+
+scripts/migration/secret\.json
+
+scripts/migration/backups/
