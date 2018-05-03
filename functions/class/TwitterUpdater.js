@@ -37,7 +37,7 @@ module.exports = class TwitterUpdater {
                 const twitterUser = this.connectToTwitter();
 
                 await this.getTwitterProfileToUpdate()
-                    .then((profile) => this.updateTwitterProfile(profile, twitterUser));
+                    .then((profile) => profile ? this.updateTwitterProfile(profile, twitterUser) : null);
                 await Server.fn.api.sleep(1 * 1000);
             }
         } catch (err) {
@@ -71,6 +71,10 @@ module.exports = class TwitterUpdater {
             .then((data) => Server.fn.routes.user.getPreview(data.tags, data.profile, true))
             .then((data) => data.data)
             .then((profile) => {
+
+                // Return null if nothing activated
+                if (!this.user.twitelo.name.status && !this.user.twitelo.description.status &&
+                    !this.user.twitelo.location.status) return null;
 
                 // Delete disabled switch
                 if (!this.user.twitelo.name.status) delete profile.name;
@@ -142,11 +146,11 @@ module.exports = class TwitterUpdater {
                 .then(() => Server.fn.dbMethods.notification.sendNotification(this.user.id, 'exclamation-circle', 'error', {
                     en: {
                         title: 'Twitter error',
-                        content: 'Twitelo no longer has access to your account. If you want to continue using twitelo, please log in again (http://twitelo.me).'
+                        content: `Twitelo no longer has access to your account. If you want to continue using twitelo, please log in again (${config.server.appURL}).`
                     },
                     fr: {
                         title: 'Erreur twitter',
-                        content: 'Twitelo n\'a plus accès a votre compte. Si vous voulez continuer d\'utiliser twitelo, veuillez vous reconnecter (http://twitelo.me).'
+                        content: `Twitelo n'a plus accès a votre compte. Si vous voulez continuer d'utiliser twitelo, veuillez vous reconnecter (${config.server.appURL}).`
                     }
                 }))
                 .catch(err => __logError('[DB] twitterUpdater - Can\'t update user/updateTags/sendNotif', err));
