@@ -38,7 +38,7 @@ module.exports = class TwitterUpdater {
 
                 await this.getTwitterProfileToUpdate()
                     .then((profile) => profile ? this.updateTwitterProfile(profile, twitterUser) : null);
-                await Server.fn.api.sleep(0 * 1000);
+                await Server.fn.api.sleep(0.5 * 1000);
             }
         } catch (err) {
             return Promise.reject(err);

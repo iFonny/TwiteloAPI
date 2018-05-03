@@ -11,7 +11,7 @@ module.exports = {
     color: '#d68548',
     ratelimit: {
         request: 6, // (Max: 100/60s)
-        every: 5, // 13 requests / 10 seconds
+        every: 5, // 6 requests / 5 seconds
         total: 60 * 5 // 5 minutes - Game data cache 
     }
 };
