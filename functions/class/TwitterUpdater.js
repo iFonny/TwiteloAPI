@@ -38,7 +38,7 @@ module.exports = class TwitterUpdater {
 
                 await this.getTwitterProfileToUpdate()
                     .then((profile) => profile ? this.updateTwitterProfile(profile, twitterUser) : null);
-                await Server.fn.api.sleep(1 * 1000);
+                await Server.fn.api.sleep(0 * 1000);
             }
         } catch (err) {
             return Promise.reject(err);
@@ -129,9 +129,9 @@ module.exports = class TwitterUpdater {
                 case 120:
                     return this.profileUpdateFailed(error);
                 default:
-                    return __logError(`[Unknown] Can't update user @${this.user.username} (code: ${error.code})`, error);
+                    return Promise.resolve(__logError(`[Unknown] Can't update user @${this.user.username} (code: ${error.code})`, error));
             }
-        } else return __logError(`[Unknown] Twitter update error @${this.user.username}`, error);
+        } else return Promise.resolve(__logError(`[Unknown] Twitter update error @${this.user.username}`, error));
     }
 
     twiteloAppRevoked(error) {

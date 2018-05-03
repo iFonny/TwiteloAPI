@@ -295,9 +295,16 @@ module.exports = {
 
         tags = _.keyBy(tags, 'id');
 
-        profile.name = getProfileTextPreview(profile.name, tags, forTwitter).substr(0, config.constant.twitterLimits.name) || '';
-        profile.description = getProfileTextPreview(profile.description, tags, forTwitter).substr(0, config.constant.twitterLimits.description) || '';
-        profile.location = getProfileTextPreview(profile.location, tags, forTwitter).substr(0, config.constant.twitterLimits.location) || '';
+        profile.name = getProfileTextPreview(profile.name, tags, forTwitter) || '';
+        profile.description = getProfileTextPreview(profile.description, tags, forTwitter) || '';
+        profile.location = getProfileTextPreview(profile.location, tags, forTwitter) || '';
+
+        if (forTwitter) {
+            profile.name = profile.name.substr(0, config.constant.twitterLimits.name);
+            profile.description = profile.description.substr(0, config.constant.twitterLimits.description);
+            profile.location = profile.location.substr(0, config.constant.twitterLimits.location);
+        }
+
         return Server.fn.api.jsonSuccess(200, profile);
     },
 
