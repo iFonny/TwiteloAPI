@@ -10,7 +10,7 @@ module.exports = {
     image: '/public/images/game/lol/image.png',
     color: '#f9d380',
     ratelimit: {
-        request: 50, // (Max: 500/10s) // TODO: repasser a 200 quand prod
+        request: 200, // (Max: 500/10s)
         every: 5, // 200 requests / 5 seconds
         total: 60 * 5 // 5 minutes - Game data cache 
     }
