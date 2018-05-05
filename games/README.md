@@ -8,10 +8,10 @@ Il séparé de cette manière :
  - 1 fichier pour chaque jeu.
  - 1 sous-dossier `class` pour les classes ou libs personnalisées.
  - 4 sous-dossiers (qui contiennent également  un fichier pour chaque jeu).
-    - `api` : Récupération et mise à jour des données de jeu
-    - `functions` : Fonctions spécifiques à un jeu
-    - `settings` : Réglages de compte du jeu
-    - `tags` : Réglages des tags (donnée) du jeu
+    - [`api`](#fichier-du-jeu-dans-api) : Récupération et mise à jour des données de jeu
+    - [`functions`](#fichier-du-jeu-dans-functions) : Fonctions spécifiques à un jeu
+    - [`settings`](#fichier-du-jeu-dans-settings) : Réglages de compte du jeu
+    - [`tags`](#fichier-du-jeu-dans-tags) : Réglages des tags (donnée) du jeu
 
 
 
@@ -66,6 +66,27 @@ Exemples :
 - [/games/api/game.js.example](api/game.js.example)
 - [/games/api/lol.js](api/lol.js)
 - [/games/api/speedrun.js](api/speedrun.js)
+
+
+
+## Fichier du jeu dans `settings`
+❗ Nom : `<GAME_ID>.js`
+> Chemin : `/games/settings/<GAME_ID>.js`
+
+Fichier **javascript** qui contient les réglages du compte (game account), object utilisé pour generer le formulaire d'ajout/modification de compte.
+
+Chaque `key: value` correspond à un réglage (ex: username, région..).
+
+Chaque réglage doit posséder : 
+- **label** : Texte qui sera affiché devant l'input.
+- **tooltip** (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations.
+- **type** : Type de l'input (*string* ou *select*).
+- **input** : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*).
+
+Exemples : 
+- [/games/settings/game.js.example](settings/game.js.example)
+- [/games/settings/lol.js](settings/lol.js)
+- [/games/settings/speedrun.js](settings/speedrun.js)
 
 
 
@@ -157,21 +178,4 @@ Exemples :
 - [/games/functions/lol.js](functions/lol.js)
 - [/games/functions/speedrun.js](functions/speedrun.js)
 
-## Fichier du jeu dans `settings`
-❗ Nom : `<GAME_ID>.js`
-> Chemin : `/games/settings/<GAME_ID>.js`
 
-Fichier **javascript** qui contient les réglages du compte (game account), object utilisé pour generer le formulaire d'ajout/modification de compte.
-
-Chaque `key: value` correspond à un réglage (ex: username, région..).
-
-Chaque réglage doit posséder : 
-- **label** : Texte qui sera affiché devant l'input.
-- **tooltip** (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations.
-- **type** : Type de l'input (*string* ou *select*).
-- **input** : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*).
-
-Exemples : 
-- [/games/settings/game.js.example](settings/game.js.example)
-- [/games/settings/lol.js](settings/lol.js)
-- [/games/settings/speedrun.js](settings/speedrun.js)
