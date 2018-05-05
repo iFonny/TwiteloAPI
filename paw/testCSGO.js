@@ -1,0 +1,331 @@
+/*console.log("PLAYER", {
+    "steamid": "76561198069416257",
+    "personaname": "Equinox",
+    "avatar": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/de/deffc5366befbe7ee318a009f4db9b6566285624_full.jpg",
+    "realname": "",
+    "lastSeenString": "Last seen on 3 May",
+    "rank": 4,
+    "rank_title": "Silver IV",
+    "level": 31,
+    "level_title": "Major",
+    "xp": 987,
+    "wins": 159,
+    "cmd_friendly": 3,
+    "cmd_teacher": 3,
+    "cmd_leader": 6,
+    "featured_medal": -1,
+    "medals": [-1],
+    "medal_weapon": 2,
+    "medal_team": 2,
+    "medal_global": 1,
+    "medal_combat": 2,
+    "medal_arms": 1,
+    "bans": {
+        "SteamId": "76561198069416257",
+        "CommunityBanned": false,
+        "VACBanned": false,
+        "NumberOfVACBans": 0,
+        "DaysSinceLastBan": 0,
+        "NumberOfGameBans": 0,
+        "EconomyBan": "none"
+    },
+    "killChanges": 5209,
+    "deathChanges": 0,
+    "timeChanges": "105.53hrs",
+    "mvpChanges": 622,
+    "changesSinceDate": "22 April",
+    "winChanges": "0.01",
+    "accChanges": "0.00",
+    "hsChanges": "0.00",
+    "kdrChanges": "0.03",
+    "is_private": false,
+    "hours_played": 332,
+    "latest_match": {
+        "score": 0,
+        "money": "$0",
+        "dmg": "0 HP",
+        "mvps": 0,
+        "deaths": 6,
+        "kills": 0,
+        "fwkills": 0,
+        "fwaccuracy": "0%",
+        "totalRounds": 4,
+        "roundsWon": 0,
+        "victory": "DEFEAT",
+        "roundWins": 0,
+        "kdr": "0.00"
+    },
+    "other_stats": {
+        "kills": "18,060",
+        "deaths": "19,435",
+        "headshots": 6689,
+        "totalmoney": "$43,441,248",
+        "damagedone": "2,705,732 HP",
+        "score": "37,472",
+        "bombsplanted": 735,
+        "bombsdefused": 204,
+        "hostagesrescued": 1,
+        "matchesplayed": 1008,
+        "matcheswon": 403,
+        "roundsplayed": "16,953",
+        "rounds": 8352,
+        "mvps": 1867,
+        "weaponsdonated": 1427,
+        "killsenemyweap": 1811,
+        "blindedkills": 518,
+        "knifefight": 107,
+        "killedsniper": 1462,
+        "shots": "334,396",
+        "hits": "63,929",
+        "doms": 76,
+        "domoverkills": 53,
+        "revenges": 107,
+        "pistolwins": 607,
+        "tasers": 79,
+        "windows": 104,
+        "timeplayed": "333h."
+    },
+    "favWeapon": {
+        "name": "AK-47",
+        "rawName": "ak47",
+        "kills": 3640,
+        "rawKills": 3640
+    },
+    "favWeapons": [{
+        "name": "M4",
+        "rawName": "m4a1",
+        "kills": 2873,
+        "rawKills": 2873
+    }, {
+        "name": "AWP",
+        "rawName": "awp",
+        "kills": 2233,
+        "rawKills": 2233
+    }, {
+        "name": "P2K & USP",
+        "rawName": "hkp2000",
+        "kills": 1077,
+        "rawKills": 1077
+    }, {
+        "name": "Glock-18",
+        "rawName": "glock",
+        "kills": 731,
+        "rawKills": 731
+    }],
+    "favMap": {
+        "rawName": "de_dust2_new",
+        "name": "Dust II",
+        "rounds": 2738,
+        "rawRounds": 2738
+    },
+    "favMaps": [{
+        "rawName": "de_inferno_new",
+        "name": "Inferno",
+        "rounds": 1585,
+        "rawRounds": 1585
+    }, {
+        "rawName": "de_nuke_new",
+        "name": "Nuke",
+        "rounds": 714,
+        "rawRounds": 714
+    }, {
+        "rawName": "de_cbble",
+        "name": "Cobble",
+        "rounds": 339,
+        "rawRounds": 339
+    }, {
+        "rawName": "de_train",
+        "name": "Train",
+        "rounds": 122,
+        "rawRounds": 122
+    }, {
+        "rawName": "cs_office",
+        "name": "Office",
+        "rounds": 86,
+        "rawRounds": 86
+    }, {
+        "rawName": "de_dust",
+        "name": "Dust",
+        "rounds": 37,
+        "rawRounds": 37
+    }],
+    "accuracy": "19.1%",
+    "hsp": "37.0%",
+    "weaponKills": [{
+        "name": "Zeus x27",
+        "value": 79
+    }, {
+        "name": "Molotov",
+        "value": 101
+    }, {
+        "name": "Galil AR",
+        "value": 236
+    }, {
+        "name": "M4A1-S and M4A4",
+        "value": 2873
+    }, {
+        "name": "MAG-7",
+        "value": 241
+    }, {
+        "name": "Tec-9",
+        "value": 640
+    }, {
+        "name": "PP-Bizon",
+        "value": 390
+    }, {
+        "name": "Sawed-Off",
+        "value": 95
+    }, {
+        "name": "Negev",
+        "value": 415
+    }, {
+        "name": "Nova",
+        "value": 212
+    }, {
+        "name": "MP9",
+        "value": 243
+    }, {
+        "name": "MP7",
+        "value": 439
+    }, {
+        "name": "SSG 08",
+        "value": 368
+    }, {
+        "name": "SCAR-20",
+        "value": 191
+    }, {
+        "name": "SG 553",
+        "value": 233
+    }, {
+        "name": "P250",
+        "value": 303
+    }, {
+        "name": "USP-S & P2000",
+        "value": 1077
+    }, {
+        "name": "M249",
+        "value": 58
+    }, {
+        "name": "G3SG1",
+        "value": 131
+    }, {
+        "name": "FAMAS",
+        "value": 351
+    }, {
+        "name": "AUG",
+        "value": 180
+    }, {
+        "name": "AK-47",
+        "value": 3640
+    }, {
+        "name": "AWP",
+        "value": 2233
+    }, {
+        "name": "P90",
+        "value": 648
+    }, {
+        "name": "UMP-45",
+        "value": 506
+    }, {
+        "name": "MAC-10",
+        "value": 203
+    }, {
+        "name": "XM1014",
+        "value": 118
+    }, {
+        "name": "Five-SeveN",
+        "value": 108
+    }, {
+        "name": "Dual Berettas",
+        "value": 77
+    }, {
+        "name": "Desert Eagle",
+        "value": 356
+    }, {
+        "name": "Glock-18",
+        "value": 731
+    }, {
+        "name": "HE Grenade",
+        "value": 136
+    }, {
+        "name": "Knife",
+        "value": 448
+    }],
+    "mapsPlayed": [{
+        "name": "cs_militia",
+        "value": 8
+    }, {
+        "name": "ar_monastery",
+        "value": 6
+    }, {
+        "name": "ar_baggage",
+        "value": 26
+    }, {
+        "name": "ar_shoots",
+        "value": 21
+    }, {
+        "name": "de_stmarc",
+        "value": 5
+    }, {
+        "name": "de_safehouse",
+        "value": 17
+    }, {
+        "name": "de_lake",
+        "value": 11
+    }, {
+        "name": "de_train",
+        "value": 122
+    }, {
+        "name": "de_nuke",
+        "value": 714
+    }, {
+        "name": "de_inferno",
+        "value": 1585
+    }, {
+        "name": "de_dust",
+        "value": 37
+    }, {
+        "name": "de_dust2",
+        "value": 2738
+    }, {
+        "name": "de_cbble",
+        "value": 339
+    }, {
+        "name": "de_aztec",
+        "value": 36
+    }, {
+        "name": "cs_office",
+        "value": 86
+    }, {
+        "name": "cs_italy",
+        "value": 33
+    }, {
+        "name": "cs_assault",
+        "value": 14
+    }],
+    "bestWeapon": "AK-47",
+    "favoriteMap": "de_dust2",
+    "winRate": "49.3%",
+    "kills": 18060,
+    "deaths": 19435,
+    "kdr": "0.93",
+    "friends": [{
+        "steamid": "76561198086946608",
+        "personaname": "Babiche",
+        "avatar": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/4c/4cb41a9011662a14b3afde6c6753acb70a90e763_full.jpg",
+        "rank": 7,
+        "rank_title": "Gold Nova I"
+    }, {
+        "steamid": "76561198299330045",
+        "personaname": "€nz0",
+        "avatar": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/9b/9bb756b84715e21ac49dc937aaa597bae43047c3_full.jpg",
+        "rank": 3,
+        "rank_title": "Silver III"
+    }, {
+        "steamid": "76561198157274047",
+        "personaname": "Camion CPS",
+        "avatar": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/51/51f5dfe17e168446bb9761d1f09b0dea00f9e5cb_full.jpg",
+        "rank": 1,
+        "rank_title": "Silver I"
+    }]
+})*/
