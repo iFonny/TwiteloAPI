@@ -38,6 +38,18 @@ module.exports = {
 				.catch((err) => res.status(err.status).json(err));
 		});
 
+		router.get('/stats/min', Server.cache.route({
+			expire: {
+				200: 10 * 60, // 10 minutes
+				xxx: 1
+			}
+		}), (req, res) => {
+			Server.fn.routes.other.getStatsMin()
+				.then((data) => res.status(data.status).json(data))
+				.catch((err) => res.status(err.status).json(err));
+		});
+
+
 		//=======================================================================//
 		//     Me routes                                                         //
 		//=======================================================================//

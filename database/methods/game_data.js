@@ -41,3 +41,7 @@ module.exports.deleteByTagIDAndFilter = (tagID, condition) => {
 //=======================================================================//
 //     OTHER                                                             //
 //=======================================================================//
+
+module.exports.count = (filter) => {
+    return r.table('game_data').filter(filter).count().run();
+};
