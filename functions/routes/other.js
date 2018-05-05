@@ -78,11 +78,40 @@ module.exports = {
 
     getDonations() {
         return new Promise((resolve, reject) => {
-
             Server.fn.dbMethods.donation.getAllPublic()
                 .then((donations) => resolve(Server.fn.api.jsonSuccess(200, donations)))
                 .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get donations', '[DB] getDonations() error', err)));
+        });
+    },
 
+    getStatsMin() {
+        return new Promise((resolve, reject) => {
+            let stats = [];
+            Server.fn.dbMethods.user.count({})
+                .then((nbUsers) => stats.push({
+                    nb: nbUsers,
+                    text: {
+                        en: 'Users',
+                        fr: 'Utilisateurs'
+                    }
+                }))
+                .then(() => Server.fn.dbMethods.game_data.count({}))
+                .then((nbGameData) => stats.push({
+                    nb: nbGameData,
+                    text: {
+                        en: 'Game Data',
+                        fr: 'Données de jeu'
+                    },
+                    bonus: {
+                        nb: Object.keys(Server.game).length,
+                        text: {
+                            en: 'Games',
+                            fr: 'Jeux'
+                        }
+                    }
+                }))
+                .then(() => resolve(Server.fn.api.jsonSuccess(200, stats)))
+                .catch(err => reject(Server.fn.api.jsonError(500, 'Can\'t get stats', '[DB] getStatsMin() error', err)));
         });
     }
 
