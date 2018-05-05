@@ -21,9 +21,9 @@ Il séparé de cette manière :
 
 Fichier **javascript** qui contient les settings de base du jeu.
 
-- **icon** : Chemin vers l'icone du jeu (~200x200) ([LINK vers le dossier des images de jeu])
-- **image** : Chemin vers l'image du jeu (Doit faire comprendre de quel jeu il s'agit et doit être dans une forme horizontale) ([LINK vers le dossier des images de jeu])
-- **ratelimit** : /!\ Toujours laisser de la marge avec les ratelimits imposées par le jeu
+- **icon** : Chemin vers l'icone du jeu (~200x200) [/public/images/game/<GAME_ID>](../public/images/game)
+- **image** : Chemin vers l'image du jeu (Doit faire comprendre de quel jeu il s'agit et doit être dans une forme horizontale) [/public/images/game/<GAME_ID>](../public/images/game)
+- **ratelimit** : ❗ Important : Toujours laisser de la marge avec les ratelimits imposées par le jeu
 - Pour le reste voir fichier d'[exemple](game.js.example)
 
 Exemple : [/games/game.js.example](game.js.example)
@@ -33,7 +33,9 @@ Exemple : [/games/game.js.example](game.js.example)
 ## Sous-dossier `class`
 > Chemin : `/games/class/`
 
-Dossier pour ajouter ses propres libs, nom de fichier libre. (Accessible dans le code depuis `Server.class.game.<FILE_NAME>`)
+Dossier pour ajouter ses propres libs, nom de fichier libre.
+
+(Accessible dans le code depuis `Server.class.game.<FILE_NAME>`)
 
 Exemple : [/games/class/OPGG.js](class/OPGG.js)
 
@@ -44,7 +46,7 @@ Exemple : [/games/class/OPGG.js](class/OPGG.js)
 > Chemin : `/games/api/<GAME_ID>.js`
 
 
-Fichier **javascript** separé en 3 **functions** et un **object** generator permettent de récupérer les données du jeu.
+Fichier **javascript** permettant de récupérer les données du jeu. Séparé en 3 **functions** et un **object** generator.
 
 - **getAccountInfo** : Fonction appelée lors de l'ajout d'un compte. Permet de recuperer les infos d'un compte (id, region..).
     - Success : *Resolve* un `object` qui contient les infos du compte (id, region..)
@@ -55,7 +57,7 @@ Fichier **javascript** separé en 3 **functions** et un **object** generator per
     - ❗ Important : Utiliser la fonction `await Server.fn.game.utils.useMeBeforeEachRequest` avant chaque request de jeu.
     - ❗ Important : Utiliser la fonction `Server.fn.game.utils.useMeAfterEachRequest` apres chaque request de jeu.
 - **updateFullGameData** : *[Peut être copié sans modification]* À modifier uniquement si une optimisation est nécessaire. (ex: batch) Fonction qui va appeler `getDataOneByOne` pour toutes les données de jeu à mettre à jour.
-- **generator** : *[Peut être copié sans modification]* Object qui contient des fonctions qui permetront de generer les données en fonction des reglages de l'utilisateur. Vont appeller les fonctions specifique a chaque settings de tag (voir [tags](#fichier-du-jeu-dans-tags))
+- **generator** : *[Peut être copié sans modification]* Object qui contient des fonctions qui permetront de generer les données en fonction des reglages de l'utilisateur. Vont appeller les fonctions specifique a chaque settings de tag/donnée (voir [tags](#fichier-du-jeu-dans-tags))
 
 Exemple : [/games/api/game.js.example](api/game.js.example)
 
