@@ -21,12 +21,15 @@ Il séparé de cette manière :
 
 Fichier **javascript** qui contient les settings de base du jeu.
 
-- **icon** : Chemin vers l'icone du jeu (~200x200) [/public/images/game/<GAME_ID>](../public/images/game)
-- **image** : Chemin vers l'image du jeu (Doit faire comprendre de quel jeu il s'agit et doit être dans une forme horizontale) [/public/images/game/<GAME_ID>](../public/images/game)
-- **ratelimit** : ❗ Important : Toujours laisser de la marge avec les ratelimits imposées par le jeu
+- **icon** : Chemin vers l'icone du jeu (PNG ~200x200) [/public/images/game/<GAME_ID>](../public/images/game)
+- **image** : Chemin vers l'image du jeu (PNG Doit faire comprendre de quel jeu il s'agit et doit être dans une forme longue horizontale) [/public/images/game/<GAME_ID>](../public/images/game)
+- **ratelimit** : ❗ Important : Toujours laisser de la marge avec les ratelimits imposées par le jeu (~15%)
 - Pour le reste voir fichier d'[exemple](game.js.example)
 
-Exemple : [/games/game.js.example](game.js.example)
+Exemples : 
+- [/games/game.js.example](game.js.example)
+- [/games/lol.js](lol.js)
+- [/games/speedrun.js](speedrun.js)
 
 
 
@@ -59,7 +62,10 @@ Fichier **javascript** permettant de récupérer les données du jeu. Séparé e
 - **updateFullGameData** : *[Peut être copié sans modification]* À modifier uniquement si une optimisation est nécessaire. (ex: batch) Fonction qui va appeler `getDataOneByOne` pour toutes les données de jeu à mettre à jour.
 - **generator** : *[Peut être copié sans modification]* Object qui contient des fonctions qui permetront de generer les données en fonction des reglages de l'utilisateur. Vont appeller les fonctions specifique a chaque settings de tag/donnée (voir [tags](#fichier-du-jeu-dans-tags))
 
-Exemple : [/games/api/game.js.example](api/game.js.example)
+Exemples : 
+- [/games/api/game.js.example](api/game.js.example)
+- [/games/api/lol.js](api/lol.js)
+- [/games/api/speedrun.js](api/speedrun.js)
 
 
 
@@ -73,8 +79,27 @@ Exemple : [/games/api/game.js.example](api/game.js.example)
 ❗ Nom : `<GAME_ID>.js`
 > Chemin : `/games/functions/<GAME_ID>.js`
 
+Fichier **javascript** qui contient les fonctions liées au jeu. Séparé du fichier [api](#fichier-du-jeu-dans-api) pour plus de propreté.
 
+Exemples : 
+- [/games/functions/lol.js](functions/lol.js)
+- [/games/functions/speedrun.js](functions/speedrun.js)
 
 ## Fichier du jeu dans `settings`
 ❗ Nom : `<GAME_ID>.js`
 > Chemin : `/games/settings/<GAME_ID>.js`
+
+Fichier **javascript** qui contient les réglages du compte (game account), object utilisé pour generer le formulaire d'ajout/modification de compte.
+
+Chaque `key: value` correspond à un réglage (ex: username, région..).
+
+Chaque réglage doit posséder : 
+- label : Texte qui sera affiché devant l'input
+- tooltip (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations
+- type : Type de l'input (*string* ou *select*)
+- input : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*)
+
+Exemples : 
+- [/games/settings/game.js.example](api/game.js.example)
+- [/games/settings/lol.js](functions/lol.js)
+- [/games/settings/speedrun.js](functions/speedrun.js)
