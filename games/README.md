@@ -92,12 +92,12 @@ Un tag est composé de
 - **size** : Taille par defaut du tag dans le profil (Taille max d'une donnée avec les reglages de base).
 - **account** : (`true` ou `false`) Si le tag a besoin d'un compte pour fonctionner.
 - **useExample** : (`true` ou `false`) Si le tag doit utiliser un example plutot que faire des requests pour récupérer la donnée au moment de l'ajout du tag. Mettre à `true` si les ratelimits sont très stricts.
-- **fieldSettings** : Réglages utilisés pour generer le formulaire d'ajout/modification de tag. Réglages de format de données (modification de texte, taille..) (`SETTING_ID: SETTINGS`). Chaque réglage est composé de :
+- **fieldSettings** : Réglages utilisés pour generer le formulaire d'ajout/modification de tag. Réglages de format de données (modification de texte, taille..) (`SETTING_ID: SETTING_OBJECT`). Chaque réglage est composé de :
     - **label** : Texte qui sera affiché devant l'input
     - **tooltip** (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations
     - **type** : Type de l'input (*select*)
     - **input** : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*)
-- **dataSettings** : Réglages utilisés pour generer le formulaire d'ajout/modification de tag. Réglages appliqués au moment de la récupération des données (ex: saison, categorie..) (`SETTING_ID: SETTINGS`). Chaque réglage est composé de :
+- **dataSettings** : Réglages utilisés pour generer le formulaire d'ajout/modification de tag. Réglages appliqués au moment de la récupération des données (ex: saison, categorie..) (`SETTING_ID: SETTING_OBJECT`). Chaque réglage est composé de :
     - **label** : Texte qui sera affiché devant l'input.
     - **tooltip** (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations.
     - **type** : Type de l'input (*select*).
@@ -105,31 +105,40 @@ Un tag est composé de
         - Chaque input contient une `value` qui +/- la taille de la donnée (ex pour un reglage *short*: `value: -4`)
 - **settingsOrder** : Ordre dans lequel les réglages (❗ uniquement les réglages de formatage/*fieldSettings*) doivent être appliqués (ex: `['size', 'format']`).
 - **generator** : Fonction du générateur de données à appeler. `default` si aucune modification apportée au générateur (ex: `default`).
-- **data** : Object qui contient des fonctions utilisés pour formater la donnée pour chaque réglage (❗ uniquement les réglages de formatage/*fieldSettings*) (`SETTING_ID: FUNCTION`) (ex: `withPercent: data => data + ' %'`).
+- **data** : Object qui contient, pour chaque réglage, des fonctions utilisés pour formater la donnée (❗ uniquement les réglages de formatage/*fieldSettings*) (`SETTING_ID: SETTING_OBJECT`). Chaque réglage est composé d'une fonction par valeur.
+
+    Example pour un réglage `size` (qui contient `default`, `withPercentSpace` et `withPercentNoSpace`) : 
+    ```js
+    size: {
+        default: data => data,
+        withPercentSpace: data => data + ' %',
+        withPercentNoSpace: data => data + '%'
+    }
+    ```
 - **exampleOriginal** : Donnée d'example originale (ex: `DIAMOND`)
 - **example** : Object qui contient toutes les données d'exemples pour toutes les combinaisons possibles (En respectant l'ordre). 
 
-    Exemple pour un tag qui a les réglages `size` (qui contient `default` et `short`) et `format` (qui contient `default`, `uppercase`, `lowercase` et `capitalize`): 
-```js
-size: { // setting PROPERTY
-    default: { // setting VALUE
-        format: { // setting PROPERTY
-            default: 'DIAMOND', // setting VALUE
-            uppercase: 'DIAMOND', // setting VALUE
-            lowercase: 'diamond', // setting VALUE
-            capitalize: 'Diamond' // setting VALUE
-        }
-    },
-    short: { // setting VALUE
-        format: { // setting PROPERTY
-            default: 'DIAM', // setting VALUE
-            uppercase: 'DIAM', // setting VALUE
-            lowercase: 'diam', // setting VALUE
-            capitalize: 'Diam' // setting VALUE
+    Exemple pour un tag qui a les réglages `size` (qui contient `default` et `short`) et `format` (qui contient `default`, `uppercase`, `lowercase` et `capitalize`) : 
+    ```js
+    size: { // setting PROPERTY
+        default: { // setting VALUE
+            format: { // setting PROPERTY
+                default: 'DIAMOND', // setting VALUE
+                uppercase: 'DIAMOND', // setting VALUE
+                lowercase: 'diamond', // setting VALUE
+                capitalize: 'Diamond' // setting VALUE
+            }
+        },
+        short: { // setting VALUE
+            format: { // setting PROPERTY
+                default: 'DIAM', // setting VALUE
+                uppercase: 'DIAM', // setting VALUE
+                lowercase: 'diam', // setting VALUE
+                capitalize: 'Diam' // setting VALUE
+            }
         }
     }
-}
-```
+    ```
 
 Exemples : 
 - [/games/tags/game.js.example](tags/game.js.example)
