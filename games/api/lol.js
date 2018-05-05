@@ -257,20 +257,13 @@ module.exports.generator = {
         let result = data;
 
         for (const key of gameTag.settingsOrder) {
-            const setting = settings[key];
-
-            if (gameTag.data[key][setting]) {
-                switch (key) {
-                    case 'size':
-                        result = gameTag.data[key][setting](result) || result;
-                        break;
-                    case 'format':
-                        result = gameTag.data[key][setting](result) || result;
-                        break;
-
-                    default:
-                        break;
+            try {
+                const setting = settings[key];
+                if (gameTag.data[key][setting]) {
+                    result = gameTag.data[key][setting](result) || result;
                 }
+            } catch (error) {
+                __logError(`[generator] unknown error (${gameTag.id})`, error);
             }
         }
 

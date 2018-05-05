@@ -1,5 +1,5 @@
 //=======================================================================//
-//     FORMAT SETTINGS                                                   //
+//     DATA FORMAT SETTINGS (to avoid code duplication)                  //
 //=======================================================================//
 
 // Settings applied to the retrieved data (ex: format, size...)
@@ -214,11 +214,11 @@ const fieldSettings = {
 };
 
 //=======================================================================//
-//     DATA SETTINGS                                                     //
+//     DATA SETTINGS (to avoid code duplication)                         //
 //=======================================================================//
 
 // Settings applied at the time of data retrieve (Like: game, category, season...)
-const dataSettings = {
+const dataSetting = {
     season: {
         type: 'select', // select
         tooltip: false,
@@ -252,10 +252,10 @@ const dataSettings = {
 };
 
 //=======================================================================//
-//     UTIL DATA (to avoid code duplication)                             //
+//     DATA FUNCTIONS (to avoid code duplication)                        //
 //=======================================================================//
 
-const someData = {
+const dataFunction = {
     text: {
         format: {
             default: data => data,
@@ -354,7 +354,11 @@ const someData = {
     },
 };
 
-const someExamples = {
+//=======================================================================//
+//     DATA EXAMPLES (to avoid code duplication)                         //
+//=======================================================================//
+
+const dataExample = {
     percentage: {
         size: {
             default: '69',
@@ -584,9 +588,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['format'], // settings order
         generator: 'default', // function called to generate data 
-        data: someData.text, // existing data
+        data: dataFunction.text, // existing data
         exampleOriginal: 'iFonny',
-        example: someExamples.username // existing example
+        example: dataExample.username // existing example
     },
     LOL__ACCOUNT__REGION: {
         id: 'LOL__ACCOUNT__REGION',
@@ -606,11 +610,11 @@ module.exports = {
         settingsOrder: ['size', 'format'],
         generator: 'default',
         data: {
-            size: someData.region.size, // existing data
-            format: someData.text.format // existing data
+            size: dataFunction.region.size, // existing data
+            format: dataFunction.text.format // existing data
         },
         exampleOriginal: 'euw',
-        example: someExamples.region // existing example
+        example: dataExample.region // existing example
     },
     LOL__ACCOUNT__ID: {
         id: 'LOL__ACCOUNT__ID',
@@ -689,9 +693,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['format'], // settings order
         generator: 'default', // function called to generate data 
-        data: someData.text, // existing data
+        data: dataFunction.text, // existing data
         exampleOriginal: 'Twisted Fate\'s Constellations',
-        example: someExamples.leagueName // existing example
+        example: dataExample.leagueName // existing example
     },
     LOL__RANKED_SOLO_SR__TIER: {
         id: 'LOL__RANKED_SOLO_SR__TIER', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
@@ -711,11 +715,11 @@ module.exports = {
         settingsOrder: ['size', 'format'], // settings order
         generator: 'default', // function called to generate data 
         data: {
-            size: someData.tier.size, // existing data
-            format: someData.text.format // existing data
+            size: dataFunction.tier.size, // existing data
+            format: dataFunction.text.format // existing data
         },
         exampleOriginal: 'DIAMOND',
-        example: someExamples.tier // existing example
+        example: dataExample.tier // existing example
     },
     LOL__RANKED_SOLO_SR__RANK: {
         id: 'LOL__RANKED_SOLO_SR__RANK',
@@ -733,9 +737,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['format'],
         generator: 'default', // function called to generate data 
-        data: someData.rank, // existing data
+        data: dataFunction.rank, // existing data
         exampleOriginal: 'IV',
-        example: someExamples.rank // existing example
+        example: dataExample.rank // existing example
     },
     LOL__RANKED_SOLO_SR__LP: {
         id: 'LOL__RANKED_SOLO_SR__LP',
@@ -754,9 +758,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['size', 'format'],
         generator: 'default', // function called to generate data 
-        data: someData.lp, // existing data
+        data: dataFunction.lp, // existing data
         exampleOriginal: '86',
-        example: someExamples.lp // existing example
+        example: dataExample.lp // existing example
     },
     LOL__RANKED_SOLO_SR__WINS: {
         id: 'LOL__RANKED_SOLO_SR__WINS',
@@ -828,9 +832,9 @@ module.exports = {
         dataSettings: {},
         settingsOrder: ['size'],
         generator: 'default',
-        data: someData.percentage, // existing data
+        data: dataFunction.percentage, // existing data
         exampleOriginal: '69',
-        example: someExamples.percentage // existing example
+        example: dataExample.percentage // existing example
     },
 
 
@@ -851,9 +855,9 @@ module.exports = {
         dataSettings: {},
         settingsOrder: ['format'],
         generator: 'default',
-        data: someData.text, // existing data
+        data: dataFunction.text, // existing data
         exampleOriginal: 'Twisted Fate\'s Constellations',
-        example: someExamples.leagueName // existing example
+        example: dataExample.leagueName // existing example
     },
     LOL__RANKED_FLEX_SR__TIER: {
         id: 'LOL__RANKED_FLEX_SR__TIER',
@@ -872,9 +876,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['size', 'format'],
         generator: 'default', // function called to generate data 
-        data: someData.tier, // existing data
+        data: dataFunction.tier, // existing data
         exampleOriginal: 'DIAMOND',
-        example: someExamples.tier // existing example
+        example: dataExample.tier // existing example
     },
     LOL__RANKED_FLEX_SR__RANK: {
         id: 'LOL__RANKED_FLEX_SR__RANK',
@@ -892,9 +896,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['format'],
         generator: 'default', // function called to generate data 
-        data: someData.rank, // existing data
+        data: dataFunction.rank, // existing data
         exampleOriginal: 'IV',
-        example: someExamples.rank // existing example
+        example: dataExample.rank // existing example
     },
     LOL__RANKED_FLEX_SR__LP: {
         id: 'LOL__RANKED_FLEX_SR__LP',
@@ -913,9 +917,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['size', 'format'],
         generator: 'default', // function called to generate data 
-        data: someData.lp, // existing data
+        data: dataFunction.lp, // existing data
         exampleOriginal: '86',
-        example: someExamples.lp // existing example
+        example: dataExample.lp // existing example
     },
     LOL__RANKED_FLEX_SR__WINS: {
         id: 'LOL__RANKED_FLEX_SR__WINS',
@@ -987,9 +991,9 @@ module.exports = {
         dataSettings: {},
         settingsOrder: ['size'],
         generator: 'default',
-        data: someData.percentage, // existing data
+        data: dataFunction.percentage, // existing data
         exampleOriginal: '69',
-        example: someExamples.percentage // existing example
+        example: dataExample.percentage // existing example
     },
 
 
@@ -1010,9 +1014,9 @@ module.exports = {
         dataSettings: {},
         settingsOrder: ['format'],
         generator: 'default',
-        data: someData.text, // existing data
+        data: dataFunction.text, // existing data
         exampleOriginal: 'Twisted Fate\'s Constellations',
-        example: someExamples.leagueName // existing example
+        example: dataExample.leagueName // existing example
     },
     LOL__RANKED_FLEX_TT__TIER: {
         id: 'LOL__RANKED_FLEX_TT__TIER',
@@ -1031,9 +1035,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['size', 'format'],
         generator: 'default', // function called to generate data 
-        data: someData.tier, // existing data
+        data: dataFunction.tier, // existing data
         exampleOriginal: 'DIAMOND',
-        example: someExamples.tier // existing example
+        example: dataExample.tier // existing example
     },
     LOL__RANKED_FLEX_TT__RANK: {
         id: 'LOL__RANKED_FLEX_TT__RANK',
@@ -1051,9 +1055,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['format'],
         generator: 'default', // function called to generate data 
-        data: someData.rank, // existing data
+        data: dataFunction.rank, // existing data
         exampleOriginal: 'IV',
-        example: someExamples.rank // existing example
+        example: dataExample.rank // existing example
     },
     LOL__RANKED_FLEX_TT__LP: {
         id: 'LOL__RANKED_FLEX_TT__LP',
@@ -1072,9 +1076,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['size', 'format'],
         generator: 'default', // function called to generate data 
-        data: someData.lp, // existing data
+        data: dataFunction.lp, // existing data
         exampleOriginal: '86',
-        example: someExamples.lp // existing example
+        example: dataExample.lp // existing example
     },
     LOL__RANKED_FLEX_TT__WINS: {
         id: 'LOL__RANKED_FLEX_TT__WINS',
@@ -1146,9 +1150,9 @@ module.exports = {
         dataSettings: {},
         settingsOrder: ['size'],
         generator: 'default',
-        data: someData.percentage, // existing data
+        data: dataFunction.percentage, // existing data
         exampleOriginal: '69',
-        example: someExamples.percentage // existing example
+        example: dataExample.percentage // existing example
     },
 
     // OPGG
@@ -1169,10 +1173,10 @@ module.exports = {
         settingsOrder: ['format'],
         generator: 'default',
         data: {
-            format: someData.ordinal // existing data
+            format: dataFunction.ordinal // existing data
         },
         exampleOriginal: '51499',
-        example: someExamples.ordinal
+        example: dataExample.ordinal
     },
     LOL__OPGG__PERCENT_OF_TOP: {
         id: 'LOL__OPGG__PERCENT_OF_TOP',
@@ -1190,9 +1194,9 @@ module.exports = {
         dataSettings: {},
         settingsOrder: ['size'],
         generator: 'default',
-        data: someData.percentage, // existing data
+        data: dataFunction.percentage, // existing data
         exampleOriginal: '5.2007',
-        example: someExamples.percentageOfTop // existing example
+        example: dataExample.percentageOfTop // existing example
     },
     LOL__OPGG__MMR: {
         id: 'LOL__OPGG__MMR',
@@ -1227,16 +1231,16 @@ module.exports = {
             format: fieldSettings.format // existing setting
         },
         dataSettings: {
-            season: dataSettings.season
+            season: dataSetting.season
         },
         settingsOrder: ['size', 'format'],
         generator: 'default',
         data: {
-            size: someData.tier.size, // existing data
-            format: someData.text.format // existing data
+            size: dataFunction.tier.size, // existing data
+            format: dataFunction.text.format // existing data
         },
         exampleOriginal: 'DIAMOND',
-        example: someExamples.tier // existing example
+        example: dataExample.tier // existing example
     },
 
     // ...

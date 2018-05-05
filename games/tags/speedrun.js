@@ -1,5 +1,5 @@
 //=======================================================================//
-//     FORMAT SETTINGS                                                   //
+//     DATA FORMAT SETTINGS (to avoid code duplication)                  //
 //=======================================================================//
 
 // Settings applied to the retrieved data (ex: format, size...)
@@ -157,11 +157,11 @@ const fieldSettings = {
 };
 
 //=======================================================================//
-//     DATA SETTINGS                                                     //
+//     DATA SETTINGS (to avoid code duplication)                         //
 //=======================================================================//
 
 // Settings applied at the time of data retrieve (Like: game, category, season...)
-const dataSettings = {
+const dataSetting = {
     game: {
         type: 'speedrun_game', // text input
         tooltip: false,
@@ -183,10 +183,10 @@ const dataSettings = {
 };
 
 //=======================================================================//
-//     UTIL DATA (to avoid code duplication)                             //
+//     DATA FUNCTIONS (to avoid code duplication)                        //
 //=======================================================================//
 
-const someData = {
+const dataFunction = {
     text: {
         format: {
             default: data => data,
@@ -246,7 +246,11 @@ const someData = {
 
 };
 
-const someExamples = {
+//=======================================================================//
+//     DATA EXAMPLES (to avoid code duplication)                         //
+//=======================================================================//
+
+const dataExample = {
     username: {
         format: {
             default: 'iFonny',
@@ -380,7 +384,7 @@ module.exports = {
 
     // Account infos
     SPEEDRUN__ACCOUNT__USERNAME: {
-        id: 'SPEEDRUN__ACCOUNT__USERNAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
+        id: 'SPEEDRUN__ACCOUNT__USERNAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}__{NAME_SMALL}
         gameID: 'speedrun',
         category: 'Account / Informations',
         categorySmall: 'Account',
@@ -395,9 +399,9 @@ module.exports = {
         dataSettings: {}, // Settings applied at the time of data retrieve (Like: game, category...)
         settingsOrder: ['format'], // settings order
         generator: 'default', // function called to generate data 
-        data: someData.text, // existing data
+        data: dataFunction.text, // existing data
         exampleOriginal: 'iFonny',
-        example: someExamples.username // existing example
+        example: dataExample.username // existing example
     },
     SPEEDRUN__ACCOUNT__ID: {
         id: 'SPEEDRUN__ACCOUNT__ID', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
@@ -433,16 +437,16 @@ module.exports = {
             format: fieldSettings.ordinal
         },
         dataSettings: {
-            game: dataSettings.game,
-            category: dataSettings.category
+            game: dataSetting.game,
+            category: dataSetting.category
         },
         settingsOrder: ['format'],
         generator: 'default',
         data: {
-            format: someData.ordinal // existing data
+            format: dataFunction.ordinal // existing data
         },
         exampleOriginal: '21',
-        example: someExamples.ordinal
+        example: dataExample.ordinal
     },
     SPEEDRUN__PB__TIME: {
         id: 'SPEEDRUN__PB__TIME',
@@ -459,17 +463,17 @@ module.exports = {
             format: fieldSettings.formatNoCapitalize
         },
         dataSettings: {
-            game: dataSettings.game,
-            category: dataSettings.category
+            game: dataSetting.game,
+            category: dataSetting.category
         },
         settingsOrder: ['timeFormat', 'format'],
         generator: 'default',
         data: {
-            timeFormat: someData.timeFormat, // existing data
-            format: someData.formatNoCapitalize // existing data
+            timeFormat: dataFunction.timeFormat, // existing data
+            format: dataFunction.formatNoCapitalize // existing data
         },
         exampleOriginal: '7572',
-        example: someExamples.time
+        example: dataExample.time
     },
 
     // - SPEEDRUN__WR__TIME : TODO 

@@ -39,9 +39,9 @@ module.exports = {
             return new Promise(resolve => setTimeout(() => resolve(Server.ratelimitCounters[game.id].reqCounter), game.ratelimit.every * 1000));
         } else return Promise.resolve(Server.ratelimitCounters[game.id].reqCounter);
     },
-    useMeAfterEachRequest(game, requests) {
-        Server.ratelimitCounters[game.id].reqCounter += requests;
-        Server.ratelimitCounters[game.id].totalRequests += requests;
+    useMeAfterEachRequest(game, nbRequests) {
+        Server.ratelimitCounters[game.id].reqCounter += nbRequests;
+        Server.ratelimitCounters[game.id].totalRequests += nbRequests;
     },
 
     getGameDataDoc(data, tag_id, game_id, data_settings, game_account_info) {
