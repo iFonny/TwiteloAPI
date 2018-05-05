@@ -60,7 +60,7 @@ Fichier **javascript** permettant de récupérer les données du jeu. Séparé e
     - ❗ Important : Utiliser la fonction `await Server.fn.game.utils.useMeBeforeEachRequest` avant chaque request de jeu.
     - ❗ Important : Utiliser la fonction `Server.fn.game.utils.useMeAfterEachRequest` apres chaque request de jeu.
 - **updateFullGameData** : *[Peut être copié sans modification]* À modifier uniquement si une optimisation est nécessaire. (ex: batch) Fonction qui va appeler `getDataOneByOne` pour toutes les données de jeu à mettre à jour.
-- **generator** : *[Peut être copié sans modification]* Object qui contient des fonctions qui permetront de generer les données en fonction des reglages de l'utilisateur. Vont appeller les fonctions specifique a chaque settings de tag/donnée (voir [tags](#fichier-du-jeu-dans-tags))
+- **generator** : *[Peut être copié sans modification]* Object qui contient des fonctions qui permetront de generer les données en fonction des reglages de l'utilisateur. Vont appeller les fonctions specifique a chaque settings de tag/donnée (voir [tags](#fichier-du-jeu-dans-tags)).
 
 Exemples : 
 - [/games/api/game.js.example](api/game.js.example)
@@ -72,6 +72,69 @@ Exemples :
 ## Fichier du jeu dans `tags`
 ❗ Nom : `<GAME_ID>.js`
 > Chemin : `/games/tags/<GAME_ID>.js` 
+
+Fichier **javascript** qui contient les réglages/fonctions des tags/donnés de jeu. Séparé en 5 parties pour éviter la duplication de code (car beaucoup de réglages sont utilisés plusieurs fois).
+- **DATA FORMAT SETTINGS** : Partie qui contient les réglages de format de données (modification de texte, taille..).
+- **DATA SETTINGS** : Partie qui contient les réglages appliqués au moment de la récupération des données (ex: saison, categorie..).
+- **DATA FUNCTIONS** : Partie qui contient les fonctions à appliquer sur les données en fonction des réglages.
+- **DATA EXAMPLES** : Partie qui contient les données d'examples.
+- **TAGS** : Liste des tags avec leurs settings (Objects `TAG_ID:TAG_SETTINGS`).
+
+
+Un tag est composé de 
+- **id** : Un identifiant unique (ex: `SPEEDRUN__PB__RANK`).
+    - norme : `<GAME_ID>__<CATEGORY_SMALL>__<NAME_SMALL>`
+- **gameID** : ID du jeu (ex: `speedrun`).
+- **category** : Nom complet de la categorie (ex: `Ranked Solo Summoner\'s Rift`).
+- **categorySmall** : Nom court de la categorie (ex: `Ranked Solo SR`).
+- **name** : Nom complet du tag (ex: `Winrate`).
+- **nameSmall** : Nom court du tag (ex: `WR`).
+- **size** : Taille par defaut du tag dans le profil (Taille max d'une donnée avec les reglages de base).
+- **account** : (`true` ou `false`) Si le tag a besoin d'un compte pour fonctionner.
+- **useExample** : (`true` ou `false`) Si le tag doit utiliser un example plutot que faire des requests pour récupérer la donnée au moment de l'ajout du tag. Mettre à `true` si les ratelimits sont très stricts.
+- **fieldSettings** : Réglages utilisés pour generer le formulaire d'ajout/modification de tag. Réglages de format de données (modification de texte, taille..) (`SETTING_ID: SETTINGS`). Chaque réglage est composé de :
+    - **label** : Texte qui sera affiché devant l'input
+    - **tooltip** (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations
+    - **type** : Type de l'input (*select*)
+    - **input** : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*)
+- **dataSettings** : Réglages utilisés pour generer le formulaire d'ajout/modification de tag. Réglages appliqués au moment de la récupération des données (ex: saison, categorie..) (`SETTING_ID: SETTINGS`). Chaque réglage est composé de :
+    - **label** : Texte qui sera affiché devant l'input.
+    - **tooltip** (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations.
+    - **type** : Type de l'input (*select*).
+    - **input** : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*).
+        - Chaque input contient une `value` qui +/- la taille de la donnée (ex pour un reglage *short*: `value: -4`)
+- **settingsOrder** : Ordre dans lequel les réglages (❗ uniquement les réglages de formatage/*fieldSettings*) doivent être appliqués (ex: `['size', 'format']`).
+- **generator** : Fonction du générateur de données à appeler. `default` si aucune modification apportée au générateur (ex: `default`).
+- **data** : Object qui contient des fonctions utilisés pour formater la donnée pour chaque réglage (❗ uniquement les réglages de formatage/*fieldSettings*) (`SETTING_ID: FUNCTION`) (ex: `withPercent: data => data + ' %'`).
+- **exampleOriginal** : Donnée d'example originale (ex: `DIAMOND`)
+- **example** : Object qui contient toutes les données d'exemples pour toutes les combinaisons possibles (En respectant l'ordre). 
+
+    Exemple pour un tag qui a les réglages `size` (qui contient `default` et `short`) et `format` (qui contient `default`, `uppercase`, `lowercase` et `capitalize`): 
+```js
+size: { // setting PROPERTY
+    default: { // setting VALUE
+        format: { // setting PROPERTY
+            default: 'DIAMOND', // setting VALUE
+            uppercase: 'DIAMOND', // setting VALUE
+            lowercase: 'diamond', // setting VALUE
+            capitalize: 'Diamond' // setting VALUE
+        }
+    },
+    short: { // setting VALUE
+        format: { // setting PROPERTY
+            default: 'DIAM', // setting VALUE
+            uppercase: 'DIAM', // setting VALUE
+            lowercase: 'diam', // setting VALUE
+            capitalize: 'Diam' // setting VALUE
+        }
+    }
+}
+```
+
+Exemples : 
+- [/games/tags/game.js.example](tags/game.js.example)
+- [/games/tags/lol.js](tags/lol.js)
+- [/games/tags/speedrun.js](tags/speedrun.js)
 
 
 
@@ -94,12 +157,12 @@ Fichier **javascript** qui contient les réglages du compte (game account), obje
 Chaque `key: value` correspond à un réglage (ex: username, région..).
 
 Chaque réglage doit posséder : 
-- label : Texte qui sera affiché devant l'input
-- tooltip (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations
-- type : Type de l'input (*string* ou *select*)
-- input : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*)
+- **label** : Texte qui sera affiché devant l'input.
+- **tooltip** (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations.
+- **type** : Type de l'input (*string* ou *select*).
+- **input** : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*).
 
 Exemples : 
-- [/games/settings/game.js.example](api/game.js.example)
-- [/games/settings/lol.js](functions/lol.js)
-- [/games/settings/speedrun.js](functions/speedrun.js)
+- [/games/settings/game.js.example](settings/game.js.example)
+- [/games/settings/lol.js](settings/lol.js)
+- [/games/settings/speedrun.js](settings/speedrun.js)
