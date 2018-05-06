@@ -1,0 +1,202 @@
+//=======================================================================//
+//     DATA FORMAT SETTINGS (to avoid code duplication)                  //
+//=======================================================================//
+
+// Settings applied to the retrieved data (ex: format, size...)
+const fieldSettings = {};
+
+//=======================================================================//
+//     DATA SETTINGS (to avoid code duplication)                         //
+//=======================================================================//
+
+// Settings applied at the time of data retrieve (Like: game, category, season...)
+const dataSetting = {};
+
+//=======================================================================//
+//     DATA FUNCTIONS (to avoid code duplication)                        //
+//=======================================================================//
+
+const dataFunction = {};
+
+//=======================================================================//
+//     DATA EXAMPLES (to avoid code duplication)                         //
+//=======================================================================//
+
+const dataExample = {};
+
+
+//=======================================================================//
+//     TAGS                                                              //
+//=======================================================================//
+
+/*
+ Tags : 
+    - LOL__OPGG__SEASON_TIER
+    - LOL__ACCOUNT__LEVEL
+*/
+
+module.exports = {
+
+    LOL__OPGG__SEASON_TIER: {
+        id: 'LOL__OPGG__SEASON_TIER', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}__{NAME_SMALL}
+        gameID: 'lol', // game ID
+        category: 'OPGG', // Category name
+        categorySmall: 'OPGG', // Category small name
+        name: 'Previous seasons tier', // Tag name
+        nameSmall: 'Season tier', // Tag small name
+        size: 10, // Default size
+        account: true, // Need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: { // Settings applied to the retrieved data (ex: format, size...)
+            size: {
+                type: 'select', // select
+                tooltip: {
+                    en: 'Text size in the profile',
+                    fr: 'Taille du texte dans le profil'
+                },
+                label: {
+                    en: 'Size',
+                    fr: 'Taille'
+                },
+                input: {
+                    default: {
+                        value: 0, // Size add or sub
+                        en: 'Default size',
+                        fr: 'Taille par défaut'
+                    },
+                    short: {
+                        value: -4, // Size add or sub
+                        en: 'Short',
+                        fr: 'Court'
+                    }
+                },
+            },
+            format: {
+                type: 'select', // select
+                tooltip: false,
+                label: {
+                    en: 'Formatting',
+                    fr: 'Mise en forme'
+                },
+                input: {
+                    default: {
+                        value: 0,
+                        en: 'No change',
+                        fr: 'Aucune modification'
+                    },
+                    uppercase: {
+                        value: 0,
+                        en: 'EXAMPLE',
+                        fr: 'EXEMPLE'
+                    },
+                    lowercase: {
+                        value: 0,
+                        en: 'example',
+                        fr: 'exemple'
+                    },
+                    capitalize: {
+                        value: 0,
+                        en: 'Example',
+                        fr: 'Exemple'
+                    }
+                }
+            }
+        },
+        dataSettings: { // Settings applied at the time of data retrieve (Like: season, game, category...)
+            season: {
+                type: 'select', // select
+                tooltip: false,
+                label: {
+                    en: 'Season',
+                    fr: 'Saison'
+                },
+                input: {
+                    S3: {
+                        en: 'Season 3',
+                        fr: 'Saison 3'
+                    },
+                    S4: {
+                        en: 'Season 4',
+                        fr: 'Saison 4'
+                    },
+                    S5: {
+                        en: 'Season 5',
+                        fr: 'Saison 5'
+                    },
+                    S6: {
+                        en: 'Season 6',
+                        fr: 'Saison 6'
+                    },
+                    S7: {
+                        en: 'Season 7',
+                        fr: 'Saison 7'
+                    }
+                }
+            }
+        },
+        settingsOrder: ['size', 'format'], // Settings order
+        generator: 'default', // Function called to generate data 
+        data: {
+            size: { // setting property
+                default: data => data, // setting value (function)
+                short: data => _.get({ // setting value (function)
+                    'UNRANKED': 'UNRANK',
+                    'BRONZE': 'BRONZE',
+                    'SILVER': 'SILVER',
+                    'GOLD': 'GOLD',
+                    'PLATINUM': 'PLAT',
+                    'DIAMOND': 'DIAM',
+                    'MASTER': 'MASTER',
+                    'CHALLENGER': 'CHALL',
+                }, data),
+            },
+            format: {
+                default: data => data,
+                lowercase: _.toLower,
+                uppercase: _.toUpper,
+                capitalize: _.capitalize
+            }
+        },
+        exampleOriginal: 'DIAMOND',
+        example: {
+            size: { // setting property
+                default: { // setting value
+                    format: { // setting property
+                        default: 'DIAMOND',
+                        uppercase: 'DIAMOND', // setting value
+                        lowercase: 'diamond', // setting value
+                        capitalize: 'Diamond' // setting value
+                    }
+                },
+                short: { // setting value
+                    format: { // setting property
+                        default: 'DIAM',
+                        uppercase: 'DIAM', // setting value
+                        lowercase: 'diam', // setting value
+                        capitalize: 'Diam' // setting value
+                    }
+                }
+            }
+        }
+    },
+
+    LOL__ACCOUNT__LEVEL: {
+        id: 'LOL__ACCOUNT__LEVEL', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}__{NAME_SMALL}
+        gameID: 'lol', // game ID
+        category: 'Account / Informations', // Category name
+        categorySmall: 'Account', // Category small name
+        name: 'Level', // Tag name
+        nameSmall: 'LvL', // Tag small name
+        size: 5, // Default size
+        account: true, // Need account or not
+        useExample: false, // Use a static data or update game data on tag creation/update (set to 'true' if strict ratelimits)
+        fieldSettings: {},
+        dataSettings: {},
+        settingsOrder: [],
+        generator: 'default', // function called to generate data 
+        data: null, // Because no settings
+        exampleOriginal: '103',
+        example: '103'
+    }
+
+};

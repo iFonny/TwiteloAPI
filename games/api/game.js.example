@@ -1,0 +1,247 @@
+/*
+ ** Get & resolve game account info or ids
+ **
+ ** Params: 
+ ** - settings (required: account settings)
+ **
+ ** Return (Promise): 
+ ** - object: account infos in game
+ **
+ ** Reject error format : {
+ **     code: 500,
+ **     messsage: 'Can\'t get game account',
+ **     full: error // full error
+ ** }
+ **
+ */
+module.exports.getAccountInfo = (gameID, settings) => {
+    return new Promise((resolve, reject) => {
+
+        /* Parameters: 
+
+        gameID: ID of the game
+            ex: 
+                - 'lol'
+                - 'speedrun'
+
+        settings: Account settings (from /games/settings/<GAME_ID>.js)
+            ex:
+                - (lol) {
+                    username: 'iFonny',
+                    region: 'kr'
+                }
+                - (speedrun) {
+                    username: 'iFonny'
+                }
+        */
+
+        /* Resolve/Reject
+
+        Success: Object game account informations
+            ex: 
+                - (lol) {
+                    account_id: 209856983 ,
+                    region:  'kr' ,
+                    summoner_id: 65170219
+                }
+                - (speedrun) {
+                    user_id: 'zxzz459x'
+                }
+
+        Error: 
+        - Resolve null if bad username/unknown...
+        - Reject error if error from server ({
+            code: 500,
+            messsage: 'Can\'t get game account',
+            full: error // full error object
+        })
+        */
+
+
+        // Call function from /games/functions/<GAME_ID>.js to get account info
+        Server.fn.game[gameID].getSummonerByName(settings.username, settings.region)
+            .then((summoner) => {
+
+                // IMPORTANT: Call this function after each game request
+                Server.fn.game.utils.useMeAfterEachRequest(Server.game[gameID], 1);
+
+                // Resolve account info
+                if (summoner) resolve(summoner);
+                else resolve(null);
+            })
+            .catch(error => reject({
+                code: 500,
+                message: 'Can\'t get game account',
+                full: error
+            }));
+
+    });
+};
+
+
+/*
+ ** Update database with new game data (no bulk account)
+ **
+ ** Params : 
+ ** - game (required)
+ ** - data_settings (required)
+ ** - game_account_info (required)
+ ** - tag_ids (required)
+ **
+ */
+module.exports.getDataOneByOne = async (game, data_settings, game_account_info, tag_ids) => {
+
+    /* Parameters: 
+
+        game: Game object (from game file /games/<GAME_ID>.js)
+
+        data_settings: Tag data settings (from 'dataSettings' of a tag)
+            ex: 
+                - (lol) {}
+                - (lol) {
+                    season: 'S4'
+                }
+                - (speedrun) {
+                    category: 'zdnw64ed',
+                    game: 'v1pwgmd8'
+                }
+
+        game_account_info: Game account informations (from 'getAccountInfo')
+            ex: 
+                - (lol) {
+                    account_id: 209856983 ,
+                    region:  'kr' ,
+                    summoner_id: 65170219
+                }
+                - (speedrun) {
+                    user_id: 'zxzz459x'
+                }
+
+        tag_ids: Object of tagIDs to update
+                ex: 
+                    - (lol) {
+                        LOL__RANKED_SOLO_SR__TIER: true,
+                        LOL__RANKED_SOLO_SR__RANK: true
+                    }
+                    - (speedrun) {
+                        SPEEDRUN__ACCOUNT__USERNAME: true,
+                        SPEEDRUN__PB__RANK: true
+                    }
+    */
+
+    // Exemple : Include of a custom lib
+    const opgg = new Server.class.game.OPGG(game_account_info.region, true);
+
+    // If one of this tag: get data 
+    if (tag_ids.LOL__RANKED_SOLO_SR__TIER || tag_ids.LOL__RANKED_SOLO_SR__RANK) {
+
+        // IMPORTANT: Call this function before each game request
+        await Server.fn.game.utils.useMeBeforeEachRequest(game);
+
+        // Call function from /games/functions/<GAME_ID>.js to game data (No errors allowed here, always success)
+        const res = await Server.fn.game[game.id].getLeaguePositionsBySummonerID(game_account_info.summoner_id, game_account_info.region);
+
+        /* Here 'res' is returned from the function to get the number of requests sent.
+            If impossible to get data, just set data to NULL
+            ex: res = {
+                requests: 1,
+                data: {
+                    rankedSoloSR: {
+                        tier: 'SILVER',
+                        rank: 'III'
+                    }
+                }
+            }
+         */
+
+        // If there are data and no errors (/!\ If you call 'updateGameData' with no data, it will be deleted from the profile)
+        if (res.data) {
+
+            // Call this function to update/set/delete data
+            // updateGameData(NEW_GAME_DATA, TAG_ID, GAME_ID, DATA_SETTINGS, GAME_ACCOUNT_INFO)
+            // Sending NEW_GAME_DATA null will delete the data from the profile
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.tier, 'LOL__RANKED_SOLO_SR__TIER', game.id, data_settings, game_account_info);
+            await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.rank, 'LOL__RANKED_SOLO_SR__RANK', game.id, data_settings, game_account_info);
+        }
+
+        // IMPORTANT: Call this function after each game request (send game and nb of requests sent)
+        Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
+    }
+
+};
+
+/*
+ ** Update database with new game data
+ **
+ ** Params : 
+ ** - game (required)
+ ** - tags (required): Array of tags (grouped, reduced and modified with only useful informations)
+ ** example: 
+ ** [{ 
+ **     game_id: 'lol',
+ **     data_settings: null,
+ **     game_account_info: { 
+ **         account_id: '204805322',
+ **         region: 'br',
+ **         summoner_id: '46741395'
+ **     },
+ **     tag_ids: {
+ **         LOL__RANKED_SOLO_SR__RANK: true,
+ **         LOL__RANKED_SOLO_SR__TIER: true
+ **     } 
+ ** }]
+ **
+ ** Return (Promise): recap
+ **
+ */
+
+module.exports.updateFullGameData = (game, tags) => {
+    return new Promise(async (resolve) => {
+
+        const time = process.hrtime();
+        __log(`__**${game.name}**__ - starting update...`);
+
+        for (const {
+                data_settings,
+                game_account_info,
+                tag_ids
+            } of tags) {
+
+            await Server.gameAPI[game.id].getDataOneByOne(game, data_settings, game_account_info, tag_ids);
+
+        }
+        const elapsedTimeS = process.hrtime(time)[0];
+        const elapsedTimeMS = process.hrtime(time)[1] / 1000000;
+
+        __log(`__**${game.name}**__ - update finished in **${elapsedTimeS}s ${elapsedTimeMS}ms**`);
+        __logRecapGame(`__**${game.name}**__ - **${Server.ratelimitCounters[game.id].totalTags}** tags updated for a total of **${Server.ratelimitCounters[game.id].totalRequests}** requests in **${elapsedTimeS}s**.`);
+        return resolve(`${game.name} - ${Server.ratelimitCounters[game.id].totalTags} tags updated for a total of ${Server.ratelimitCounters[game.id].totalRequests} requests in ${elapsedTimeS}s.`);
+    });
+};
+
+
+
+
+//=======================================================================//
+//     GENERATOR                                                         //
+//=======================================================================//
+
+// Used to generate a new formated data with settings
+module.exports.generator = {
+    default (gameTag, data, settings) {
+        let result = data;
+
+        for (const key of gameTag.settingsOrder) {
+            try {
+                const setting = settings[key];
+                if (gameTag.data[key][setting]) {
+                    result = gameTag.data[key][setting](result) || result;
+                }
+            } catch (error) {
+                __logError(`[generator] unknown error (${gameTag.id})`, error);
+            }
+        }
+
+        return result;
+    }
+};

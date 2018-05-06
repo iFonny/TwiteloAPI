@@ -18,10 +18,10 @@ module.exports.getAccountInfo = (gameID, settings) => {
     return new Promise((resolve, reject) => {
 
         Server.fn.game[gameID].getUserByUsername(settings.username)
-            .then((summoner) => {
+            .then((accountInfo) => {
                 Server.fn.game.utils.useMeAfterEachRequest(Server.game[gameID], 1);
 
-                if (summoner) resolve(summoner);
+                if (accountInfo) resolve(accountInfo);
                 else resolve(null);
             })
             .catch(error => reject({
@@ -155,7 +155,7 @@ module.exports.updateFullGameData = (game, tags) => {
 //     GENERATOR                                                         //
 //=======================================================================//
 
-// User to generate a new formated data with settings
+// Used to generate a new formated data with settings
 module.exports.generator = {
     default (gameTag, data, settings) {
         let result = data;
