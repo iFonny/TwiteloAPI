@@ -1,4 +1,4 @@
-# Comment ajouter un jeu 
+# Ajouter un jeu / platforme 
 
 
 Tout se passe dans le dossier `games` 

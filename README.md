@@ -1,14 +1,16 @@
-# Required
-- Nodejs : 9.4.0
-- Redis : 3.2.9
-- RethinkDB : 2.3.6
+# Twitelo API 
+Twitelo is a website that allows you to link your twitter account and your favorite online games.
+Display your ranks, stats, and more in your twitter profile. Updated automatically!
 
-Config file needed: secret.json (in /configs/)
+## Contribution
+Every contribution to this repo is welcomed to add more games/platforms, try to keep it as consistent as possible, fork and PR to contribute.
 
-Clear redis cache : 
-> redis-cli flushdb
+- [Add a game/platform](games/README.md) ( [EN](games/README.md) | [FR](games/README_FR.md) )
 
-Launch local : 
-> npm start
+## Contributors
 
-Doc: [https://ifonny.gitbooks.io/twiteloapp](https://ifonny.gitbooks.io/twiteloapp)
+iFonny - [Twitter @iFonny_](https://twitter.com/iFonny_) - [Discord iFonny#6666](#) - BTC : 347J8WRftcQmGg7imyF88wSzqUiXA8cPfM
+
+## License
+
+Refer to the [LICENSE.md](LICENSE.md) file
