@@ -404,7 +404,7 @@ module.exports = {
         example: dataExample.username // existing example
     },
     SPEEDRUN__ACCOUNT__ID: {
-        id: 'SPEEDRUN__ACCOUNT__ID', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
+        id: 'SPEEDRUN__ACCOUNT__ID', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}__{NAME_SMALL}
         gameID: 'speedrun',
         category: 'Account / Informations',
         categorySmall: 'Account',

@@ -573,7 +573,7 @@ module.exports = {
 
     // Account infos
     LOL__ACCOUNT__USERNAME: {
-        id: 'LOL__ACCOUNT__USERNAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
+        id: 'LOL__ACCOUNT__USERNAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}__{NAME_SMALL}
         gameID: 'lol',
         category: 'Account / Informations',
         categorySmall: 'Account',
@@ -678,7 +678,7 @@ module.exports = {
 
     // Solo 5v5
     LOL__RANKED_SOLO_SR__LEAGUE_NAME: {
-        id: 'LOL__RANKED_SOLO_SR__LEAGUE_NAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
+        id: 'LOL__RANKED_SOLO_SR__LEAGUE_NAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}__{NAME_SMALL}
         gameID: 'lol', // game ID
         category: 'Ranked Solo Summoner\'s Rift', // Category name
         categorySmall: 'Ranked Solo SR', // Category small name
@@ -698,7 +698,7 @@ module.exports = {
         example: dataExample.leagueName // existing example
     },
     LOL__RANKED_SOLO_SR__TIER: {
-        id: 'LOL__RANKED_SOLO_SR__TIER', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}_{NAME_SMALL}
+        id: 'LOL__RANKED_SOLO_SR__TIER', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}__{NAME_SMALL}
         gameID: 'lol', // game ID
         category: 'Ranked Solo Summoner\'s Rift', // Category name
         categorySmall: 'Ranked Solo SR', // Category small name
