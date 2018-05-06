@@ -1,11 +1,11 @@
 # Twitelo API 
-Twitelo is a website that allows you to link your twitter account and your favorite online games.
+Twitelo is a website that allows you to link your twitter account and your favorite online games or platforms.
 Display your ranks, stats, and more in your twitter profile. Updated automatically!
 
 ## Contribution
 Every contribution to this repo is welcomed to add more games/platforms, try to keep it as consistent as possible, fork and PR to contribute.
 
-- [Add a game/platform](games/README.md) ( [EN](games/README.md) | [FR](games/README_FR.md) )
+- [Add a game/platform](games/README.md) ( [EN](games/README.md) | [FR](games/LISEZMOI.md) )
 
 ## Contributors
 

@@ -1,134 +1,134 @@
-# Ajouter un jeu / platforme 
+# Add a game / platform 
+
+[Français](LISEZMOI.md) | [English](README.md)
 
 
-Tout se passe dans le dossier `games` 
-
-
-Il séparé de cette manière :
- - 1 fichier pour chaque jeu.
- - 1 sous-dossier `class` pour les classes ou libs personnalisées.
- - 4 sous-dossiers (qui contiennent également  un fichier pour chaque jeu).
-    - [`api`](#fichier-du-jeu-dans-api) : Récupération et mise à jour des données de jeu
-    - [`functions`](#fichier-du-jeu-dans-functions) : Fonctions spécifiques à un jeu
-    - [`settings`](#fichier-du-jeu-dans-settings) : Réglages de compte du jeu
-    - [`tags`](#fichier-du-jeu-dans-tags) : Réglages des tags (donnée) du jeu
+Everything happens in the `games` folder which is separated like this:
+ - 1 file for each game.
+ - 1 subfolder `class` for custom classes or libs.
+ - 4 subfolders (which also contain a file for each game).
+    - [`api`](#game-file-in-api): Retrieving and updating game data.
+    - [`functions`](#game-file-in-functions): Game functions.
+    - [`settings`](#game-file-in-settings): Game account settings.
+    - [`tags`](#game-file-in-tags): Game tags (data) settings.
 
 
 
-## Fichier principal du jeu : `<GAME_ID>.js`
-❗ Nom : `<GAME_ID>.js`
-> Chemin : `/games/<GAME_ID>.js`
+## Main config game file: `<GAME_ID>.js`
+❗ File name: `<GAME_ID>.js`
+> Path: `/games/<GAME_ID>.js`
 
-Fichier **javascript** qui contient les settings de base du jeu.
+**Javascript** file which contains the basic settings of the game.
 
-- **icon** : Chemin vers l'icone du jeu (PNG ~200x200) [/public/images/game/<GAME_ID>](../public/images/game)
-- **image** : Chemin vers l'image du jeu (PNG Doit faire comprendre de quel jeu il s'agit et doit être dans une forme longue horizontale) [/public/images/game/<GAME_ID>](../public/images/game)
-- **ratelimit** : ❗ Important : Toujours laisser de la marge avec les ratelimits imposées par le jeu (~15%)
-- Pour le reste voir fichier d'[exemple](game.js.example)
+- **icon**: Path to the game icon (PNG | ~200x200) [/public/images/game/<GAME_ID>](../public/images/game).
+- **image**: Path to the game image (PNG | Must make it clear what game it is and must be a long horizontal image) [/public/images/game/<GAME_ID>](../public/images/game)
+- **ratelimit**: ❗ Important: Always leave some margin with the ratelimits imposed by the game (~15%)
+- **...**: Check [example file](game.js.example) 
 
-Exemples : 
+Examples: 
 - [/games/game.js.example](game.js.example)
 - [/games/lol.js](lol.js)
 - [/games/speedrun.js](speedrun.js)
 
 
 
-## Sous-dossier `class`
-> Chemin : `/games/class/`
+## Subfolder `class`
+> Path: `/games/class/`
 
-Dossier pour ajouter ses propres libs, nom de fichier libre.
+Folder to add its own libs, free filename (no duplicate name ofc).
 
-(Accessible dans le code depuis `Server.class.game.<FILE_NAME>`)
+(Accessible in code from `Server.class.game.<FILE_NAME>`)
 
-Exemple : [/games/class/OPGG.js](class/OPGG.js)
-
-
-
-## Fichier du jeu dans `api`
-❗ Nom : `<GAME_ID>.js`
-> Chemin : `/games/api/<GAME_ID>.js`
+Example: [/games/class/OPGG.js](class/OPGG.js)
 
 
-Fichier **javascript** permettant de récupérer les données du jeu. Séparé en 3 **functions** et un **object** generator.
 
-- **getAccountInfo** : Fonction appelée lors de l'ajout d'un compte. Permet de recuperer les infos d'un compte (id, region..).
-    - Success : *Resolve* un `object` qui contient les infos du compte (id, region..)
-    - Error :
-        - *Resolve* `null` si le compte ajouté est incorrect 
-        - *Reject* une error si erreur serveur (ex: request timeout) 
-- **getDataOneByOne** : Fonction qui permet de recuperer et de mettre a jour les données de jeu des tags de l'utilisateur.
-    - ❗ Important : Utiliser la fonction `await Server.fn.game.utils.useMeBeforeEachRequest` avant chaque request de jeu.
-    - ❗ Important : Utiliser la fonction `Server.fn.game.utils.useMeAfterEachRequest` apres chaque request de jeu.
-- **updateFullGameData** : *[Peut être copié sans modification]* À modifier uniquement si une optimisation est nécessaire. (ex: batch) Fonction qui va appeler `getDataOneByOne` pour toutes les données de jeu à mettre à jour.
-- **generator** : *[Peut être copié sans modification]* Object qui contient des fonctions qui permetront de generer les données en fonction des reglages de l'utilisateur. Vont appeller les fonctions specifique a chaque settings de tag/donnée (voir [tags](#fichier-du-jeu-dans-tags)).
+## Game file in `api`
+❗ File name: `<GAME_ID>.js`
+> Path: `/games/api/<GAME_ID>.js`
 
-Exemples : 
+
+**Javascript** file that contains functions to get game data. 
+
+Separated into 3 **functions** and an **object** generator:
+- **getAccountInfo**: Function called when adding an account. Allows you to retrieve information from an account (id, region..).
+    - Success: *Resolve* an `object` that contains the account informations (id, region..)
+    - Error:
+        - *Resolve* `null` if the added account is incorrect (ex: bad username, not found...)
+        - *Reject* an error if server error (ex: request timeout) 
+- **getDataOneByOne**: Function that allows to retrieve and update the game data of the user tags.
+    - ❗ Important: Use the `await Server.fn.game.utils.useMeBeforeEachRequest` function before each game request.
+    - ❗ Important: Use the `Server.fn.game.utils.useMeAfterEachRequest` function after each game request.
+- **updateFullGameData**: *[Can be copied without modification]* Change only if an optimization is required (ex: batch). Function that will call `getDataOneByOne` for all game data to update.
+- **generator**: *[Can be copied without modification]* Object that contains functions that will generate data based on tag settings. Will call the specific functions to each tag/data setting (see [tags](#fichier-du-jeu-dans-tags)).
+
+Examples: 
 - [/games/api/game.js.example](api/game.js.example)
 - [/games/api/lol.js](api/lol.js)
 - [/games/api/speedrun.js](api/speedrun.js)
 
 
 
-## Fichier du jeu dans `settings`
-❗ Nom : `<GAME_ID>.js`
-> Chemin : `/games/settings/<GAME_ID>.js`
+## Game file in `settings`
+❗ File name: `<GAME_ID>.js`
+> Path: `/games/settings/<GAME_ID>.js`
 
-Fichier **javascript** qui contient les réglages du compte (game account), object utilisé pour generer le formulaire d'ajout/modification de compte.
+**Javascript** file that contains the account settings (game account) config, used to generate the add/edit account form.
 
-Chaque `key: value` correspond à un réglage (ex: username, région..).
+Each `key: value` corresponds to a setting (ex: username, region..).
 
-Chaque réglage doit posséder : 
-- **label** : Texte qui sera affiché devant l'input.
-- **tooltip** (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations.
-- **type** : Type de l'input (*string* ou *select*).
-- **input** : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*).
+Each setting must have: 
+- **label**: Text that will be displayed in front of the input.
+- **tooltip** (can be `false`): Displays a small help icon with more information.
+- **type**: Input type (*string* or *select*).
+- **input**: Input content according to type (ex: Object with different choices for *select* type).
 
-Exemples : 
+Examples: 
 - [/games/settings/game.js.example](settings/game.js.example)
 - [/games/settings/lol.js](settings/lol.js)
 - [/games/settings/speedrun.js](settings/speedrun.js)
 
 
 
-## Fichier du jeu dans `tags`
-❗ Nom : `<GAME_ID>.js`
-> Chemin : `/games/tags/<GAME_ID>.js` 
+## Game file in `tags`
+❗ File name : `<GAME_ID>.js`
+> Path : `/games/tags/<GAME_ID>.js` 
 
-Fichier **javascript** qui contient les réglages/fonctions des tags/donnés de jeu. Séparé en 5 parties pour éviter la duplication de code (car beaucoup de réglages sont utilisés plusieurs fois).
-- **DATA FORMAT SETTINGS** : Partie qui contient les réglages de format de données (modification de texte, taille..).
-- **DATA SETTINGS** : Partie qui contient les réglages appliqués au moment de la récupération des données (ex: saison, categorie..).
-- **DATA FUNCTIONS** : Partie qui contient les fonctions à appliquer sur les données en fonction des réglages.
-- **DATA EXAMPLES** : Partie qui contient les données d'examples.
-- **TAGS** : Liste des tags avec leurs settings (Objects `TAG_ID:TAG_SETTINGS`).
+**Javascript** file which contains the settings/functions of the tags/game data. Divided into 5 parts to avoid code duplication (because many settings are used several times).
+- **DATA FORMAT SETTINGS**: Part that contains data formatting settings (text modification, size...).
+- **DATA SETTINGS**: Part that contains the settings applied at the time of data retrieve (ex: season, category...).
+- **DATA FUNCTIONS**: Part that contains the functions to be applied to the data according to the settings.
+- **DATA EXAMPLES**: Part that contains example data.
+- **TAGS**: List of tags with their info/settings (Objects `TAG_ID:TAG_SETTINGS`).
 
 
-Un tag est composé de 
-- **id** : Un identifiant unique (ex: `SPEEDRUN__PB__RANK`).
-    - norme : `<GAME_ID>__<CATEGORY_SMALL>__<NAME_SMALL>`
-- **gameID** : ID du jeu (ex: `speedrun`).
-- **category** : Nom complet de la categorie (ex: `Ranked Solo Summoner\'s Rift`).
-- **categorySmall** : Nom court de la categorie (ex: `Ranked Solo SR`).
-- **name** : Nom complet du tag (ex: `Winrate`).
-- **nameSmall** : Nom court du tag (ex: `WR`).
-- **size** : Taille par defaut du tag dans le profil (Taille max d'une donnée avec les reglages de base).
-- **account** : (`true` ou `false`) Si le tag a besoin d'un compte pour fonctionner.
-- **useExample** : (`true` ou `false`) Si le tag doit utiliser un example plutot que faire des requests pour récupérer la donnée au moment de l'ajout du tag. Mettre à `true` si les ratelimits sont très stricts.
-- **fieldSettings** : Réglages utilisés pour generer le formulaire d'ajout/modification de tag. Réglages de format de données (modification de texte, taille..) (`SETTING_ID: SETTING_OBJECT`). Chaque réglage est composé de :
-    - **label** : Texte qui sera affiché devant l'input
-    - **tooltip** (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations
-    - **type** : Type de l'input (*select*)
-    - **input** : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*)
-- **dataSettings** : Réglages utilisés pour generer le formulaire d'ajout/modification de tag. Réglages appliqués au moment de la récupération des données (ex: saison, categorie..) (`SETTING_ID: SETTING_OBJECT`). Chaque réglage est composé de :
-    - **label** : Texte qui sera affiché devant l'input.
-    - **tooltip** (peut etre `false`) : Affiche une petite icône d'aide avec plus d'informations.
-    - **type** : Type de l'input (*select*).
-    - **input** : Contenu de l'input en fonction du type (ex: Object avec les differents choix pour le type *select*).
-        - Chaque input contient une `value` qui +/- la taille de la donnée (ex pour un reglage *short*: `value: -4`)
-- **settingsOrder** : Ordre dans lequel les réglages (❗ uniquement les réglages de formatage/*fieldSettings*) doivent être appliqués (ex: `['size', 'format']`).
-- **generator** : Fonction du générateur de données à appeler. `default` si aucune modification apportée au générateur (ex: `default`).
-- **data** : Object qui contient, pour chaque réglage, des fonctions utilisés pour formater la donnée (❗ uniquement les réglages de formatage/*fieldSettings*) (`SETTING_ID: SETTING_OBJECT`). Chaque réglage est composé d'une fonction par valeur.
+Each tag must have: 
+- **id**: A unique identifier (ex: `SPEEDRUN__PB__RANK`).
+    - norm : `<GAME_ID>__<CATEGORY_SMALL>__<NAME_SMALL>`
+- **gameID**: Game ID (ex: `speedrun`).
+- **category**: Full name of the category (ex: `Ranked Solo Summoner\'s Rift`).
+- **categorySmall**: Short name of the category (ex: `Ranked Solo SR`).
+- **name**: Full name of the tag (ex: `Winrate`).
+- **nameSmall**: Short name of the tag (ex: `WR`).
+- **size**: Default tag size in the profile (Max data size with default settings).
+- **account**: (`true` or `false`) If the tag needs an account to work.
+- **useExample**: (`true` or `false`) If the tag must use an example instead of making requests to get the data when the tag is added. Set to `true` if the ratelimits are very strict.
+- **fieldSettings**: Settings used to generate the add/edit tag form. Data formatting settings (text modification, size..) (`SETTING_ID: SETTING_OBJECT`). Each setting must have: 
+    - **label**: Text that will be displayed in front of the input.
+    - **tooltip** (can be `false`): Displays a small help icon with more information.
+    - **type**: Input type (*select*).
+    - **input**: Input content according to type (ex: Object with different choices for *select* type).
+- **dataSettings**: Settings used to generate the add/edit tag form. Settings applied at the time of data retrieve (ex: season, category..) (`SETTING_ID: SETTING_OBJECT`). Each setting must have:
+    - **label**: Text that will be displayed in front of the input.
+    - **tooltip** (can be `false`): Displays a small help icon with more information.
+    - **type**: Input type (*select*).
+    - **input**: Input content according to type (ex: Object with different choices for *select* type).
+        - Each input contains a `value` that +/- the size of the data (ex for a *short* setting: `value: -4`)
+- **settingsOrder**: Order in which the settings (❗ only formatting/*fieldSettings* settings) should be applied (ex: `['size', 'format']`).
+- **generator**: Function of the data generator to call. `default` If no changes are made to the generator (ex: `default`).
+- **data**: Object that contains, for each setting, functions used to format the data (❗ only formatting/*fieldSettings* settings) (`SETTING_ID: SETTING_OBJECT`). Each setting is composed of one function per value.
 
-    Example pour un réglage `size` (qui contient `default`, `withPercentSpace` et `withPercentNoSpace`) : 
+    Example for a setting `size` (that contains  `default`, `withPercentSpace` and `withPercentNoSpace`): 
     ```js
     size: {
         default: data => data,
@@ -136,10 +136,10 @@ Un tag est composé de
         withPercentNoSpace: data => data + '%'
     }
     ```
-- **exampleOriginal** : Donnée d'example originale (ex: `DIAMOND`)
-- **example** : Object qui contient toutes les données d'exemples pour toutes les combinaisons possibles (En respectant l'ordre). 
+- **exampleOriginal**: Original example data (ex: `DIAMOND`)
+- **example**: Object that contains all example data for all possible combinations (In order).
 
-    Exemple pour un tag qui a les réglages `size` (qui contient `default` et `short`) et `format` (qui contient `default`, `uppercase`, `lowercase` et `capitalize`) : 
+    Example for a tag that has settings `size` (that contains `default` and `short`) and `format` (that contains `default`, `uppercase`, `lowercase` et `capitalize`) : 
     ```js
     size: { // setting PROPERTY
         default: { // setting VALUE
@@ -161,20 +161,20 @@ Un tag est composé de
     }
     ```
 
-Exemples : 
+Examples : 
 - [/games/tags/game.js.example](tags/game.js.example)
 - [/games/tags/lol.js](tags/lol.js)
 - [/games/tags/speedrun.js](tags/speedrun.js)
 
 
 
-## Fichier du jeu dans `functions`
-❗ Nom : `<GAME_ID>.js`
-> Chemin : `/games/functions/<GAME_ID>.js`
+## Game file in `functions`
+❗ File name : `<GAME_ID>.js`
+> Path : `/games/functions/<GAME_ID>.js`
 
-Fichier **javascript** qui contient les fonctions liées au jeu. Séparé du fichier [api](#fichier-du-jeu-dans-api) pour plus de propreté.
+**Javascript** file which contains the functions related to the game. Separated from [api](#fichier-du-jeu-dans-api) file for more cleanliness.
 
-Exemples : 
+Examples : 
 - [/games/functions/lol.js](functions/lol.js)
 - [/games/functions/speedrun.js](functions/speedrun.js)
 
