@@ -60,7 +60,7 @@ Separated into 3 **functions** and an **object** generator:
     - ❗ Important: Use the `await Server.fn.game.utils.useMeBeforeEachRequest` function before each game request.
     - ❗ Important: Use the `Server.fn.game.utils.useMeAfterEachRequest` function after each game request.
 - **updateFullGameData**: *[Can be copied without modification]* Change only if an optimization is required (ex: batch). Function that will call `getDataOneByOne` for all game data to update.
-- **generator**: *[Can be copied without modification]* Object that contains functions that will generate data based on tag settings. Will call the specific functions to each tag/data setting (see [tags](#fichier-du-jeu-dans-tags)).
+- **generator**: *[Can be copied without modification]* Object that contains functions that will generate data based on tag settings. Will call the specific functions to each tag/data setting (see [tags](#game-file-in-tags)).
 
 Examples: 
 - [/games/api/game.js.example](api/game.js.example)
@@ -172,7 +172,7 @@ Examples :
 ❗ File name : `<GAME_ID>.js`
 > Path : `/games/functions/<GAME_ID>.js`
 
-**Javascript** file which contains the functions related to the game. Separated from [api](#fichier-du-jeu-dans-api) file for more cleanliness.
+**Javascript** file which contains the functions related to the game. Separated from [api](#game-file-in-api) file for more cleanliness.
 
 Examples : 
 - [/games/functions/lol.js](functions/lol.js)
