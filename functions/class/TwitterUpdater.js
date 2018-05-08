@@ -131,6 +131,8 @@ module.exports = class TwitterUpdater {
                 default:
                     return Promise.resolve(__logError(`[Unknown] Can't update user @${this.user.username} (code: ${error.code})`, error));
             }
+        } else if (error && error.errno === 'ETIMEDOUT') {
+            return Promise.resolve(__log(`[Twitter] Timeout on @${this.user.username} - ${error.message}`));
         } else return Promise.resolve(__logError(`[Unknown] Twitter update error @${this.user.username}`, error));
     }
 
