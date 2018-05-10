@@ -43,7 +43,7 @@ module.exports.initLogs = () => {
 				color = 15868707;
 				break;
 			case 'warn':
-				discordWebHook = config.secret.webhooks[config.env].errorDiscordWebhook;
+				discordWebHook = config.secret.webhooks[config.env].warningDiscordWebhook;
 				color = 16773214;
 				break;
 
