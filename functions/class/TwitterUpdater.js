@@ -101,7 +101,12 @@ module.exports = class TwitterUpdater {
     profileUpdated(twUser) {
         this.total.updated += 1;
 
-        console.log(twUser);
+        try {
+            twUser.profile_image_url_https.replace('_normal', '_400x400');
+        } catch (error) {
+            __logWarning(twUser, twUser);
+            __logError('[TEST] profileUpdated - Can\'t update user', error);
+        }
 
         return Server.fn.dbMethods.user.update(this.user.id, {
             username: twUser.screen_name,
@@ -110,11 +115,11 @@ module.exports = class TwitterUpdater {
             verified: twUser.verified,
             followers: twUser.followers_count,
             lang: twUser.lang,
-            profile_image_url: twUser.profile_image_url_https.replace('_normal', '_400x400'),
+            profile_image_url: twUser.profile_image_url_https ? twUser.profile_image_url_https.replace('_normal', '_400x400') : 'https://twitelo.me/images/errors/default_profile.png',
             description: twUser.description,
             disabled: 0,
             updated: Date.now()
-        }).catch(err => __logError('[DB] profileUpdated - Can\'t update user', err));
+        }).catch(err => Promise.resolve(__logError('[DB] profileUpdated - Can\'t update user', err)));
     }
 
     profileNotUpdated(error) {
@@ -134,7 +139,7 @@ module.exports = class TwitterUpdater {
                     return Promise.resolve(__logError(`[Unknown] Can't update user @${this.user.username} (code: ${error.code})`, error));
             }
         } else if (error && error.errno === 'ETIMEDOUT') {
-            return Promise.resolve(__log(`[Twitter] Timeout on @${this.user.username} - ${error.message}`));
+            return Promise.resolve(__logWarning(`[Twitter] Timeout on @${this.user.username} - ${error.message}`, error));
         } else return Promise.resolve(__logError(`[Unknown] Twitter update error @${this.user.username}`, error));
     }
 
