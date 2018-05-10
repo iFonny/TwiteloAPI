@@ -92,7 +92,7 @@ module.exports = class TwitterUpdater {
     updateTwitterProfile(profile, twitterUser) {
         return new Promise((resolve) => {
             twitterUser.post('account/update_profile', profile, async (error, twUser) => {
-                if (error) resolve(await this.profileNotUpdated(error));
+                if (error || !twUser) resolve(await this.profileNotUpdated(error));
                 else resolve(await this.profileUpdated(twUser));
             });
         });
