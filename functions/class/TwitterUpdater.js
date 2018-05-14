@@ -132,6 +132,7 @@ module.exports = class TwitterUpdater {
                 case 64:
                 case 89:
                 case 220:
+                case 326:
                     return this.twiteloAppRevoked(error);
                 case 120:
                     return this.profileUpdateFailed(error);
