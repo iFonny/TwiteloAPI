@@ -5,11 +5,12 @@
 Tout se passe dans le dossier `games` qui est séparé de cette manière :
  - 1 fichier pour chaque jeu.
  - 1 sous-dossier `class` pour les classes ou libs personnalisées.
- - 4 sous-dossiers (qui contiennent également  un fichier pour chaque jeu).
+ - 5 sous-dossiers (qui contiennent également  un fichier pour chaque jeu).
     - [`api`](#fichier-du-jeu-dans-api) : Récupération et mise à jour des données de jeu.
     - [`functions`](#fichier-du-jeu-dans-functions) : Fonctions spécifiques à un jeu.
     - [`settings`](#fichier-du-jeu-dans-settings) : Réglages de compte du jeu.
     - [`tags`](#fichier-du-jeu-dans-tags) : Réglages des tags (donnée) du jeu.
+    - [`tests`](#fichier-du-jeu-dans-tests) : Réglages des tests des tags (données) du jeu.
 
 
 
@@ -178,3 +179,13 @@ Exemples :
 - [/games/functions/speedrun.js](functions/speedrun.js)
 
 
+
+## Fichier du jeu dans `tests`
+❗ Nom du fichier : `<GAME_ID>.js`
+> Chemin : `/games/tests/<GAME_ID>.js`
+
+Fichier **javascript** qui contient les données et les reglages des tests de tags liées au jeu. (Export object vide pour faire uniquement les tests des reglages par default)
+
+Exemples : 
+- [/games/tests/lol.js](tests/lol.js)
+- [/games/tests/speedrun.js](tests/speedrun.js)
