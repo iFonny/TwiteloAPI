@@ -119,6 +119,11 @@ const fieldSettings = {
             fr: 'Mise en forme'
         },
         input: {
+            default: {
+                value: 0,
+                en: 'Without ordinal indicator',
+                fr: 'Sans indicateur ordinal'
+            },
             withoutOrdinal: {
                 value: 0,
                 en: 'Without ordinal indicator',

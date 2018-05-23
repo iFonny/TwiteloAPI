@@ -6,11 +6,12 @@
 Everything happens in the `games` folder which is separated like this:
  - 1 file for each game.
  - 1 subfolder `class` for custom classes or libs.
- - 4 subfolders (which also contain a file for each game).
+ - 5 subfolders (which also contain a file for each game).
     - [`api`](#game-file-in-api): Retrieving and updating game data.
     - [`functions`](#game-file-in-functions): Game functions.
     - [`settings`](#game-file-in-settings): Game account settings.
     - [`tags`](#game-file-in-tags): Game tags (data) settings.
+    - [`tests`](#game-file-in-tests): Game tags (data) tests settings.
 
 
 
@@ -179,3 +180,13 @@ Examples :
 - [/games/functions/speedrun.js](functions/speedrun.js)
 
 
+
+## Game file in `tests`
+❗ File name : `<GAME_ID>.js`
+> Path : `/games/tests/<GAME_ID>.js`
+
+**Javascript** file which contains data and tags tests settings related to the game. (Export empty object to run only default settings tests)
+
+Examples : 
+- [/games/tests/lol.js](tests/lol.js)
+- [/games/tests/speedrun.js](tests/speedrun.js)

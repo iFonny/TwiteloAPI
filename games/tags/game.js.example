@@ -59,7 +59,7 @@ module.exports = {
                     fr: 'Taille'
                 },
                 input: {
-                    default: {
+                    default: { // /!\ NEED DEFAULT SETTING
                         value: 0, // Size add or sub
                         en: 'Default size',
                         fr: 'Taille par défaut'
@@ -79,7 +79,7 @@ module.exports = {
                     fr: 'Mise en forme'
                 },
                 input: {
-                    default: {
+                    default: { /!\ NEED DEFAULT SETTING
                         value: 0,
                         en: 'No change',
                         fr: 'Aucune modification'
