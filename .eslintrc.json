@@ -11,8 +11,10 @@
     "globals": {
         "_": false,
         "r": false,
+        "it": false,
         "config": false,
         "Server": false,
+        "describe": false,
         "__log": false,
         "__logInfo": false,
         "__logError": false,
