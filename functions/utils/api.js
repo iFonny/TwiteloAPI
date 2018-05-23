@@ -67,9 +67,18 @@ module.exports = {
           if (user.settings.locale == 'fr') welcomeMessage = `Bienvenue !\n\nEmbellissez votre description, nom, localisation twitter avec vos stats et montrez votre skill (ou pas) !\nVous pouvez activer/désactiver la modification automatique ici : ${config.server.appURL}/settings\n\nVous pouvez également nous rejoindre sur discord : http://discord.gg/F75CNy2\n\nContact : ${config.server.appURL}/contact`;
           else welcomeMessage = `Welcome!\n\nEmbellish your twitter description, name, location with your stats and show your skill (or not)!\nYou can enable/disable auto updater here: ${config.server.appURL}/settings\n\nYou can also join us on discord: http://discord.gg/F75CNy2\n\nContact: ${config.server.appURL}/contact`;
 
-          Server.twitterBot.post('direct_messages/new', {
-            user_id: user.twitter_id,
-            text: welcomeMessage
+          Server.twitterBot.post('direct_messages/events/new', {
+            event: {
+              type: 'message_create',
+              message_create: {
+                target: {
+                  recipient_id: user.twitter_id
+                },
+                message_data: {
+                  text: welcomeMessage
+                }
+              }
+            }
           }, (errorMP) => {
             if (errorMP) __logWarning(`[WELCOME] Can't send MP to @${user.username}`, errorMP);
           });

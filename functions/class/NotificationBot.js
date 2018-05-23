@@ -25,9 +25,18 @@ module.exports = class NotificationBot {
 
     sendTwitterNotification(user, notification) {
         if (user.settings.notifications.mp_twitter) {
-            Server.twitterBot.post('direct_messages/new', {
-                user_id: user.twitter_id,
-                text: user.settings.locale == 'fr' ? notification.fr.content : notification.en.content
+            Server.twitterBot.post('direct_messages/events/new', {
+                event: {
+                    type: 'message_create',
+                    message_create: {
+                        target: {
+                            recipient_id: user.twitter_id
+                        },
+                        message_data: {
+                            text: user.settings.locale == 'fr' ? notification.fr.content : notification.en.content
+                        }
+                    }
+                }
             }, (errorMP) => {
                 if (errorMP) __logWarning(`[NOTIFICATION] Can't send MP to @${user.username}`, errorMP);
             });
