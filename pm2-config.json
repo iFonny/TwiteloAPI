@@ -1,63 +1,52 @@
 {
-  "apps": [{
-      "name": "twitelo-api-beta",
-      "script": "./app.js",
-      "watch": false,
-      "restart_delay": 1000,
-      "ignore_watch": [
-        "node_modules",
-        "logs/*",
-        "public/*",
-        "*.log",
-        ".git"
-      ],
-      "log_date_format": "YYYY-MM-DD HH:mm Z",
-      "env": {
-        "NODE_ENV": "beta"
-      }
-    },
-    {
-      "name": "twitelo-api",
-      "script": "./app.js",
-      "watch": false,
-      "restart_delay": 1000,
-      "ignore_watch": [
-        "node_modules",
-        "logs/*",
-        "public/*",
-        "*.log",
-        ".git"
-      ],
-      "log_date_format": "YYYY-MM-DD HH:mm Z",
-      "env": {
-        "NODE_ENV": "prod"
-      }
-    }
-  ],
-  "deploy": {
-    "beta": {
-      "user": "root",
-      "host": "51.254.118.165",
-      "key": "~/.ssh/ssh_ifo_vps",
-      "ref": "origin/beta",
-      "repo": "git@github.com:iFonny/TwiteloAPI.git",
-      "path": "/root/www/TwiteloAPI/beta/",
-      "post-deploy": "cp /root/configs/TwiteloAPI/secret.json ./configs/; npm install && pm2 startOrRestart pm2-config.json --only twitelo-api-beta",
-      "env": {
-        "NODE_ENV": "beta"
-      }
-    },
-    "production": {
-      "user": "root",
-      "host": "51.254.118.165",
-      "key": "~/.ssh/ssh_ifo_vps",
-      "ref": "origin/master",
-      "repo": "git@github.com:iFonny/TwiteloAPI.git",
-      "path": "/root/www/TwiteloAPI/production/",
-      "post-deploy": "cp /root/configs/TwiteloAPI/secret.json ./configs/; npm install && pm2 startOrRestart pm2-config.json --only twitelo-api",
-      "env": {
-        "NODE_ENV": "prod"
-      }
-    }
-  }
+	"apps": [
+		{
+			"name": "twitelo-api-beta",
+			"script": "./app.js",
+			"watch": false,
+			"restart_delay": 1000,
+			"ignore_watch": ["node_modules", "logs/*", "public/*", "*.log", ".git"],
+			"log_date_format": "YYYY-MM-DD HH:mm Z",
+			"env": {
+				"NODE_ENV": "beta"
+			}
+		},
+		{
+			"name": "twitelo-api",
+			"script": "./app.js",
+			"watch": false,
+			"restart_delay": 1000,
+			"ignore_watch": ["node_modules", "logs/*", "public/*", "*.log", ".git"],
+			"log_date_format": "YYYY-MM-DD HH:mm Z",
+			"env": {
+				"NODE_ENV": "prod"
+			}
+		}
+	],
+	"deploy": {
+		"beta": {
+			"user": "root",
+			"host": "51.254.118.165",
+			"key": "~/.ssh/ssh_ifo_vps",
+			"ref": "origin/beta",
+			"repo": "git@github.com:iFonny/TwiteloAPI.git",
+			"path": "/root/www/TwiteloAPI/beta/",
+			"post-deploy": "cp /root/configs/TwiteloAPI/secret.json ./configs/; npm install && pm2 startOrRestart pm2-config.json --only twitelo-api-beta",
+			"env": {
+				"NODE_ENV": "beta"
+			}
+		},
+		"production": {
+			"user": "root",
+			"host": "51.254.118.165",
+			"key": "~/.ssh/ssh_ifo_vps",
+			"ref": "origin/master",
+			"repo": "git@github.com:iFonny/TwiteloAPI.git",
+			"path": "/root/www/TwiteloAPI/production/",
+			"post-deploy": "cp /root/configs/TwiteloAPI/secret.json ./configs/; npm install && pm2 startOrRestart pm2-config.json --only twitelo-api",
+			"env": {
+				"NODE_ENV": "prod"
+			}
+		}
+	}
 }
