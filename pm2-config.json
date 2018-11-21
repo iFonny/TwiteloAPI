@@ -26,7 +26,7 @@
 	"deploy": {
 		"beta": {
 			"user": "root",
-			"host": "51.15.131.156",
+			"host": "51.254.118.165",
 			"key": "~/.ssh/ssh_ifo_vps",
 			"ref": "origin/beta",
 			"repo": "git@github.com:iFonny/TwiteloAPI.git",
@@ -38,7 +38,7 @@
 		},
 		"production": {
 			"user": "root",
-			"host": "51.15.131.156",
+			"host": "51.254.118.165",
 			"key": "~/.ssh/ssh_ifo_vps",
 			"ref": "origin/master",
 			"repo": "git@github.com:iFonny/TwiteloAPI.git",
