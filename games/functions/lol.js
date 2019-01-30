@@ -69,6 +69,11 @@ module.exports = {
   },
 
   async getSummonerByID(ID, region) {
+    return {
+      requests: 1,
+      data: null
+    };
+
     let data = {
       id: null,
       username: null,
@@ -98,6 +103,11 @@ module.exports = {
   },
 
   async getLeaguePositionsBySummonerID(summonerID, region) {
+    return {
+      requests: 1,
+      data: null
+    };
+
     // Default values
     let data = {
       username: null,
