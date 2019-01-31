@@ -125,9 +125,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
     // Require game tags in /games/tags folder
     Server.gameTags[gameName] = require(`${__dirname}/games/tags/${gameName}`);
     // Require game account settings in /games/settings folder
-    Server.gameSettings[
-      gameName
-    ] = require(`${__dirname}/games/settings/${gameName}`);
+    Server.gameSettings[gameName] = require(`${__dirname}/games/settings/${gameName}`);
     // Require game methods in /games/api folder
     Server.gameAPI[gameName] = require(`${__dirname}/games/api/${gameName}`);
   });
@@ -164,28 +162,19 @@ Server.fn.db.checkOrCreateTable().then(() => {
 
   app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept'
-    );
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
   });
   app.options('/*', (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Content-Type, Authorization, Content-Length, X-Requested-With'
-    );
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
     res.sendStatus(200);
   });
 
   app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
   app.use('/public/images', express.static(`${__dirname}/public/images`));
-  app.use(
-    '/public/media',
-    express.static(`${__dirname}/public/media/${config.env}`)
-  );
+  app.use('/public/media', express.static(`${__dirname}/public/media/${config.env}`));
 
   app.enable('trust proxy');
   app.disable('x-powered-by');
@@ -203,12 +192,9 @@ Server.fn.db.checkOrCreateTable().then(() => {
   );
 
   // create a write stream (in append mode)
-  const accessLogStream = fs.createWriteStream(
-    path.join(__dirname, 'logs', 'access.log'),
-    {
-      flags: 'a'
-    }
-  );
+  const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'access.log'), {
+    flags: 'a'
+  });
 
   // setup the logger
   app.use(
@@ -218,11 +204,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
   );
 
   app.listen(config.server.port, () => {
-    __logInfo(
-      `Server is listening on ${config.server.host}:${config.server.port} [**${
-        config.env
-      }**] tmp`
-    );
+    __logInfo(`Server is listening on ${config.server.host}:${config.server.port} [**${config.env}**]`);
   });
 
   /* Rate limiter */
@@ -251,9 +233,7 @@ Server.fn.db.checkOrCreateTable().then(() => {
     routes[routeName] = require(file).router(express, routeName);
 
     // Require routes functions
-    Server.fn.routes[
-      routeName
-    ] = require(`${__dirname}/functions/routes/${routeName}`);
+    Server.fn.routes[routeName] = require(`${__dirname}/functions/routes/${routeName}`);
 
     // Use routes
     app.use(`/${routeName}`, routes[routeName]);
@@ -283,14 +263,12 @@ Server.fn.db.checkOrCreateTable().then(() => {
     //=======================================================================//
 
     function gameUpdater(game) {
-      Server.fn.api
-        .getAndUpdateGameData(game)
-        .then(() => setTimeout(() => gameUpdater(game), 60 * 1000)); // 1 minute
+      Server.fn.api.getAndUpdateGameData(game).then(() => setTimeout(() => gameUpdater(game), 60 * 1000)); // 1 minute
     }
 
-    for (const gameID in Server.game) {
+    /*     for (const gameID in Server.game) {
       gameUpdater(Server.game[gameID]);
-    }
+    } */
 
     //=======================================================================//
     //     Twitter updater                                                   //
@@ -299,12 +277,10 @@ Server.fn.db.checkOrCreateTable().then(() => {
     const twitterUpdater = new TwitterUpdater();
 
     function twUpdater() {
-      twitterUpdater
-        .update()
-        .then(() => setTimeout(() => twUpdater(), 60 * 1000)); // 1 minute
+      twitterUpdater.update().then(() => setTimeout(() => twUpdater(), 60 * 1000)); // 1 minute
     }
 
-    if (config.env == 'beta' || config.env == 'prod') twUpdater();
+    /* if (config.env == 'beta' || config.env == 'prod') twUpdater(); */
   }, 10 * 1000); // 10s
 });
 
