@@ -44,30 +44,12 @@ module.exports.getAccountInfo = (gameID, settings) => {
  ** - tag_ids (required)
  **
  */
-module.exports.getDataOneByOne = async (
-  game,
-  data_settings,
-  game_account_info,
-  tag_ids
-) => {
+module.exports.getDataOneByOne = async (game, data_settings, game_account_info, tag_ids) => {
   const opgg = new Server.class.game.OPGG(game_account_info.region, true);
   let username = null;
 
   // Set region && ID
-  await Server.fn.game.utils.updateGameData(
-    game_account_info.region,
-    'LOL__ACCOUNT__REGION',
-    game.id,
-    data_settings,
-    game_account_info
-  );
-  await Server.fn.game.utils.updateGameData(
-    game_account_info.summoner_id,
-    'LOL__ACCOUNT__ID',
-    game.id,
-    data_settings,
-    game_account_info
-  );
+  await Server.fn.game.utils.updateGameData(game_account_info.region, 'LOL__ACCOUNT__REGION', game.id, data_settings, game_account_info);
 
   // League tags
   if (
@@ -98,19 +80,13 @@ module.exports.getDataOneByOne = async (
   ) {
     await Server.fn.game.utils.useMeBeforeEachRequest(game);
 
-    const res = await Server.fn.game[game.id].getLeaguePositionsBySummonerID(
-      game_account_info.summoner_id,
-      game_account_info.region
-    );
+    const res = await Server.fn.game[game.id].getLeaguePositionsBySummonerID(game_account_info.summoner_id, game_account_info.region);
 
     if (res.data) {
       // Get and update account username in database (namechange handler)
       if (res.data.username) {
         username = res.data.username;
-        Server.fn.game.utils.updateDBAccountUsername(
-          game_account_info,
-          username
-        );
+        Server.fn.game.utils.updateDBAccountUsername(game_account_info, username);
       }
 
       // Ranked Solo 5v5
@@ -121,20 +97,8 @@ module.exports.getDataOneByOne = async (
         data_settings,
         game_account_info
       );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedSoloSR.tier,
-        'LOL__RANKED_SOLO_SR__TIER',
-        game.id,
-        data_settings,
-        game_account_info
-      );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedSoloSR.rank,
-        'LOL__RANKED_SOLO_SR__RANK',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.tier, 'LOL__RANKED_SOLO_SR__TIER', game.id, data_settings, game_account_info);
+      await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.rank, 'LOL__RANKED_SOLO_SR__RANK', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
         res.data.rankedSoloSR.leaguePoints,
         'LOL__RANKED_SOLO_SR__LP',
@@ -142,13 +106,7 @@ module.exports.getDataOneByOne = async (
         data_settings,
         game_account_info
       );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedSoloSR.wins,
-        'LOL__RANKED_SOLO_SR__WINS',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.wins, 'LOL__RANKED_SOLO_SR__WINS', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
         res.data.rankedSoloSR.losses,
         'LOL__RANKED_SOLO_SR__LOSSES',
@@ -156,13 +114,7 @@ module.exports.getDataOneByOne = async (
         data_settings,
         game_account_info
       );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedSoloSR.games,
-        'LOL__RANKED_SOLO_SR__GAMES',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.games, 'LOL__RANKED_SOLO_SR__GAMES', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
         res.data.rankedSoloSR.winrate,
         'LOL__RANKED_SOLO_SR__WINRATE',
@@ -179,20 +131,8 @@ module.exports.getDataOneByOne = async (
         data_settings,
         game_account_info
       );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedFlexSR.tier,
-        'LOL__RANKED_FLEX_SR__TIER',
-        game.id,
-        data_settings,
-        game_account_info
-      );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedFlexSR.rank,
-        'LOL__RANKED_FLEX_SR__RANK',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.tier, 'LOL__RANKED_FLEX_SR__TIER', game.id, data_settings, game_account_info);
+      await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.rank, 'LOL__RANKED_FLEX_SR__RANK', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
         res.data.rankedFlexSR.leaguePoints,
         'LOL__RANKED_FLEX_SR__LP',
@@ -200,13 +140,7 @@ module.exports.getDataOneByOne = async (
         data_settings,
         game_account_info
       );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedFlexSR.wins,
-        'LOL__RANKED_FLEX_SR__WINS',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.wins, 'LOL__RANKED_FLEX_SR__WINS', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
         res.data.rankedFlexSR.losses,
         'LOL__RANKED_FLEX_SR__LOSSES',
@@ -214,13 +148,7 @@ module.exports.getDataOneByOne = async (
         data_settings,
         game_account_info
       );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedFlexSR.games,
-        'LOL__RANKED_FLEX_SR__GAMES',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.games, 'LOL__RANKED_FLEX_SR__GAMES', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
         res.data.rankedFlexSR.winrate,
         'LOL__RANKED_FLEX_SR__WINRATE',
@@ -237,20 +165,8 @@ module.exports.getDataOneByOne = async (
         data_settings,
         game_account_info
       );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedFlexTT.tier,
-        'LOL__RANKED_FLEX_TT__TIER',
-        game.id,
-        data_settings,
-        game_account_info
-      );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedFlexTT.rank,
-        'LOL__RANKED_FLEX_TT__RANK',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.tier, 'LOL__RANKED_FLEX_TT__TIER', game.id, data_settings, game_account_info);
+      await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.rank, 'LOL__RANKED_FLEX_TT__RANK', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
         res.data.rankedFlexTT.leaguePoints,
         'LOL__RANKED_FLEX_TT__LP',
@@ -258,13 +174,7 @@ module.exports.getDataOneByOne = async (
         data_settings,
         game_account_info
       );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedFlexTT.wins,
-        'LOL__RANKED_FLEX_TT__WINS',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.wins, 'LOL__RANKED_FLEX_TT__WINS', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
         res.data.rankedFlexTT.losses,
         'LOL__RANKED_FLEX_TT__LOSSES',
@@ -272,13 +182,7 @@ module.exports.getDataOneByOne = async (
         data_settings,
         game_account_info
       );
-      await Server.fn.game.utils.updateGameData(
-        res.data.rankedFlexTT.games,
-        'LOL__RANKED_FLEX_TT__GAMES',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.games, 'LOL__RANKED_FLEX_TT__GAMES', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
         res.data.rankedFlexTT.winrate,
         'LOL__RANKED_FLEX_TT__WINRATE',
@@ -295,23 +199,14 @@ module.exports.getDataOneByOne = async (
   if (tag_ids.LOL__ACCOUNT__LEVEL) {
     await Server.fn.game.utils.useMeBeforeEachRequest(game);
 
-    const res = await Server.fn.game[game.id].getSummonerByID(
-      game_account_info.summoner_id,
-      game_account_info.region
-    );
+    const res = await Server.fn.game[game.id].getSummonerByID(game_account_info.summoner_id, game_account_info.region);
 
     if (res.data) {
       // Get and update account username in database (namechange handler)
       username = res.data.username;
       Server.fn.game.utils.updateDBAccountUsername(game_account_info, username);
 
-      await Server.fn.game.utils.updateGameData(
-        res.data.level,
-        'LOL__ACCOUNT__LEVEL',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(res.data.level, 'LOL__ACCOUNT__LEVEL', game.id, data_settings, game_account_info);
     }
 
     Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
@@ -320,35 +215,17 @@ module.exports.getDataOneByOne = async (
   // Account username
   if (tag_ids.LOL__ACCOUNT__USERNAME) {
     if (username) {
-      await Server.fn.game.utils.updateGameData(
-        username,
-        'LOL__ACCOUNT__USERNAME',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(username, 'LOL__ACCOUNT__USERNAME', game.id, data_settings, game_account_info);
     } else {
       await Server.fn.game.utils.useMeBeforeEachRequest(game);
 
-      const res = await Server.fn.game[game.id].getSummonerByID(
-        game_account_info.summoner_id,
-        game_account_info.region
-      );
+      const res = await Server.fn.game[game.id].getSummonerByID(game_account_info.summoner_id, game_account_info.region);
 
       if (res.data) {
         // Get and update account username in database (namechange handler)
         username = res.data.username;
-        Server.fn.game.utils.updateDBAccountUsername(
-          game_account_info,
-          res.data.username
-        );
-        await Server.fn.game.utils.updateGameData(
-          res.data.username,
-          'LOL__ACCOUNT__USERNAME',
-          game.id,
-          data_settings,
-          game_account_info
-        );
+        Server.fn.game.utils.updateDBAccountUsername(game_account_info, res.data.username);
+        await Server.fn.game.utils.updateGameData(res.data.username, 'LOL__ACCOUNT__USERNAME', game.id, data_settings, game_account_info);
       }
 
       Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
@@ -356,59 +233,32 @@ module.exports.getDataOneByOne = async (
   }
 
   // OPGG tags
-  if (
-    tag_ids.LOL__OPGG__RANK ||
-    tag_ids.LOL__OPGG__PERCENT_OF_TOP ||
-    tag_ids.LOL__OPGG__MMR ||
-    tag_ids.LOL__OPGG__SEASON_TIER
-  ) {
+  if (tag_ids.LOL__OPGG__RANK || tag_ids.LOL__OPGG__PERCENT_OF_TOP || tag_ids.LOL__OPGG__MMR || tag_ids.LOL__OPGG__SEASON_TIER) {
     if (!username) {
       await Server.fn.game.utils.useMeBeforeEachRequest(game);
 
-      const res = await Server.fn.game[game.id].getSummonerByID(
-        game_account_info.summoner_id,
-        game_account_info.region
-      );
+      const res = await Server.fn.game[game.id].getSummonerByID(game_account_info.summoner_id, game_account_info.region);
 
       if (res.data) {
         // Get and update account username in database (namechange handler)
         username = res.data.username;
-        Server.fn.game.utils.updateDBAccountUsername(
-          game_account_info,
-          res.data.username
-        );
+        Server.fn.game.utils.updateDBAccountUsername(game_account_info, res.data.username);
       }
 
       Server.fn.game.utils.useMeAfterEachRequest(game, res.requests);
     }
 
     try {
-      await opgg.renew(game_account_info.summoner_id);
+      // TODO: (Find solution)
+      // DON'T RENEW bc bug
+      // await opgg.renew(game_account_info.summoner_id);
       const mmr = await opgg.getMMR(username);
       const summoner = await opgg.getSummoner(username);
 
-      await Server.fn.game.utils.updateGameData(
-        mmr,
-        'LOL__OPGG__MMR',
-        game.id,
-        data_settings,
-        game_account_info
-      );
+      await Server.fn.game.utils.updateGameData(mmr, 'LOL__OPGG__MMR', game.id, data_settings, game_account_info);
       if (summoner) {
-        await Server.fn.game.utils.updateGameData(
-          summoner.rank,
-          'LOL__OPGG__RANK',
-          game.id,
-          data_settings,
-          game_account_info
-        );
-        await Server.fn.game.utils.updateGameData(
-          summoner.percentOfTop,
-          'LOL__OPGG__PERCENT_OF_TOP',
-          game.id,
-          data_settings,
-          game_account_info
-        );
+        await Server.fn.game.utils.updateGameData(summoner.rank, 'LOL__OPGG__RANK', game.id, data_settings, game_account_info);
+        await Server.fn.game.utils.updateGameData(summoner.percentOfTop, 'LOL__OPGG__PERCENT_OF_TOP', game.id, data_settings, game_account_info);
 
         if (tag_ids.LOL__OPGG__SEASON_TIER) {
           await Server.fn.game.utils.updateGameData(
@@ -457,32 +307,19 @@ module.exports.updateFullGameData = (game, tags) => {
     __log(`__**${game.name}**__ - starting update...`);
 
     for (const { data_settings, game_account_info, tag_ids } of tags) {
-      await Server.gameAPI[game.id].getDataOneByOne(
-        game,
-        data_settings,
-        game_account_info,
-        tag_ids
-      );
+      await Server.gameAPI[game.id].getDataOneByOne(game, data_settings, game_account_info, tag_ids);
     }
     const elapsedTimeS = process.hrtime(time)[0];
     const elapsedTimeMS = process.hrtime(time)[1] / 1000000;
 
-    __log(
-      `__**${
-        game.name
-      }**__ - update finished in **${elapsedTimeS}s ${elapsedTimeMS}ms**`
-    );
+    __log(`__**${game.name}**__ - update finished in **${elapsedTimeS}s ${elapsedTimeMS}ms**`);
     __logRecapGame(
-      `__**${game.name}**__ - **${
-        Server.ratelimitCounters[game.id].totalTags
-      }** tags updated for a total of **${
+      `__**${game.name}**__ - **${Server.ratelimitCounters[game.id].totalTags}** tags updated for a total of **${
         Server.ratelimitCounters[game.id].totalRequests
       }** requests in **${elapsedTimeS}s**.`
     );
     return resolve(
-      `${game.name} - ${
-        Server.ratelimitCounters[game.id].totalTags
-      } tags updated for a total of ${
+      `${game.name} - ${Server.ratelimitCounters[game.id].totalTags} tags updated for a total of ${
         Server.ratelimitCounters[game.id].totalRequests
       } requests in ${elapsedTimeS}s.`
     );

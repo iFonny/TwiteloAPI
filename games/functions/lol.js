@@ -56,12 +56,13 @@ module.exports = {
             resolve({
               summoner_id: summoner.id,
               account_id: summoner.accountId,
+              puuid: summoner.puuid,
               region: region.toLowerCase()
             });
           })
           .catch(error => {
-            if (error.statusCode == 404) resolve(null);
             // Doesn't exist
+            if (error.statusCode == 404) resolve(null);
             else reject(error); // Unknown error/bad region...
           });
       } else resolve(null); // Invalid or too long
@@ -69,11 +70,6 @@ module.exports = {
   },
 
   async getSummonerByID(ID, region) {
-    return {
-      requests: 1,
-      data: null
-    };
-
     let data = {
       id: null,
       username: null,
@@ -81,14 +77,10 @@ module.exports = {
     };
 
     const account = await kayn.Summoner.by
-      .id(parseInt(ID, 10))
+      .id(ID)
       .region(region.toLowerCase())
       .then()
-      .catch(
-        error => (
-          (data = null), __logError('[LoL] getSummonerByID() error', error)
-        )
-      );
+      .catch(error => ((data = null), __logError('[LoL] getSummonerByID() error', error)));
 
     if (data) {
       data.id = account.id;
@@ -103,11 +95,6 @@ module.exports = {
   },
 
   async getLeaguePositionsBySummonerID(summonerID, region) {
-    return {
-      requests: 1,
-      data: null
-    };
-
     // Default values
     let data = {
       username: null,
@@ -145,15 +132,10 @@ module.exports = {
 
     // Get summoner positions
     const positions = await kayn.LeaguePositions.by
-      .summonerID(parseInt(summonerID, 10))
+      .summonerID(summonerID)
       .region(region.toLowerCase())
       .then()
-      .catch(
-        error => (
-          (data = null),
-          __logError('[LoL] getLeaguePositionsBySummonerID() error', error)
-        )
-      );
+      .catch(error => ((data = null), __logError('[LoL] getLeaguePositionsBySummonerID() error', error)));
 
     if (data) {
       // If no errors
@@ -178,9 +160,7 @@ module.exports = {
           data[queueType].wins = position.wins;
           data[queueType].losses = position.losses;
           data[queueType].games = position.wins + position.losses;
-          data[queueType].winrate = Math.round(
-            (position.wins / (position.wins + position.losses)) * 100
-          );
+          data[queueType].winrate = Math.round((position.wins / (position.wins + position.losses)) * 100);
         }
       }
     }
