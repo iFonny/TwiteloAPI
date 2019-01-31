@@ -26,3 +26,5 @@ configs/secret\.json
 scripts/migration/secret\.json
 
 scripts/migration/backups/
+
+rethinkdb_data/
