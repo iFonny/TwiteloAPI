@@ -6,7 +6,7 @@ class OPGG {
 
     this.cheerio = require('cheerio');
     this.axios = require('axios').create({
-      baseURL: `http://${region == 'kr' ? '' : region + '.'}op.gg`,
+      baseURL: `https://${region == 'kr' ? '' : region + '.'}op.gg`,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
