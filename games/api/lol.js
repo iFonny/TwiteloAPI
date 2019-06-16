@@ -53,7 +53,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
 
   // League tags
   if (
-    tag_ids.LOL__RANKED_SOLO_SR__LEAGUE_NAME ||
+    // tag_ids.LOL__RANKED_SOLO_SR__LEAGUE_NAME || // 17/06/2019 - leagueName deprecation
     tag_ids.LOL__RANKED_SOLO_SR__TIER ||
     tag_ids.LOL__RANKED_SOLO_SR__RANK ||
     tag_ids.LOL__RANKED_SOLO_SR__LP ||
@@ -61,7 +61,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
     tag_ids.LOL__RANKED_SOLO_SR__LOSSES ||
     tag_ids.LOL__RANKED_SOLO_SR__GAMES ||
     tag_ids.LOL__RANKED_SOLO_SR__WINRATE ||
-    tag_ids.LOL__RANKED_FLEX_SR__LEAGUE_NAME ||
+    // tag_ids.LOL__RANKED_FLEX_SR__LEAGUE_NAME || // 17/06/2019 - leagueName deprecation
     tag_ids.LOL__RANKED_FLEX_SR__TIER ||
     tag_ids.LOL__RANKED_FLEX_SR__RANK ||
     tag_ids.LOL__RANKED_FLEX_SR__LP ||
@@ -69,7 +69,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
     tag_ids.LOL__RANKED_FLEX_SR__LOSSES ||
     tag_ids.LOL__RANKED_FLEX_SR__GAMES ||
     tag_ids.LOL__RANKED_FLEX_SR__WINRATE ||
-    tag_ids.LOL__RANKED_FLEX_TT__LEAGUE_NAME ||
+    // tag_ids.LOL__RANKED_FLEX_TT__LEAGUE_NAME || // 17/06/2019 - leagueName deprecation
     tag_ids.LOL__RANKED_FLEX_TT__TIER ||
     tag_ids.LOL__RANKED_FLEX_TT__RANK ||
     tag_ids.LOL__RANKED_FLEX_TT__LP ||
@@ -89,14 +89,17 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
         Server.fn.game.utils.updateDBAccountUsername(game_account_info, username);
       }
 
-      // Ranked Solo 5v5
+      /* 17/06/2019 - leagueName deprecation
       await Server.fn.game.utils.updateGameData(
         res.data.rankedSoloSR.leagueName,
         'LOL__RANKED_SOLO_SR__LEAGUE_NAME',
         game.id,
         data_settings,
         game_account_info
-      );
+      ); 
+      */
+
+      // Ranked Solo 5v5
       await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.tier, 'LOL__RANKED_SOLO_SR__TIER', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(res.data.rankedSoloSR.rank, 'LOL__RANKED_SOLO_SR__RANK', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
@@ -123,7 +126,7 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
         game_account_info
       );
 
-      // Ranked Flex 5v5
+      /* 17/06/2019 - leagueName deprecation
       await Server.fn.game.utils.updateGameData(
         res.data.rankedFlexSR.leagueName,
         'LOL__RANKED_FLEX_SR__LEAGUE_NAME',
@@ -131,6 +134,9 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
         data_settings,
         game_account_info
       );
+      */
+
+      // Ranked Flex 5v5
       await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.tier, 'LOL__RANKED_FLEX_SR__TIER', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(res.data.rankedFlexSR.rank, 'LOL__RANKED_FLEX_SR__RANK', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
@@ -157,7 +163,8 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
         game_account_info
       );
 
-      // Ranked Flex 3v3
+      /* 17/06/2019 - leagueName deprecation
+     
       await Server.fn.game.utils.updateGameData(
         res.data.rankedFlexTT.leagueName,
         'LOL__RANKED_FLEX_TT__LEAGUE_NAME',
@@ -165,6 +172,9 @@ module.exports.getDataOneByOne = async (game, data_settings, game_account_info, 
         data_settings,
         game_account_info
       );
+      */
+
+      // Ranked Flex 3v3
       await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.tier, 'LOL__RANKED_FLEX_TT__TIER', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(res.data.rankedFlexTT.rank, 'LOL__RANKED_FLEX_TT__RANK', game.id, data_settings, game_account_info);
       await Server.fn.game.utils.updateGameData(
