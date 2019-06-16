@@ -417,6 +417,7 @@ const dataExample = {
       withOrdinal: '51499th'
     }
   },
+  /* 17/06/2019 - leagueName deprecation
   leagueName: {
     format: {
       default: "Twisted Fate's Constellations",
@@ -425,6 +426,7 @@ const dataExample = {
       capitalize: "Twisted fate's constellations"
     }
   },
+  */
   region: {
     size: {
       // setting property
@@ -554,7 +556,7 @@ const dataExample = {
     - LOL__TOP_FLEX_TT__WINRATE : TODO
 
 
-    - LOL__RANKED_SOLO_SR__LEAGUE_NAME
+    - LOL__RANKED_SOLO_SR__LEAGUE_NAME // 17/06/2019 - leagueName deprecation
     - LOL__RANKED_SOLO_SR__TIER 
     - LOL__RANKED_SOLO_SR__RANK
     - LOL__RANKED_SOLO_SR__LP
@@ -563,7 +565,7 @@ const dataExample = {
     - LOL__RANKED_SOLO_SR__GAMES
     - LOL__RANKED_SOLO_SR__WINRATE
 
-    - LOL__RANKED_FLEX_SR__LEAGUE_NAME
+    - LOL__RANKED_FLEX_SR__LEAGUE_NAME // 17/06/2019 - leagueName deprecation
     - LOL__RANKED_FLEX_SR__TIER
     - LOL__RANKED_FLEX_SR__RANK
     - LOL__RANKED_FLEX_SR__LP
@@ -572,7 +574,7 @@ const dataExample = {
     - LOL__RANKED_FLEX_SR__GAMES
     - LOL__RANKED_FLEX_SR__WINRATE
 
-    - LOL__RANKED_FLEX_TT__LEAGUE_NAME
+    - LOL__RANKED_FLEX_TT__LEAGUE_NAME // 17/06/2019 - leagueName deprecation
     - LOL__RANKED_FLEX_TT__TIER
     - LOL__RANKED_FLEX_TT__RANK
     - LOL__RANKED_FLEX_TT__LP
@@ -696,7 +698,7 @@ module.exports = {
   // - LOL__TOP_FLEX_TT__GAMES : TODO
   // - LOL__TOP_FLEX_TT__WINRATE : TODO
 
-  // Solo 5v5
+  /* 17/06/2019 - leagueName deprecation
   LOL__RANKED_SOLO_SR__LEAGUE_NAME: {
     id: 'LOL__RANKED_SOLO_SR__LEAGUE_NAME', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}__{NAME_SMALL}
     gameID: 'lol', // game ID
@@ -718,6 +720,9 @@ module.exports = {
     exampleOriginal: "Twisted Fate's Constellations",
     example: dataExample.leagueName // existing example
   },
+  */
+
+  // Solo 5v5
   LOL__RANKED_SOLO_SR__TIER: {
     id: 'LOL__RANKED_SOLO_SR__TIER', // gameTag ID : {GAME_ID}__{CATEGORY_SMALL}__{NAME_SMALL}
     gameID: 'lol', // game ID
@@ -861,7 +866,7 @@ module.exports = {
     example: dataExample.percentage // existing example
   },
 
-  // Flex 5v5
+  /* 17/06/2019 - leagueName deprecation
   LOL__RANKED_FLEX_SR__LEAGUE_NAME: {
     id: 'LOL__RANKED_FLEX_SR__LEAGUE_NAME',
     gameID: 'lol',
@@ -882,6 +887,9 @@ module.exports = {
     exampleOriginal: "Twisted Fate's Constellations",
     example: dataExample.leagueName // existing example
   },
+  */
+
+  // Flex 5v5
   LOL__RANKED_FLEX_SR__TIER: {
     id: 'LOL__RANKED_FLEX_SR__TIER',
     gameID: 'lol',
@@ -1022,7 +1030,7 @@ module.exports = {
     example: dataExample.percentage // existing example
   },
 
-  // Flex 3v3
+  /* 17/06/2019 - leagueName deprecation
   LOL__RANKED_FLEX_TT__LEAGUE_NAME: {
     id: 'LOL__RANKED_FLEX_TT__LEAGUE_NAME',
     gameID: 'lol',
@@ -1043,6 +1051,9 @@ module.exports = {
     exampleOriginal: "Twisted Fate's Constellations",
     example: dataExample.leagueName // existing example
   },
+  */
+
+  // Flex 3v3
   LOL__RANKED_FLEX_TT__TIER: {
     id: 'LOL__RANKED_FLEX_TT__TIER',
     gameID: 'lol',

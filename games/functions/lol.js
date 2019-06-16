@@ -99,7 +99,7 @@ module.exports = {
     let data = {
       username: null,
       rankedFlexTT: {
-        leagueName: null,
+        // leagueName: null, 17/06/2019 - leagueName deprecation
         tier: 'UNRANKED',
         rank: null,
         leaguePoints: null,
@@ -109,7 +109,7 @@ module.exports = {
         winrate: null
       },
       rankedSoloSR: {
-        leagueName: null,
+        // leagueName: null, 17/06/2019 - leagueName deprecation
         tier: 'UNRANKED',
         rank: null,
         leaguePoints: null,
@@ -119,7 +119,7 @@ module.exports = {
         winrate: null
       },
       rankedFlexSR: {
-        leagueName: null,
+        // leagueName: null, 17/06/2019 - leagueName deprecation
         tier: 'UNRANKED',
         rank: null,
         leaguePoints: null,
@@ -131,11 +131,11 @@ module.exports = {
     };
 
     // Get summoner positions
-    const positions = await kayn.LeaguePositions.by
+    const positions = await kayn.League.Entries.by
       .summonerID(summonerID)
       .region(region.toLowerCase())
       .then()
-      .catch(error => ((data = null), __logError('[LoL] getLeaguePositionsBySummonerID() error', error)));
+      .catch(error => ((data = null), __logError('[LoL] getLeagueEntriesBySummonerID() error', error)));
 
     if (data) {
       // If no errors
@@ -152,8 +152,8 @@ module.exports = {
         const queueType = queueTypes[position.queueType];
 
         if (queueType) {
-          data.username = position.playerOrTeamName;
-          data[queueType].leagueName = position.leagueName;
+          data.username = position.summonerName;
+          // data[queueType].leagueName = position.leagueName; 17/06/2019 - leagueName deprecation
           data[queueType].tier = position.tier;
           data[queueType].rank = position.rank;
           data[queueType].leaguePoints = position.leaguePoints;
