@@ -2,7 +2,7 @@
 Twitelo is a website that allows you to link your twitter account and your favorite online games or platforms.
 Display your ranks, stats, and more in your twitter profile. Updated automatically!
 
-App Repository: https://github.com/iFonny/TwiteloApp
+Front App Repository: https://github.com/iFonny/TwiteloApp
 
 ## Contribution
 Every contribution to this repo is welcomed to add more games/platforms, try to keep it as consistent as possible, fork and PR to contribute.
